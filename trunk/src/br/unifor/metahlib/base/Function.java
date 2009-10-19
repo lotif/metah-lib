@@ -32,7 +32,7 @@ public abstract class Function {
 		return var;
 	}
 	
-	public double perturb(double x){
+	protected double perturb(double x){
 		double var = x + getPerturbation();
 		if(var < minValue()){
 			var = minValue();
@@ -44,12 +44,12 @@ public abstract class Function {
 		return var;
 	}
 	
-	public abstract double getPerturbation();
+	protected abstract double getPerturbation();
 	
 	public abstract double minValue();
 	public abstract double maxValue();
 	
-	public double[] initializeParameters(){		
+	public double[] getRandomSolution(){
 		double[] x = new double[getNumVariables()];
 		
 		for(int i = 0; i < x.length; i++){
@@ -58,7 +58,7 @@ public abstract class Function {
 		return x;
 	}
 	
-	public abstract double getFeasibleValue();
+	protected abstract double getFeasibleValue();
 
 	public int getCount() {
 		return count;
