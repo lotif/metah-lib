@@ -26,7 +26,13 @@ public class SimulatedAnnealing extends Metaheuristic {
 
 	public double[] execute() {
 		Random r = new Random();
-		double[] x = function.getRandomSolution();
+		
+		double[] x;
+		if(initialSolution == null){
+			x = function.getRandomSolution();
+		} else {
+			x = initialSolution;
+		}
 		
 		double temperature = maxTemperature;
 		
