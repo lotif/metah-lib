@@ -10,11 +10,17 @@ public class GuidedLocalSearch extends Metaheuristic {
 	private double lambda;
 	private int maxIterations;
 	
-	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod, int maxIterations, double lambda) {
+	private PenalizedFeatures penalizedFeatures;
+	private double[] p;
+	
+	
+	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod, int maxIterations, double lambda, PenalizedFeatures penalizedFeatures) {
 		this.function = function;
 		this.localSearchMethod = localSearchMethod;
 		this.lambda = lambda;
 		this.maxIterations = maxIterations;
+		this.penalizedFeatures = penalizedFeatures;
+		p = new double[penalizedFeatures.getTotalFeatures()];
 	}
 	
 	public double[] execute(){
@@ -22,13 +28,36 @@ public class GuidedLocalSearch extends Metaheuristic {
 		double[] s = function.getRandomSolution();
 		
 		for(int i = 0; i < maxIterations; i++){
+			AugmentedCostFunction f_ = new AugmentedCostFunction(function, lambda, p, penalizedFeatures); 
+			
+			localSearchMethod.setFunction(f_);
 			localSearchMethod.setInitialSolution(s);
 			s = localSearchMethod.execute();
 			
-			//TODO to be continued...
+			double[] util = new double[p.length];
+			double maxUtil = -1;
+			int maxUtilIndex = -1;
+			
+			for(int k = 0; k < util.length; k++){
+				double c = penalizedFeatures.hasTheFeature(s, k);
+				if(c != 0){
+					util[k] = c/(1 + p[k]);
+					if(util[k] > maxUtil){
+						maxUtil = util[k];
+						maxUtilIndex = k;
+					}
+				}
+			}
+			
+			if(maxUtilIndex >= 0){
+				p[maxUtilIndex]++;
+			}
+			
+			System.out.println("*" + i + ": " + function.eval(s));
+			
 		}
 		
-		return null;
+		return s;
 	}
 	
 	@Override

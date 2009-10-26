@@ -35,7 +35,7 @@ public class TSPFunction extends NeighbourhoodableFunction {
 	}
 
 	@Override
-	protected double getFeasibleValue() {
+	public double getFeasibleValue() {
 		return r.nextInt(numVariables);
 	}
 

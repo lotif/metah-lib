@@ -32,7 +32,7 @@ public abstract class Function {
 		return var;
 	}
 	
-	protected double perturb(double x){
+	public double perturb(double x){
 		double var = x + getPerturbation();
 		if(var < minValue()){
 			var = minValue();
@@ -44,7 +44,7 @@ public abstract class Function {
 		return var;
 	}
 	
-	protected abstract double getPerturbation();
+	public abstract double getPerturbation();
 	
 	public abstract double minValue();
 	public abstract double maxValue();
@@ -58,7 +58,7 @@ public abstract class Function {
 		return x;
 	}
 	
-	protected abstract double getFeasibleValue();
+	public abstract double getFeasibleValue();
 
 	public int getCount() {
 		return count;

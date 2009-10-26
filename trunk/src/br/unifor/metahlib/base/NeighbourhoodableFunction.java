@@ -28,13 +28,13 @@ public abstract class NeighbourhoodableFunction extends Function {
 	
 	@Override
 	@Deprecated
-	protected double getPerturbation() {
+	public double getPerturbation() {
 		return 0;
 	}
 	
 	@Override
 	@Deprecated
-	protected double perturb(double x){
+	public double perturb(double x){
 		return -1;
 	}
 
