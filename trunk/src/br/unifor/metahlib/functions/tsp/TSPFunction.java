@@ -4,28 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.base.NeighbourhoodStructure;
+import br.unifor.metahlib.base.NeighbourhoodableFunction;
 
-public class TSPFunction extends Function {
+public class TSPFunction extends NeighbourhoodableFunction {
 
 	private Random r = new Random();
 	
 	private TSPProblemDefinition tspProblem;
 	
-	private NeighbourhoodStructure neighbourhoodStructure;
-	
-	public TSPFunction(double[][] distanceMatrix, NeighbourhoodStructure neighbourhoodStructure) {
-		tspProblem = new TSPProblemDefinition(distanceMatrix);
-		numVariables = distanceMatrix.length;
-		this.neighbourhoodStructure = neighbourhoodStructure;
+	public TSPFunction(TSPProblemDefinition tspProblem, NeighbourhoodStructure neighbourhoodStructure) {
+		super(neighbourhoodStructure);
+		this.tspProblem = tspProblem;
+		numVariables = tspProblem.getNumberOfCities();
 	}
 	
 	@Override
 	protected double evalImpl(double... x) {
 		
 		double totalCost = 0;
-		
 		for(int i = 0; i < x.length; i++){
 			if(i < x.length - 1){
 				totalCost += tspProblem.getDistance((int)x[i], (int)x[i + 1]);
@@ -52,8 +49,8 @@ public class TSPFunction extends Function {
 		double[] x = new double[getNumVariables()];
 		
 		List<Integer> citiesLeft = new ArrayList<Integer>();
-		for(int i = 0; i < citiesLeft.size(); i++){
-			citiesLeft.set(i, i);
+		for(int i = 0; i < x.length; i++){
+			citiesLeft.add(i + 1);
 		}
 		
 		for(int i = 0; i < x.length; i++){
@@ -64,29 +61,6 @@ public class TSPFunction extends Function {
 		}
 		
 		return x;
-	}
-	
-	/**
-	 * Use getNeighbours instead
-	 */
-	@Override
-	@Deprecated
-	public double[] perturb(double... x){
-		List<double[]> parent = new ArrayList<double[]>();
-		parent.add(x);
-		return neighbourhoodStructure.getNeighbours(parent).get(0);
-	}
-	
-	@Override
-	@Deprecated
-	protected double getPerturbation() {
-		return 0;
-	}
-	
-	@Override
-	@Deprecated
-	protected double perturb(double x){
-		return -1;
 	}
 	
 	@Override
