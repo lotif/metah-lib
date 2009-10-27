@@ -6,6 +6,12 @@ import java.util.Random;
 
 import br.unifor.metahlib.base.NeighbourhoodStructure;
 
+/**
+ * An implementation of the 2-opt TSP neighborhood structure 
+ * 
+ * @author marcelo lotif
+ *
+ */
 public class TwoOpt implements NeighbourhoodStructure {
 	
 	@Override

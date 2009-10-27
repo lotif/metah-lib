@@ -5,25 +5,57 @@ import java.util.Random;
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.base.Metaheuristic;
 
+/**
+ * The simulated annealing optimization method
+ * 
+ * @author marcelo lotif
+ *
+ */
 public class SimulatedAnnealing extends Metaheuristic {
 
+	/**
+	 * The function to be optimized
+	 */
 	private Function function;
+	/**
+	 * Maximum number of iterations for each temperature reached
+	 */
 	private int maxIterations;
+	/**
+	 * The maximum temperature of the system
+	 */
 	private double maxTemperature;
+	/**
+	 * The minimum temperature of the system
+	 */
 	private double minTemperature;
+	/**
+	 * The temperature decreasing step
+	 */
 	private double decreaseStep;
 
-//	private SAGraphicFrame frame;
-
+	/**
+	 * Constructor of the class
+	 * 
+	 * @param function the function to be optimized
+	 * @param tmax the maximum temperature of the system
+	 * @param tmin the minimum temperature of the system
+	 * @param b the decreasing step
+	 * @param k the maximum number of iterations for each temperature reached
+	 */
 	public SimulatedAnnealing(Function function, double tmax, double tmin, double b, int k){
 		this.function = function;
 		this.maxIterations = k;
 		this.maxTemperature = tmax;
 		this.minTemperature = tmin;
 		this.decreaseStep = b;
-//		this.frame = null;
 	}
 
+	/**
+	 * Executes the simulated annealing optimization
+	 * 
+	 * @return the best solution found
+	 */
 	public double[] execute() {
 		Random r = new Random();
 		
@@ -38,7 +70,6 @@ public class SimulatedAnnealing extends Metaheuristic {
 		
 		int currentIteration = 0;
 		double eval = eval(x);
-//		updateGraphic(realEval(eval), realEval(eval), temperature, currentIteration);
 		
 		int totalIt = 1;
 		while(temperature > minTemperature){
@@ -52,16 +83,12 @@ public class SimulatedAnnealing extends Metaheuristic {
 					x = _x;
 					eval = _eval;
 					lastBestFoundOn = totalIt;
-//					updateGraphic(realEval(eval), realEval(eval), temperature, currentIteration);
 				} else {
 					double rand = r.nextDouble();
 					double exp = Math.exp((eval - _eval)/temperature);
 					if(rand < exp){
 						x = _x;
 						eval = _eval;
-//						updateGraphic(realEval(eval), realEval(eval), temperature, currentIteration);
-					} else {
-//						updateGraphic(realEval(_eval), realEval(eval), temperature, currentIteration);
 					}
 				}
 				totalIt++;
@@ -72,30 +99,9 @@ public class SimulatedAnnealing extends Metaheuristic {
 		return x;
 	}
 	
-	
-	
 	private double eval(double[] x) {
 		return function.eval(x);
 	}
-
-//	private double realEval(double eval) {
-//		return -eval;
-//	}
-
-//	private void updateGraphic(double thisEval, double selectedEval, double temperature, int currentIteration){
-//		if(function instanceof MinimizationFunction){
-//			thisEval = ((MinimizationFunction) function).realEval(thisEval);
-//			selectedEval = ((MinimizationFunction) function).realEval(selectedEval);
-//		}
-//		if(frame != null){
-//			if(frame.getBestEverEval() == null){
-//				frame.setFunction(function);
-//				frame.setParameters(maxIterations);
-//				frame.init(selectedEval, selectedEval, temperature/maxTemperature);
-//			}
-//			frame.setGraphic(frame.createGraphic(thisEval, selectedEval, temperature), currentIteration);
-//		}
-//	}
 	
 	public int getMaxIterations() {
 		return maxIterations;
@@ -127,15 +133,6 @@ public class SimulatedAnnealing extends Metaheuristic {
 
 	public void setDecreaseStep(double decreaseStep) {
 		this.decreaseStep = decreaseStep;
-	}
-
-	@Override
-//	public void enableGraphic() {
-//		frame = new SAGraphicFrame();
-//	}
-	
-	public String getHeader(){
-		return "Simulated Annealing, tmax=" + maxTemperature + ", tmin=" + minTemperature + ", b=" + decreaseStep + ", k=" + maxIterations;
 	}
 	
 }

@@ -60,7 +60,7 @@ public class AugmentedCostFunction extends Function {
 		return function.isOptimal(eval);
 	}
 	public boolean isQuasiOptimal(double eval){
-		return isQuasiOptimal(eval);
+		return function.isQuasiOptimal(eval);
 	}
 	
 	public double[] perturb(double... x){

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import br.unifor.metahlib.base.Function;
+import br.unifor.metahlib.functions.tsp.A280;
 import br.unifor.metahlib.functions.tsp.TSPFunction;
 import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
 import br.unifor.metahlib.functions.tsp.TwoOpt;
@@ -19,7 +20,7 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-			TSPProblemDefinition tsp = new TSPProblemDefinition(new File(System.getProperty("user.dir") + "/a280.tsp"), 6);
+			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
 			
 			Function f = new TSPFunction(tsp, new TwoOpt());
 //			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
