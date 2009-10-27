@@ -7,18 +7,43 @@ import java.util.Random;
 import br.unifor.metahlib.base.NeighbourhoodStructure;
 import br.unifor.metahlib.base.NeighbourhoodableFunction;
 
+/**
+ * The function that evaluates a solution of the Traveling Salesman Problem
+ * 
+ * @author marcelo lotif
+ *
+ */
 public class TSPFunction extends NeighbourhoodableFunction {
 
+	/**
+	 * Variable to generate random values.
+	 */
 	private Random r = new Random();
 	
+	/**
+	 * The definition of an instance of the TSP problem.
+	 */
 	private TSPProblemDefinition tspProblem;
 	
+	/**
+	 * Constructor for the class
+	 * 
+	 * @param tspProblem the TSP problem instance
+	 * @param neighbourhoodStructure a neighborhood structure to generate new 
+	 * solutions based on existent ones
+	 */
 	public TSPFunction(TSPProblemDefinition tspProblem, NeighbourhoodStructure neighbourhoodStructure) {
 		super(neighbourhoodStructure);
 		this.tspProblem = tspProblem;
 		numVariables = tspProblem.getNumberOfCities();
 	}
 	
+	/**
+	 * Evaluates the function based on the TSP problem definition
+	 * 
+	 * @param x the solution to be evaluated
+	 * @return the evaluation result
+	 */
 	@Override
 	protected double evalImpl(double... x) {
 		
@@ -44,6 +69,9 @@ public class TSPFunction extends NeighbourhoodableFunction {
 		return -1;
 	}
 
+	/**
+	 * Generates a random feasible solution
+	 */
 	@Override
 	public double[] getRandomSolution(){
 		double[] x = new double[getNumVariables()];
@@ -70,7 +98,7 @@ public class TSPFunction extends NeighbourhoodableFunction {
 
 	@Override
 	public double minValue() {
-		return 0;
+		return 1;
 	}
 
 }

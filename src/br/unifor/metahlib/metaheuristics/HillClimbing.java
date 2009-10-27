@@ -5,17 +5,51 @@ import java.util.Random;
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.base.Metaheuristic;
 
+/**
+ * An implementation of the hill climbing optimization method 
+ * 
+ * @author marcelo lotif
+ *
+ */
 public class HillClimbing extends Metaheuristic {
 
+	/**
+	 * Executes the default hill climbing
+	 */
 	public static final int DEFAULT = 0;
+	/**
+	 * Executes the iterated hill climbing with the default execution
+	 */
 	public static final int ITERATED_DEFAULT = 1;
+	/**
+	 * Executes the stochastic hill climbing
+	 */
 	public static final int STOCHASTIC = 2;
+	/**
+	 * Executes the iterated hill climbing with the stochastic execution
+	 */
 	public static final int ITERATED_STOCHASTIC = 3;
 	
+	/**
+	 * The function to be optimized
+	 */
 	private Function function;
+	/**
+	 * The max number of iterations
+	 */
 	private int maxIterations;
+	/**
+	 * The max number of iterations for the iterated hill climbing
+	 */
 	private int maxIterations2;
+
+	/**
+	 * The type of the execution
+	 */
 	private int type;
+	/**
+	 * Parameter of the stochastic hill climbing
+	 */
 	private double T;
 	
 	public HillClimbing(Function function, int type, int maxIterations,int maxIterations2, double t) {
@@ -26,6 +60,11 @@ public class HillClimbing extends Metaheuristic {
 		T = t;
 	}
 	
+	/**
+	 * Executes the desired hill climbing.
+	 * 
+	 * @return the best solution found
+	 */
 	public double[] execute() {
 		switch(type){
 			case DEFAULT: return executeDefault(); 
@@ -36,6 +75,11 @@ public class HillClimbing extends Metaheuristic {
 		return null;
 	}
 
+	/**
+	 * Executes the default hill climbing
+	 * 
+	 * @return the best solution found
+	 */
 	private double[] executeDefault(){
 		double[] x;
 		if(initialSolution == null){
@@ -63,6 +107,11 @@ public class HillClimbing extends Metaheuristic {
 		return x;
 	}
 	
+	/**
+	 * Executes the iterated hill climbing
+	 * 
+	 * @return the best solution found
+	 */
 	private double[] executeIterated(){
 		double[] bestx;
 		if(initialSolution == null){
@@ -93,6 +142,11 @@ public class HillClimbing extends Metaheuristic {
 		return bestx;
 	}
 	
+	/**
+	 * Executes the stochastic hill climbing
+	 * 
+	 * @return the best solution found
+	 */
 	private double[] executeStochastic(){
 		Random r = new Random();
 		
@@ -171,20 +225,6 @@ public class HillClimbing extends Metaheuristic {
 
 	public void setT(double t) {
 		T = t;
-	}
-
-	public String getHeader(){
-		if(type == DEFAULT){
-			return "Default Hill Climbing, " + maxIterations + " iteracoes";
-		} else if(type == STOCHASTIC){
-			return "Stochastic Hill Climbing, " + maxIterations + " iteracoes, T=" + T;
-		} else if(type == ITERATED_DEFAULT){
-			return "Iterated Hill Climbing, " + maxIterations + " iteracoes, n_start=" + maxIterations2;
-		} else if(type == ITERATED_STOCHASTIC){
-			return "Iterated Stochastic Hill Climbing, " + maxIterations + " iteracoes, n_start=" + maxIterations2 + ", T=" + T;
-		}else {
-			return super.getHeader();
-		}
 	}
 	
 }

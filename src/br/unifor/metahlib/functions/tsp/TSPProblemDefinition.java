@@ -1,57 +1,56 @@
 package br.unifor.metahlib.functions.tsp;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class TSPProblemDefinition {
+/**
+ * Defines an instance of the Traveling Salesman Problem.
+ * 
+ * @author marcelo lotif
+ *
+ */
+public abstract class TSPProblemDefinition {
 
-	Hashtable<Integer, String> cities;
+	/**
+	 * A hash table of cities of a TSP instance.
+	 * The key is the "ID" of the city, usually a sequential ID.
+	 * The value is a list of comma separated values of the 2-D coordinates of the city 
+	 * specified by the key. 
+	 */
+	protected Hashtable<Integer, String> cities;
 	
-	public TSPProblemDefinition(File tsp, int headerOffset) throws IOException {
-		cities = new Hashtable<Integer, String>();
-		
-		BufferedReader br = new BufferedReader(new FileReader(tsp));
-		for(int i = 0; i < headerOffset; i++){
-			br.readLine();
-		}
-			
-		String line = br.readLine();
-		while(!line.trim().equalsIgnoreCase("EOF")){
-			String s = "" + line.charAt(0) + line.charAt(1) + line.charAt(2);
-			int id = Integer.parseInt(s.trim());
-			
-			String x = "" + line.charAt(4) + line.charAt(5) + line.charAt(6);
-			String y = "" + line.charAt(8) + line.charAt(9) + line.charAt(10);
-			
-			String xy = Double.parseDouble(x.trim()) + "," + Double.parseDouble(y.trim());
-			
-			cities.put(id, xy);
-			
-			line = br.readLine();
-		}
-		
+	/**
+	 * The constructor of the class
+	 * 
+	 * @param tsp the file which contains the TSP definition
+	 * @throws IOException
+	 */
+	public TSPProblemDefinition(File tsp) throws IOException {
+		buildCitiesTable(tsp);
 	}
 	
-	//Euclidean distance
-	public double getDistance(int i, int j){
-		
-		String si = cities.get(i);
-		String sj = cities.get(j);
-		
-		String[] xyi = si.split(",");
-		String[] xyj = sj.split(",");
-		
-		double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
-		double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
-		
-		double dij = Math.sqrt(xd*xd + yd*yd);
-		
-		return Math.round(dij);
-	}
+	/**
+	 * Populates the cities hash table depending on the TSP instance
+	 * 
+	 * @param tsp the tsp instance definition file
+	 * @return the populated hash table 
+	 * @throws IOException
+	 */
+	protected abstract Hashtable<Integer, String> buildCitiesTable(File tsp) throws IOException; 
+	
+	/**
+	 * The method which calculates the distance between two cities
+	 * 
+	 * @param i the ID of the city of origin
+	 * @param j the ID of the destination city
+	 * @return the distance between the two cities
+	 */
+	public abstract double getDistance(int i, int j);
 
+	/**
+	 * @return the number of cities in this instance
+	 */
 	public int getNumberOfCities(){
 		return cities.size();
 	}
