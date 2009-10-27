@@ -13,7 +13,6 @@ public class GuidedLocalSearch extends Metaheuristic {
 	private PenalizedFeatures penalizedFeatures;
 	private double[] p;
 	
-	
 	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod, int maxIterations, double lambda, PenalizedFeatures penalizedFeatures) {
 		this.function = function;
 		this.localSearchMethod = localSearchMethod;
@@ -26,6 +25,9 @@ public class GuidedLocalSearch extends Metaheuristic {
 	public double[] execute(){
 		
 		double[] s = function.getRandomSolution();
+		
+		double[] best = null;
+		Double bestEval = null;
 		
 		for(int i = 0; i < maxIterations; i++){
 			AugmentedCostFunction f_ = new AugmentedCostFunction(function, lambda, p, penalizedFeatures); 
@@ -53,11 +55,16 @@ public class GuidedLocalSearch extends Metaheuristic {
 				p[maxUtilIndex]++;
 			}
 			
-			System.out.println("*" + i + ": " + function.eval(s));
+			double currentEval = function.eval(s);
+			System.out.println("*" + i + ": " + currentEval);
 			
+			if(bestEval == null || currentEval < bestEval){
+				bestEval = currentEval;
+				best = s.clone();
+			}
 		}
 		
-		return s;
+		return best;
 	}
 	
 	@Override

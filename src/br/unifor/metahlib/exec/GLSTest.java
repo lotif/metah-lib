@@ -7,6 +7,7 @@ import java.util.Random;
 
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.functions.tsp.A280;
+import br.unifor.metahlib.functions.tsp.Berlin52;
 import br.unifor.metahlib.functions.tsp.TSPFunction;
 import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
 import br.unifor.metahlib.functions.tsp.TwoOpt;
@@ -20,24 +21,31 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
+//			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
+			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
 			
 			Function f = new TSPFunction(tsp, new TwoOpt());
 //			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
-			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1000, 0, 0);
+			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1500, 0, 0);
 			
 			List<TSPFeature> l = new ArrayList<TSPFeature>();
 			Random r = new Random();
-			for(int i = 0; i < tsp.getNumberOfCities() * 2; i++){
+			for(int i = 0; i < tsp.getNumberOfCities() * 15; i++){
 				int x = r.nextInt(tsp.getNumberOfCities()) + 1;
 				int y = r.nextInt(tsp.getNumberOfCities()) + 1;
 				l.add(new TSPFeature(x, y, tsp.getDistance(x, y)));
 			}
 			
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 100, 100, new TSPPenalizedFeatures(l));
+			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 500, 10, new TSPPenalizedFeatures(l));
 			
 			double[] minx = gls.execute();
-			System.out.println(f.eval(minx));
+			System.out.println("Melhor avaliação: "+ f.eval(minx));
+			
+			System.out.print("Rota da melhor Avaliação: [");
+			for(int i = 0; i < minx.length; i++){
+				System.out.print(minx[i] + ",");
+			}
+			System.out.print("]");
 			
 		} catch (Exception e){
 			e.printStackTrace();
