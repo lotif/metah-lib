@@ -30,13 +30,13 @@ public class GLSTest {
 			
 			List<TSPFeature> l = new ArrayList<TSPFeature>();
 			Random r = new Random();
-			for(int i = 0; i < tsp.getNumberOfCities() * 15; i++){
+			for(int i = 0; i < tsp.getNumberOfCities() * 10; i++){
 				int x = r.nextInt(tsp.getNumberOfCities()) + 1;
 				int y = r.nextInt(tsp.getNumberOfCities()) + 1;
 				l.add(new TSPFeature(x, y, tsp.getDistance(x, y)));
 			}
 			
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 500, 10, new TSPPenalizedFeatures(l));
+			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 200, 100, new TSPPenalizedFeatures(l));
 			
 			double[] minx = gls.execute();
 			System.out.println("Melhor avaliação: "+ f.eval(minx));
