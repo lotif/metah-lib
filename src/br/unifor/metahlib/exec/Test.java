@@ -19,8 +19,8 @@ public class Test {
 			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
 			
 			Function f = new TSPFunction(tsp, new TwoOpt());
-			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
-//			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 10000, 0, 0);
+//			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
+			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 10000, 0, 0);
 			
 			double[] minx = h.execute();
 			System.out.println(f.eval(minx));
