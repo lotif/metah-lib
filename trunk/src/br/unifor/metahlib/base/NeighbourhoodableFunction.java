@@ -61,4 +61,13 @@ public abstract class NeighbourhoodableFunction extends Function {
 		return -1;
 	}
 
+	public NeighbourhoodStructure getNeighbourhoodStructure() {
+		return neighbourhoodStructure;
+	}
+
+	public void setNeighbourhoodStructure(
+			NeighbourhoodStructure neighbourhoodStructure) {
+		this.neighbourhoodStructure = neighbourhoodStructure;
+	}
+
 }
