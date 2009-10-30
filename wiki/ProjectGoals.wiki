@@ -1,0 +1,28 @@
+#Esta página estabelece o que ainda falta ser desenvolvido no projeto.
+
+= O que precisa ser desenvolvido =
+
+Como este framework é de metaheurísticas, seria interessante que muitas metaheurísticas fossem desenvolvidas e adicionadas ao projeto. Aqui estarão enumeradas as metaheurísticas,  algoritmos de otimização e problemas de otimização que já foram desenvolvidos e os que ainda faltam.
+Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda não tem desenvolvedor definido.
+
+*Implementados:*
+    * Hill Climbing (Marcelo)
+    * Simulated Annealing (Marcelo)
+    * Guided Local Search (Marcelo)
+
+    * Traveling Salesman Problem (Marcelo)
+    * 2-opt para o TSP (Marcelo)
+    * 3-opt para o TSP (Marcelo)
+
+*Falta implementar:*
+    * Variable Neighborhood Search (Marcelo)
+    * GRASP (Marcelo)
+    * Tabu Search
+    * Iterated Local Search
+    * Genetic Algorithm
+    * Particle Swarm Optimization
+    * Ant Colony Optimization
+
+    * LK-opt para TSP(Marcelo)
+    * Problemas variados de otimização numérica (Marcelo)
+    * Knapsack Problem
