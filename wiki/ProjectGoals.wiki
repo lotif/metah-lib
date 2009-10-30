@@ -1,4 +1,4 @@
-#Esta página estabelece o que ainda falta ser desenvolvido no projeto.
+#Esta página estabelece a situação atual e o que ainda falta ser desenvolvido no projeto.
 
 = O que precisa ser desenvolvido =
 
