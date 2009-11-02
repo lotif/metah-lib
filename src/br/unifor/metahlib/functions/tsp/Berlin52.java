@@ -13,14 +13,14 @@ import java.util.Hashtable;
  *
  */
 public class Berlin52 extends TSPProblemDefinition {
-
+	
 	public Berlin52(File tsp) throws IOException {
 		super(tsp);
 	}
 
 	@Override
-	protected Hashtable<Integer, String> buildCitiesTable(File tsp) throws IOException {
-		cities = new Hashtable<Integer, String>();
+	protected double[][] buildDistanceMatrix(File tsp) throws IOException {
+		Hashtable<Integer, String> cities = new Hashtable<Integer, String>();
 		
 		BufferedReader br = new BufferedReader(new FileReader(tsp));
 		for(int i = 0; i < 6; i++){
@@ -38,23 +38,37 @@ public class Berlin52 extends TSPProblemDefinition {
 			
 			line = br.readLine();
 		}
-		return cities;
-	}
-	
-	@Override
-	public double getDistance(int i, int j) {
-		String si = cities.get(i);
-		String sj = cities.get(j);
 		
-		String[] xyi = si.split(",");
-		String[] xyj = sj.split(",");
+		int size = cities.size();
 		
-		double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
-		double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
+		double[][] distanceMatrix = new double[size][size];
 		
-		double dij = Math.sqrt(xd*xd + yd*yd);
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
+				String si = cities.get(i + 1);
+				String sj = cities.get(j + 1);
+				
+				String[] xyi = si.split(",");
+				String[] xyj = sj.split(",");
+				
+				double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
+				double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
+				
+				distanceMatrix[i][j] = Math.round(Math.sqrt(xd*xd + yd*yd));
+			}
+		}
 		
-		return Math.round(dij);
+		return distanceMatrix;
+		
 	}
 
+	@Override
+	public Berlin52 clone(){
+		try {
+			return new Berlin52(tsp);
+		} catch (IOException e){
+			return null;
+		}
+	}
+	
 }

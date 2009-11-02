@@ -78,7 +78,7 @@ public class TSPFunction extends NeighbourhoodableFunction {
 		
 		List<Integer> citiesLeft = new ArrayList<Integer>();
 		for(int i = 0; i < x.length; i++){
-			citiesLeft.add(i + 1);
+			citiesLeft.add(i);
 		}
 		
 		for(int i = 0; i < x.length; i++){
@@ -99,6 +99,14 @@ public class TSPFunction extends NeighbourhoodableFunction {
 	@Override
 	public double minValue() {
 		return 1;
+	}
+
+	public TSPProblemDefinition getTspProblem() {
+		return tspProblem;
+	}
+
+	public void setTspProblem(TSPProblemDefinition tspProblem) {
+		this.tspProblem = tspProblem;
 	}
 
 }

@@ -36,5 +36,9 @@ public class TSPPenalizedFeatures implements PenalizedFeatures {
 	public int getTotalFeatures(){
 		return penalizedFeatures.size();
 	}
+
+	public List<TSPFeature> getPenalizedFeatures() {
+		return penalizedFeatures;
+	}
 	
 }

@@ -35,20 +35,20 @@ public class GLSTest {
 			
 			List<TSPFeature> l = new ArrayList<TSPFeature>();
 			Random r = new Random();
-			for(int i = 0; i < tsp.getNumberOfCities() * 10; i++){
-				int x = r.nextInt(tsp.getNumberOfCities()) + 1;
-				int y = r.nextInt(tsp.getNumberOfCities()) + 1;
+			for(int i = 0; i < tsp.getNumberOfCities() * 100; i++){
+				int x = r.nextInt(tsp.getNumberOfCities());
+				int y = r.nextInt(tsp.getNumberOfCities());
 				l.add(new TSPFeature(x, y, tsp.getDistance(x, y)));
 			}
 			
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 200, 50, new TSPPenalizedFeatures(l));
+			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 200, 10, new TSPPenalizedFeatures(l));
 			
 			double[] minx = gls.execute();
 			System.out.println("Melhor avaliação: "+ f.eval(minx));
 			
 			System.out.print("Rota da melhor Avaliação: [");
 			for(int i = 0; i < minx.length; i++){
-				System.out.print(minx[i] + ",");
+				System.out.print((minx[i] + 1) + ",");
 			}
 			System.out.print("]");
 			

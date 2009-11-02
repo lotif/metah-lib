@@ -29,8 +29,9 @@ public class GuidedLocalSearch extends Metaheuristic {
 		double[] best = null;
 		Double bestEval = null;
 		
+		AugmentedCostFunction f_ = AugmentedCostFunctionFactory.getInstance(function, lambda, p, penalizedFeatures); 
+		
 		for(int i = 0; i < maxIterations; i++){
-			AugmentedCostFunction f_ = new AugmentedCostFunction(function, lambda, p, penalizedFeatures); 
 			
 			localSearchMethod.setFunction(f_);
 			localSearchMethod.setInitialSolution(s);
@@ -53,6 +54,7 @@ public class GuidedLocalSearch extends Metaheuristic {
 			
 			if(maxUtilIndex >= 0){
 				p[maxUtilIndex]++;
+				f_.updatePVector(maxUtilIndex);
 			}
 			
 			double currentEval = function.eval(s);
