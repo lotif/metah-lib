@@ -2,7 +2,6 @@ package br.unifor.metahlib.functions.tsp;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 
 /**
  * Defines an instance of the Traveling Salesman Problem.
@@ -13,12 +12,14 @@ import java.util.Hashtable;
 public abstract class TSPProblemDefinition {
 
 	/**
-	 * A hash table of cities of a TSP instance.
-	 * The key is the "ID" of the city, usually a sequential ID.
-	 * The value is a list of comma separated values of the 2-D coordinates of the city 
-	 * specified by the key. 
+	 * The distance matrix for all the cities of this TSP problem instance.
 	 */
-	protected Hashtable<Integer, String> cities;
+	protected double[][] distanceMatrix; 
+	
+	/**
+	 * The TSP instance
+	 */
+	protected File tsp;
 	
 	/**
 	 * The constructor of the class
@@ -27,17 +28,23 @@ public abstract class TSPProblemDefinition {
 	 * @throws IOException
 	 */
 	public TSPProblemDefinition(File tsp) throws IOException {
-		buildCitiesTable(tsp);
+		this.tsp = tsp;
+		distanceMatrix = buildDistanceMatrix(tsp);
 	}
 	
 	/**
-	 * Populates the cities hash table depending on the TSP instance
+	 * Populates the cities distance matrix depending on the TSP instance
 	 * 
-	 * @param tsp the tsp instance definition file
-	 * @return the populated hash table 
+	 * @param tsp the TSP instance definition file
+	 * @return the populated distance matrix
 	 * @throws IOException
 	 */
-	protected abstract Hashtable<Integer, String> buildCitiesTable(File tsp) throws IOException; 
+	protected abstract double[][] buildDistanceMatrix(File tsp) throws IOException; 
+	
+	/**
+	 * Clones this instance
+	 */
+	public abstract TSPProblemDefinition clone();
 	
 	/**
 	 * The method which calculates the distance between two cities
@@ -46,13 +53,31 @@ public abstract class TSPProblemDefinition {
 	 * @param j the ID of the destination city
 	 * @return the distance between the two cities
 	 */
-	public abstract double getDistance(int i, int j);
+	public double getDistance(int i, int j){
+		return distanceMatrix[i][j];
+	}
 
 	/**
 	 * @return the number of cities in this instance
 	 */
 	public int getNumberOfCities(){
-		return cities.size();
+		return distanceMatrix.length;
+	}
+	
+	public double[][] getDistanceMatrix() {
+		return distanceMatrix;
+	}
+
+	public void setDistanceMatrix(double[][] distanceMatrix) {
+		this.distanceMatrix = distanceMatrix;
+	}
+
+	public File getTsp() {
+		return tsp;
+	}
+
+	public void setTsp(File tsp) {
+		this.tsp = tsp;
 	}
 	
 }

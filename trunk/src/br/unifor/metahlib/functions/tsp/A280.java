@@ -19,8 +19,8 @@ public class A280 extends TSPProblemDefinition {
 	}
 
 	@Override
-	protected Hashtable<Integer, String> buildCitiesTable(File tsp) throws IOException {
-		cities = new Hashtable<Integer, String>();
+	protected double[][] buildDistanceMatrix(File tsp) throws IOException {
+		Hashtable<Integer, String> cities = new Hashtable<Integer, String>();
 		
 		BufferedReader br = new BufferedReader(new FileReader(tsp));
 		for(int i = 0; i < 6; i++){
@@ -41,23 +41,35 @@ public class A280 extends TSPProblemDefinition {
 			
 			line = br.readLine();
 		}
-		return cities;
+		
+		int size = cities.size();
+		
+		double[][] distanceMatrix = new double[size][size];
+		
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
+				String si = cities.get(i);
+				String sj = cities.get(j);
+				
+				String[] xyi = si.split(",");
+				String[] xyj = sj.split(",");
+				
+				double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
+				double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
+				
+				distanceMatrix[i][j] = Math.sqrt(xd*xd + yd*yd);
+			}
+		}
+		
+		return distanceMatrix;
 	}
 	
 	@Override
-	public double getDistance(int i, int j) {
-		String si = cities.get(i);
-		String sj = cities.get(j);
-		
-		String[] xyi = si.split(",");
-		String[] xyj = sj.split(",");
-		
-		double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
-		double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
-		
-		double dij = Math.sqrt(xd*xd + yd*yd);
-		
-		return Math.round(dij);
+	public A280 clone(){
+		try {
+			return new A280(tsp);
+		} catch (IOException e){
+			return null;
+		}
 	}
-
 }

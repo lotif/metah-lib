@@ -2,12 +2,12 @@ package br.unifor.metahlib.metaheuristics.gls;
 
 import br.unifor.metahlib.base.Function;
 
-public class AugmentedCostFunction extends Function {
+public abstract class AugmentedCostFunction extends Function {
 
-	private Function function;
-	private double lambda;
-	private double[] p;
-	private PenalizedFeatures penalizedFeatures;
+	protected Function function;
+	protected double lambda;
+	protected double[] p;
+	protected PenalizedFeatures penalizedFeatures;
 	
 	public AugmentedCostFunction(Function function, double lambda, double[] p,
 			PenalizedFeatures penalizedFeatures) {
@@ -20,17 +20,15 @@ public class AugmentedCostFunction extends Function {
 
 	@Override
 	protected double evalImpl(double... x) {
-		double eval = function.eval(x);
-		
-		for(int i = 0; i < penalizedFeatures.getTotalFeatures(); i++){
-			if(penalizedFeatures.hasTheFeature(x, i) != 0){
-				eval = eval + lambda*p[i];
-			}
-		}
-		
-		return eval;
+		return augmentedEval(x);
 	}
 
+	protected abstract double augmentedEval(double... x);
+	
+	public void updatePVector(int indexToUpdate){
+		p[indexToUpdate]++;
+	}
+	
 	@Override
 	public double getFeasibleValue() {
 		return function.getFeasibleValue();
