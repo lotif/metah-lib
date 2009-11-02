@@ -22,13 +22,13 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-//			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
-			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
+			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
+//			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
 			
-//			Function f = new TSPFunction(tsp, new TwoOpt());
-			Function f = new TSPFunction(tsp, null);
-			ThreeOpt t = new ThreeOpt(f);
-			((TSPFunction)f).setNeighbourhoodStructure(t);
+			Function f = new TSPFunction(tsp, new TwoOpt());
+//			Function f = new TSPFunction(tsp, null);
+//			ThreeOpt t = new ThreeOpt(f);
+//			((TSPFunction)f).setNeighbourhoodStructure(t);
 			
 //			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
 			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1500, 0, 0);
