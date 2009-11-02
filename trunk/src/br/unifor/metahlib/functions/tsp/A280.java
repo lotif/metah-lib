@@ -48,8 +48,8 @@ public class A280 extends TSPProblemDefinition {
 		
 		for(int i = 0; i < size; i++){
 			for(int j = 0; j < size; j++){
-				String si = cities.get(i);
-				String sj = cities.get(j);
+				String si = cities.get(i + 1);
+				String sj = cities.get(j + 1);
 				
 				String[] xyi = si.split(",");
 				String[] xyj = sj.split(",");
@@ -57,7 +57,7 @@ public class A280 extends TSPProblemDefinition {
 				double xd = Double.parseDouble(xyi[0]) - Double.parseDouble(xyj[0]);
 				double yd = Double.parseDouble(xyi[1]) - Double.parseDouble(xyj[1]);
 				
-				distanceMatrix[i][j] = Math.sqrt(xd*xd + yd*yd);
+				distanceMatrix[i][j] = Math.round(Math.sqrt(xd*xd + yd*yd));
 			}
 		}
 		
