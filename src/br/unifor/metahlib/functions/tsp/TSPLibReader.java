@@ -6,15 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
-/**
- * Implementation of the TSPProblemDefinition abstract class for the A280 TSP instance
- * 
- * @author marcelo lotif
- *
- */
-public class A280 extends TSPProblemDefinition {
-
-	public A280(File tsp) throws IOException {
+public class TSPLibReader extends TSPProblemDefinition {
+	
+	public TSPLibReader(File tsp) throws IOException {
 		super(tsp);
 	}
 
@@ -23,19 +17,19 @@ public class A280 extends TSPProblemDefinition {
 		Hashtable<Integer, String> cities = new Hashtable<Integer, String>();
 		
 		BufferedReader br = new BufferedReader(new FileReader(tsp));
-		for(int i = 0; i < 6; i++){
-			br.readLine();
-		}
 			
 		String line = br.readLine();
+		
+		while(!line.trim().equals("NODE_COORD_SECTION")){
+			line = br.readLine();
+		}
+		
+		line = br.readLine();
 		while(!line.trim().equalsIgnoreCase("EOF")){
-			String s = "" + line.charAt(0) + line.charAt(1) + line.charAt(2);
-			int id = Integer.parseInt(s.trim());
+			String[] s = line.split(" ");
+			int id = Integer.parseInt(s[0]);
 			
-			String x = "" + line.charAt(4) + line.charAt(5) + line.charAt(6);
-			String y = "" + line.charAt(8) + line.charAt(9) + line.charAt(10);
-			
-			String xy = Double.parseDouble(x.trim()) + "," + Double.parseDouble(y.trim());
+			String xy = s[1] + "," + s[2];
 			
 			cities.put(id, xy);
 			
@@ -62,14 +56,16 @@ public class A280 extends TSPProblemDefinition {
 		}
 		
 		return distanceMatrix;
+		
 	}
-	
+
 	@Override
-	public A280 clone(){
+	public TSPLibReader clone(){
 		try {
-			return new A280(tsp);
+			return new TSPLibReader(tsp);
 		} catch (IOException e){
 			return null;
 		}
 	}
+	
 }
