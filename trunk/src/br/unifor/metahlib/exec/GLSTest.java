@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.functions.tsp.A280;
-import br.unifor.metahlib.functions.tsp.Att48;
-import br.unifor.metahlib.functions.tsp.Berlin52;
-import br.unifor.metahlib.functions.tsp.D198;
 import br.unifor.metahlib.functions.tsp.TSPFunction;
+import br.unifor.metahlib.functions.tsp.TSPLibReader;
 import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
 import br.unifor.metahlib.functions.tsp.structures.ThreeOpt;
 import br.unifor.metahlib.functions.tsp.structures.TwoOpt;
@@ -24,10 +21,7 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-//			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
-//			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
-//			TSPProblemDefinition tsp = new D198(new File(System.getProperty("user.dir") + "/d198.tsp"));
-			TSPProblemDefinition tsp = new Att48(new File(System.getProperty("user.dir") + "/att48.tsp"));
+			TSPProblemDefinition tsp = new TSPLibReader(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
 			
 //			Function f = new TSPFunction(tsp, new TwoOpt());
 			Function f = new TSPFunction(tsp, null);
