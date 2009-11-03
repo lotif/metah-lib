@@ -7,7 +7,9 @@ import java.util.Random;
 
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.functions.tsp.A280;
+import br.unifor.metahlib.functions.tsp.Att48;
 import br.unifor.metahlib.functions.tsp.Berlin52;
+import br.unifor.metahlib.functions.tsp.D198;
 import br.unifor.metahlib.functions.tsp.TSPFunction;
 import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
 import br.unifor.metahlib.functions.tsp.structures.ThreeOpt;
@@ -22,31 +24,33 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
+//			TSPProblemDefinition tsp = new A280(new File(System.getProperty("user.dir") + "/a280.tsp"));
 //			TSPProblemDefinition tsp = new Berlin52(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
+//			TSPProblemDefinition tsp = new D198(new File(System.getProperty("user.dir") + "/d198.tsp"));
+			TSPProblemDefinition tsp = new Att48(new File(System.getProperty("user.dir") + "/att48.tsp"));
 			
-			Function f = new TSPFunction(tsp, new TwoOpt());
-//			Function f = new TSPFunction(tsp, null);
-//			ThreeOpt t = new ThreeOpt(f);
-//			((TSPFunction)f).setNeighbourhoodStructure(t);
+//			Function f = new TSPFunction(tsp, new TwoOpt());
+			Function f = new TSPFunction(tsp, null);
+			ThreeOpt t = new ThreeOpt(f);
+			((TSPFunction)f).setNeighbourhoodStructure(t);
 			
 //			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
 			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1500, 0, 0);
 			
 			List<TSPFeature> l = new ArrayList<TSPFeature>();
 			Random r = new Random();
-			for(int i = 0; i < tsp.getNumberOfCities() * 100; i++){
+			for(int i = 0; i < tsp.getNumberOfCities() * 10; i++){
 				int x = r.nextInt(tsp.getNumberOfCities());
 				int y = r.nextInt(tsp.getNumberOfCities());
 				l.add(new TSPFeature(x, y, tsp.getDistance(x, y)));
 			}
 			
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 200, 10, new TSPPenalizedFeatures(l));
+			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 2000, 10, new TSPPenalizedFeatures(l));
 			
 			double[] minx = gls.execute();
-			System.out.println("Melhor avaliação: "+ f.eval(minx));
+			System.out.println("Melhor avaliacao: "+ f.eval(minx));
 			
-			System.out.print("Rota da melhor Avaliação: [");
+			System.out.print("Rota da melhor Avaliacao: [");
 			for(int i = 0; i < minx.length; i++){
 				System.out.print((minx[i] + 1) + ",");
 			}
