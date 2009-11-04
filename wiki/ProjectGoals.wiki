@@ -19,7 +19,7 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * GRASP (Marcelo)
     * Tabu Search
     * Iterated Local Search
-    * Genetic Algorithm (Paulo Moreno)
+    * Genetic Algorithm
     * Particle Swarm Optimization (Paulo Moreno)
     * Ant Colony Optimization
 
