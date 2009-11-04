@@ -19,10 +19,10 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * GRASP (Marcelo)
     * Tabu Search
     * Iterated Local Search
-    * Genetic Algorithm
-    * Particle Swarm Optimization
+    * Genetic Algorithm (Paulo Moreno)
+    * Particle Swarm Optimization (Paulo Moreno)
     * Ant Colony Optimization
 
-    * LK-opt para TSP(Marcelo)
+    * LK-opt para TSP (Marcelo)
     * Problemas variados de otimização numérica (Marcelo)
     * Knapsack Problem
