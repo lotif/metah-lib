@@ -5,7 +5,6 @@ import br.unifor.metahlib.base.Metaheuristic;
 
 public class GuidedLocalSearch extends Metaheuristic {
 
-	private Function function;
 	private Metaheuristic localSearchMethod;
 	private double lambda;
 	private int maxIterations;
@@ -14,7 +13,7 @@ public class GuidedLocalSearch extends Metaheuristic {
 	private double[] p;
 	
 	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod, int maxIterations, double lambda, PenalizedFeatures penalizedFeatures) {
-		this.function = function;
+		super(function);
 		this.localSearchMethod = localSearchMethod;
 		this.lambda = lambda;
 		this.maxIterations = maxIterations;
@@ -67,16 +66,6 @@ public class GuidedLocalSearch extends Metaheuristic {
 		}
 		
 		return best;
-	}
-	
-	@Override
-	public Function getFunction() {
-		return function;
-	}
-
-	@Override
-	public void setFunction(Function function) {
-		this.function = function;		
 	}
 
 	public double getLambda() {

@@ -21,18 +21,13 @@ public abstract class Metaheuristic {
 	protected double[] initialSolution = null;
 	
 	/**
-	 * Retrieves the function to be optimized by the metaheuristic.
-	 * 
-	 * @return the function to be optimized
+	 * The function to be optimized by the metaheuristic.
 	 */
-	public abstract Function getFunction();
+	protected Function function;
 	
-	/**
-	 * Set the function to be optimized by the metraheuristic
-	 * 
-	 * @param function the function to be optimized
-	 */
-	public abstract void setFunction(Function function);
+	public Metaheuristic(Function function){
+		this.function = function;
+	}
 	
 	/**
 	 * The method which initiates the optimization.
@@ -40,6 +35,24 @@ public abstract class Metaheuristic {
 	 * @return the result of the optimization
 	 */
 	public abstract double[] execute();
+	
+	/**
+	 * Retrieves the function to be optimized by the metaheuristic.
+	 * 
+	 * @return the function to be optimized
+	 */
+	public Function getFunction(){
+		return function;
+	}
+	
+	/**
+	 * Set the function to be optimized by the metraheuristic
+	 * 
+	 * @param function the function to be optimized
+	 */
+	public void setFunction(Function function){
+		this.function = function;
+	}
 	
 	public int getLastBestFoundOn() {
 		return lastBestFoundOn;

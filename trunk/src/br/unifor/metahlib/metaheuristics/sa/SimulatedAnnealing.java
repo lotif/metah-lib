@@ -12,11 +12,7 @@ import br.unifor.metahlib.base.Metaheuristic;
  *
  */
 public class SimulatedAnnealing extends Metaheuristic {
-
-	/**
-	 * The function to be optimized
-	 */
-	private Function function;
+	
 	/**
 	 * Maximum number of iterations for each temperature reached
 	 */
@@ -44,7 +40,7 @@ public class SimulatedAnnealing extends Metaheuristic {
 	 * @param k the maximum number of iterations for each temperature reached
 	 */
 	public SimulatedAnnealing(Function function, double tmax, double tmin, double b, int k){
-		this.function = function;
+		super(function);
 		this.maxIterations = k;
 		this.maxTemperature = tmax;
 		this.minTemperature = tmin;
@@ -109,14 +105,6 @@ public class SimulatedAnnealing extends Metaheuristic {
 
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
-	}
-	
-	public Function getFunction() {
-		return function;
-	}
-
-	public void setFunction(Function function) {
-		this.function = function;		
 	}
 	
 	public double getMaxTemperature() {
