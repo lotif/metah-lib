@@ -31,10 +31,6 @@ public class HillClimbing extends Metaheuristic {
 	public static final int ITERATED_STOCHASTIC = 3;
 	
 	/**
-	 * The function to be optimized
-	 */
-	private Function function;
-	/**
 	 * The max number of iterations
 	 */
 	private int maxIterations;
@@ -53,7 +49,7 @@ public class HillClimbing extends Metaheuristic {
 	private double T;
 	
 	public HillClimbing(Function function, int type, int maxIterations,int maxIterations2, double t) {
-		this.function = function;
+		super(function);
 		this.maxIterations = maxIterations;
 		this.maxIterations2 = maxIterations2;
 		this.type = type;
@@ -66,6 +62,7 @@ public class HillClimbing extends Metaheuristic {
 	 * @return the best solution found
 	 */
 	public double[] execute() {
+		lastBestFoundOn = 0;
 		switch(type){
 			case DEFAULT: return executeDefault(); 
 			case ITERATED_DEFAULT: return executeIterated(); 
@@ -184,15 +181,6 @@ public class HillClimbing extends Metaheuristic {
 		}
 		
 		return x;
-	}
-	
-	public Function getFunction() {
-		return function;
-	}
-
-	public void setFunction(Function function) {
-		this.function = function;
-		lastBestFoundOn = 0;
 	}
 
 	public int getMaxIterations() {
