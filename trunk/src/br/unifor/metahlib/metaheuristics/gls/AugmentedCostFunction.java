@@ -1,33 +1,85 @@
 package br.unifor.metahlib.metaheuristics.gls;
 
+import java.util.List;
+
 import br.unifor.metahlib.base.Function;
 
+/**
+ * The abstract class for the Augmented Cost Function of GLS metaheuristic.
+ * Each problem must have an specific implementation of this class.
+ * 
+ * This class also treats with the penalties of the GLS Metaheuristic.
+ * 
+ * @author marcelo lotif
+ *
+ */
 public abstract class AugmentedCostFunction extends Function {
 
+	/**
+	 * The function that this instance is augmenting
+	 */
 	protected Function function;
-	protected double lambda;
-	protected double[] p;
-	protected PenalizedFeatures penalizedFeatures;
 	
-	public AugmentedCostFunction(Function function, double lambda, double[] p,
-			PenalizedFeatures penalizedFeatures) {
+	/**
+	 * The lambda parameter to calculate the feature's penalties
+	 */
+	protected double lambda;
+	
+	/**
+	 * Class contructor
+	 * 
+	 * @param function The function that this instance is augmenting
+	 * @param lambda The lambda parameter to calculate the feature's penalties
+	 */
+	public AugmentedCostFunction(Function function, double lambda) {
 		super();
 		this.function = function;
 		this.lambda = lambda;
-		this.p = p;
-		this.penalizedFeatures = penalizedFeatures;
 	}
 
+	/**
+	 * The implementation of the evaluation function.
+	 * Adds the penalties to the original cost function.
+	 * 
+	 * @param x the solution instance
+	 * @return the value of the augmented cost function
+	 */
 	@Override
 	protected double evalImpl(double... x) {
 		return augmentedEval(x);
 	}
 
+	/**
+	 * Calculates the augmented cost function.
+	 * 
+	 * @param x the solution instance
+	 * @return the augmented cost value
+	 */
 	protected abstract double augmentedEval(double... x);
 	
-	public void updatePVector(int indexToUpdate){
-		p[indexToUpdate]++;
-	}
+	/**
+	 * Given a problem solution, returns all the features belonging to this solution
+	 * 
+	 * @param solution a problem solution
+	 * @param function the function to calculate the cost of the features
+	 * @return a list of features belonging to this solution
+	 */
+	public abstract List<SolutionFeature> getSolutionFeatures(double[] solution, Function function);
+	
+	/**
+	 * Returns the penalty value for a given feature
+	 * 
+	 * @param feature the feature
+	 * @return the penalty for this feature
+	 */
+	public abstract double getP(SolutionFeature feature);
+	
+	/**
+	 * Updates the penalty for a given feature
+	 * 
+	 * @param penalizedFeature the feature to be penalized
+	 */
+	public abstract void updateP(SolutionFeature penalizedFeature);
 	
 	@Override
 	public double getFeasibleValue() {

@@ -8,6 +8,9 @@ import br.unifor.metahlib.base.NeighbourhoodStructure;
 
 /**
  * An implementation of the 3-opt TSP neighborhood structure 
+ * This implementation is in accordance with the specification from the 
+ * book "The traveling salesman problem and its variations" (Gutin, G. Punnen, A. 2002) p. 315-318.
+ * 
  * 
  * @author marcelo lotif
  *
