@@ -6,12 +6,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
 
+/**
+ * An universal reader for the TSPLib TSP instances
+ * 
+ * @author Paulo Moreno
+ * @author Marcelo Lotif
+ *
+ */
 public class TSPLibReader extends TSPProblemDefinition {
 	
+	/**
+	 * Contructor of the class
+	 * 
+	 * @param tsp the file where the TSP instance data is stored
+	 * @throws IOException
+	 */
 	public TSPLibReader(File tsp) throws IOException {
 		super(tsp);
 	}
 
+	/**
+	 * Populates the cities distance matrix depending on the TSP instance
+	 * 
+	 * @param tsp the TSP instance definition file
+	 * @return the populated distance matrix
+	 * @throws IOException
+	 */
 	@Override
 	protected double[][] buildDistanceMatrix(File tsp) throws IOException {
 		Hashtable<Integer, String> cities = new Hashtable<Integer, String>();
@@ -26,10 +46,22 @@ public class TSPLibReader extends TSPProblemDefinition {
 		
 		line = br.readLine();
 		while(!line.trim().equalsIgnoreCase("EOF")){
-			String[] s = line.split(" ");
-			int id = Integer.parseInt(s[0]);
+			String[] s = line.split("\\s");
+			double[] values = new double[3];
 			
-			String xy = s[1] + "," + s[2];
+			int i = 0;
+			for(int k = 0; k < s.length; k++){
+				if(i < 3){
+					try{
+						values[i] = Double.parseDouble(s[k]);;
+						i++;					
+					} catch (NumberFormatException e) { }
+				}
+			}
+			
+			int id = (int)values[0];
+			
+			String xy = values[1] + "," + values[2];
 			
 			cities.put(id, xy);
 			
@@ -59,6 +91,11 @@ public class TSPLibReader extends TSPProblemDefinition {
 		
 	}
 
+	/**
+	 * Clones this instance
+	 * 
+	 * @return a clone instance of this class 
+	 */
 	@Override
 	public TSPLibReader clone(){
 		try {

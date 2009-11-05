@@ -1,9 +1,6 @@
 package br.unifor.metahlib.exec;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.functions.tsp.TSPFunction;
@@ -13,33 +10,28 @@ import br.unifor.metahlib.functions.tsp.structures.ThreeOpt;
 import br.unifor.metahlib.functions.tsp.structures.TwoOpt;
 import br.unifor.metahlib.metaheuristics.HillClimbing;
 import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
-import br.unifor.metahlib.metaheuristics.gls.PenalizedFeatures;
-import br.unifor.metahlib.metaheuristics.gls.tsp.TSPFeature;
-import br.unifor.metahlib.metaheuristics.gls.tsp.TSPPenalizedFeatures;
 
 public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-			TSPProblemDefinition tsp = new TSPLibReader(new File(System.getProperty("user.dir") + "/berlin52.tsp"));
+			TSPProblemDefinition tsp = new TSPLibReader(new File(System.getProperty("user.dir") + "/a280.tsp"));
 			
-//			Function f = new TSPFunction(tsp, new TwoOpt());
-			Function f = new TSPFunction(tsp, null);
-			ThreeOpt t = new ThreeOpt(f);
-			((TSPFunction)f).setNeighbourhoodStructure(t);
+			Function f = new TSPFunction(tsp, new TwoOpt());
+//			Function f = new TSPFunction(tsp, null);
+//			ThreeOpt t = new ThreeOpt(f);
+//			((TSPFunction)f).setNeighbourhoodStructure(t);
 			
 //			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
 			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1500, 0, 0);
 			
-			List<TSPFeature> l = new ArrayList<TSPFeature>();
-			Random r = new Random();
-			for(int i = 0; i < tsp.getNumberOfCities() * 10; i++){
-				int x = r.nextInt(tsp.getNumberOfCities());
-				int y = r.nextInt(tsp.getNumberOfCities());
-				l.add(new TSPFeature(x, y, tsp.getDistance(x, y)));
-			}
-			
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 2000, 10, new TSPPenalizedFeatures(l));
+			/*
+			 * Possible values for the GLS parameter "a", according with Vordouris 1997:
+			 * 2-OPT: 1/8 <= a <= 1/2
+			 * 3-OPT: 1/10 <= a <= 1/4
+			 * LK-OPT: 1/12 <= a <= 1/6
+			 */
+			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 2000, 1.0/6.0);
 			
 			double[] minx = gls.execute();
 			System.out.println("Melhor avaliacao: "+ f.eval(minx));
