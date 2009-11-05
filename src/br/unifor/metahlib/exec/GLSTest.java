@@ -8,8 +8,8 @@ import br.unifor.metahlib.functions.tsp.TSPLibReader;
 import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
 import br.unifor.metahlib.functions.tsp.structures.ThreeOpt;
 import br.unifor.metahlib.functions.tsp.structures.TwoOpt;
-import br.unifor.metahlib.metaheuristics.HillClimbing;
-import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
+import br.unifor.metahlib.gls.GuidedLocalSearch;
+import br.unifor.metahlib.hillclimbing.HillClimbing;
 
 public class GLSTest {
 

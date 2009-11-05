@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.gls;
+package br.unifor.metahlib.gls;
 
 /**
  * This class stablishes the basic parameters to define a GLS solution feature.

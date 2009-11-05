@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.vns;
+package br.unifor.metahlib.vns;
 
 import br.unifor.metahlib.base.Function;
 import br.unifor.metahlib.base.Metaheuristic;
