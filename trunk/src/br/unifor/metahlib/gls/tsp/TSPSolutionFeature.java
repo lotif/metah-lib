@@ -1,6 +1,6 @@
-package br.unifor.metahlib.metaheuristics.gls.tsp;
+package br.unifor.metahlib.gls.tsp;
 
-import br.unifor.metahlib.metaheuristics.gls.SolutionFeature;
+import br.unifor.metahlib.gls.SolutionFeature;
 
 /**
  * Implementation of the SolutionFeature abstract class to define a TSP feature

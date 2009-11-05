@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.sa;
+package br.unifor.metahlib.sa;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.gls;
+package br.unifor.metahlib.gls;
 
 import java.util.List;
 
