@@ -1,4 +1,4 @@
-package br.unifor.metahlib.gls.tsp;
+package br.unifor.metahlib.metaheuristics.gls.tsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,8 @@ import deprecated.Function;
 import deprecated.TSPFunction;
 import deprecated.TSPProblemDefinition;
 
-import br.unifor.metahlib.gls.AugmentedCostFunction;
-import br.unifor.metahlib.gls.SolutionFeature;
+import br.unifor.metahlib.metaheuristics.gls.AugmentedCostFunction;
+import br.unifor.metahlib.metaheuristics.gls.SolutionFeature;
 
 /**
  * An implementation of the AugmentedCostFunction for the TSPFunction class

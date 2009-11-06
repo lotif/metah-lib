@@ -7,8 +7,8 @@ import deprecated.TSPFunction;
 import deprecated.TSPLibReader;
 import deprecated.TSPProblemDefinition;
 
-import br.unifor.metahlib.gls.GuidedLocalSearch;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
+import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
 import br.unifor.metahlib.problems.tsp.neighborhood.ThreeOpt;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 

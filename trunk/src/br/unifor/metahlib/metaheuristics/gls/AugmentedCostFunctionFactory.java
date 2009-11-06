@@ -1,8 +1,8 @@
-package br.unifor.metahlib.gls;
+package br.unifor.metahlib.metaheuristics.gls;
 
 import deprecated.Function;
 import deprecated.TSPFunction;
-import br.unifor.metahlib.gls.tsp.TSPAugmentedCostFunction;
+import br.unifor.metahlib.metaheuristics.gls.tsp.TSPAugmentedCostFunction;
 
 /**
  * A factory class for instances of the AugmentedCostFunction abstract class 
