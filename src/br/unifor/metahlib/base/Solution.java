@@ -1,7 +1,5 @@
 package br.unifor.metahlib.base;
 
-import br.unifor.metahlib.base.Problem.Type;
-
 public class Solution implements Cloneable {
 	private Double cost;
 	private Problem problem;
@@ -14,9 +12,6 @@ public class Solution implements Cloneable {
 	public double getCost() {
 		if (cost == null){
 			cost = problem.getCostEvaluator().eval(this);
-			if (problem.getType() == Type.MAXIMIZATION){
-				cost = -1 * cost;
-			}
 		}
 		return cost;
 	}

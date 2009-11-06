@@ -4,14 +4,12 @@ import java.util.Random;
 
 public abstract class Problem {
 	
-	static public enum Type { MINIMIZATION, MAXIMIZATION };
-	
 	private Solution optimalSolution;
 	private Solution initialSolution;
 	private CostEvaluator costEvaluator;
 	private NeighborhoodStructure neighborhoodStructure;
 	protected Random random;
-	private Type type = Type.MINIMIZATION;
+
 	public Problem(){
 		this.random = new Random();
 	}
@@ -46,10 +44,6 @@ public abstract class Problem {
 	
 	public void setRandomSeed(long seed){
 		random.setSeed(seed);
-	}
-	
-	public Problem.Type getType(){
-		return type;
 	}
 	
 	public abstract Solution newRandomSolution();
