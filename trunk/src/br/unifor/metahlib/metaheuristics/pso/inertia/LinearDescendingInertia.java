@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.inertia;
+package br.unifor.metahlib.metaheuristics.pso.inertia;
 
 import br.unifor.metahlib.metaheuristics.pso.Inertia;
 
