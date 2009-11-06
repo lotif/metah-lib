@@ -13,8 +13,8 @@ public abstract class CostEvaluator {
 	
 	/**
 	 * Calculates the cost of a solution.
-	 * @param s Solution to evaluate.
-	 * @return Cost of a solution.
+	 * @param s solution to evaluate
+	 * @return cost of a solution
 	 */
 	public double eval(Solution s) {
 		evalCount++;
@@ -24,8 +24,8 @@ public abstract class CostEvaluator {
 	/**
 	 * Method responsible for calculate the cost of a solution. Must be implemented 
 	 * in a descending class.
-	 * @param s Solution to evaluate.
-	 * @return Cost of solution.
+	 * @param s solution to evaluate
+	 * @return cost of solution
 	 */
 	protected abstract double calculateCost(Solution s);
 
