@@ -1,10 +1,10 @@
-package br.unifor.metahlib.functions.tsp.structures;
+package br.unifor.metahlib.tsp.neighborhood;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import br.unifor.metahlib.base.NeighbourhoodStructure;
+import br.unifor.metahlib.base.NeighborhoodStructure;
 
 /**
  * An implementation of the 2-opt TSP neighborhood structure 
@@ -12,7 +12,7 @@ import br.unifor.metahlib.base.NeighbourhoodStructure;
  * @author marcelo lotif
  *
  */
-public class TwoOpt implements NeighbourhoodStructure {
+public class TwoOpt extends NeighborhoodStructure {
 	
 	/**
 	 * Edge removed #1
@@ -104,5 +104,4 @@ public class TwoOpt implements NeighbourhoodStructure {
 	public void setEdge2(int edge2) {
 		this.edge2 = edge2;
 	}
-	
 }

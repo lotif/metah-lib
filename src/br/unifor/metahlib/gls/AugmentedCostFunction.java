@@ -2,7 +2,8 @@ package br.unifor.metahlib.gls;
 
 import java.util.List;
 
-import br.unifor.metahlib.base.Function;
+import deprecated.Function;
+
 
 /**
  * The abstract class for the Augmented Cost Function of GLS metaheuristic.

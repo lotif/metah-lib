@@ -1,11 +1,10 @@
-package br.unifor.metahlib.functions.tsp;
+package deprecated;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import br.unifor.metahlib.base.NeighbourhoodStructure;
-import br.unifor.metahlib.base.NeighbourhoodableFunction;
+import br.unifor.metahlib.base.NeighborhoodStructure;
 
 /**
  * The function that evaluates a solution of the Traveling Salesman Problem
@@ -32,7 +31,7 @@ public class TSPFunction extends NeighbourhoodableFunction {
 	 * @param neighbourhoodStructure a neighborhood structure to generate new 
 	 * solutions based on existent ones
 	 */
-	public TSPFunction(TSPProblemDefinition tspProblem, NeighbourhoodStructure neighbourhoodStructure) {
+	public TSPFunction(TSPProblemDefinition tspProblem, NeighborhoodStructure neighbourhoodStructure) {
 		super(neighbourhoodStructure);
 		this.tspProblem = tspProblem;
 		numVariables = tspProblem.getNumberOfCities();

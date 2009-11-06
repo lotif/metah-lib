@@ -1,10 +1,11 @@
-package br.unifor.metahlib.functions.tsp.structures;
+package br.unifor.metahlib.tsp.neighborhood;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.base.NeighbourhoodStructure;
+import deprecated.Function;
+
+import br.unifor.metahlib.base.NeighborhoodStructure;
 
 /**
  * An implementation of the 3-opt TSP neighborhood structure 
@@ -15,7 +16,7 @@ import br.unifor.metahlib.base.NeighbourhoodStructure;
  * @author marcelo lotif
  *
  */
-public class ThreeOpt implements NeighbourhoodStructure {
+public class ThreeOpt extends NeighborhoodStructure {
 
 	public Function function;
 	
@@ -61,5 +62,4 @@ public class ThreeOpt implements NeighbourhoodStructure {
 	public void setFunction(Function function) {
 		this.function = function;
 	}
-	
 }

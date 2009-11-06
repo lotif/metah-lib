@@ -3,9 +3,10 @@ package br.unifor.metahlib.gls.tsp;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.functions.tsp.TSPFunction;
-import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
+import deprecated.Function;
+import deprecated.TSPFunction;
+import deprecated.TSPProblemDefinition;
+
 import br.unifor.metahlib.gls.AugmentedCostFunction;
 import br.unifor.metahlib.gls.SolutionFeature;
 

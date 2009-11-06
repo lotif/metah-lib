@@ -1,4 +1,4 @@
-package br.unifor.metahlib.base;
+package deprecated;
 
 import java.text.DecimalFormat;
 

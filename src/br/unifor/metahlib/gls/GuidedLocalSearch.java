@@ -2,8 +2,9 @@ package br.unifor.metahlib.gls;
 
 import java.util.List;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.base.Metaheuristic;
+import deprecated.Function;
+import deprecated.Metaheuristic;
+
 
 /**
  * An implementation of the Guiided Local Search Metaheuristic.

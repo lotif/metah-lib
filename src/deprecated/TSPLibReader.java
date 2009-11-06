@@ -1,4 +1,4 @@
-package br.unifor.metahlib.functions.tsp;
+package deprecated;
 
 import java.io.BufferedReader;
 import java.io.File;

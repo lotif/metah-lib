@@ -1,7 +1,7 @@
 package br.unifor.metahlib.gls;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.functions.tsp.TSPFunction;
+import deprecated.Function;
+import deprecated.TSPFunction;
 import br.unifor.metahlib.gls.tsp.TSPAugmentedCostFunction;
 
 /**
