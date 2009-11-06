@@ -1,14 +1,37 @@
 package br.unifor.metahlib.base;
 
+/**
+ * A possible solution for a problem. 
+ */
 public class Solution implements Cloneable {
+	
+	/**
+	 * Solution cost.  
+	 */
 	private Double cost;
+	
+	/**
+	 * Problem which this solution is applicable. 
+	 */
 	private Problem problem;
+	
+	/**
+	 * Values of solution. The meaning of the values is given by the problem.
+	 */
 	private Object[] values;
 	
+	/**
+	 * Constructs a new Solution for the problem informed.
+	 * @param p
+	 */
 	public Solution(Problem p){
 		problem = p;
 	}
 
+	/**
+	 * Returns the cost of solution.
+	 * @return cost of solution
+	 */
 	public double getCost() {
 		if (cost == null){
 			cost = problem.getCostEvaluator().eval(this);
@@ -16,16 +39,27 @@ public class Solution implements Cloneable {
 		return cost;
 	}
 	
+	/**
+	 * Sets the solution values. The meaning of the values is given by the problem. 
+	 * @param values solution values
+	 */
 	public void setValues(Object[] values){
 		this.values = values;
 		this.cost = null;
 	}
 	
+	/**
+	 * Returns the solution values. The meaning of the values is given by the problem.
+	 * @return solution values
+	 */
 	public Object[] getValues(){
 		return values;
 	}
 	
-    @Override
+    /**
+     * Creates a solution clone.
+     */
+	@Override
     public Object clone() throws CloneNotSupportedException {
         Solution clone = new Solution(problem);
         clone.cost = cost;
@@ -33,6 +67,10 @@ public class Solution implements Cloneable {
         return clone;
     }
     
+	/**
+	 * Creates a string representation of solution.
+	 */
+	@Override
 	public String toString(){
 		String s = "Cost: " + getCost() + " [";
 		if (values.length > 0){
@@ -44,5 +82,4 @@ public class Solution implements Cloneable {
 		s+= "]";
 		return s;
 	}
-    
 }
