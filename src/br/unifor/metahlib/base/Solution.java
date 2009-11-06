@@ -61,12 +61,20 @@ public class Solution implements Cloneable {
      */
 	@Override
     public Object clone() throws CloneNotSupportedException {
+        Solution clone = duplicate();
+        return clone;
+    }
+	
+    /**
+     * Creates a solution clone. Same that clone(), but without throws CloneNotSupportedException.
+     */
+	public Solution duplicate() {
         Solution clone = new Solution(problem);
         clone.cost = cost;
         clone.values = values.clone();
         return clone;
     }
-    
+	    
 	/**
 	 * Creates a string representation of solution.
 	 */

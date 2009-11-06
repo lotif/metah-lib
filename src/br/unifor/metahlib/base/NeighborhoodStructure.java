@@ -2,12 +2,18 @@ package br.unifor.metahlib.base;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * A class that defines a neighborhood structure.
  * @author marcelo lotif
  */
 public abstract class NeighborhoodStructure {
+	
+	/**
+	 * Random number generator. Problem class automatically sets this property on setNeighborhoodStructure() method. 
+	 */
+	protected Random random;
 
 	/**
 	 * Given a group of parents, this method should return a group of sons, depending
@@ -41,16 +47,25 @@ public abstract class NeighborhoodStructure {
 			cities[i] = new Integer((int) n[i]);
 		}
 			
-		Solution neighbor = null;
-		try {
-			neighbor = (Solution) solution.clone();
-			neighbor.setValues(cities);
-			
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			assert(false);
-		}
+		Solution neighbor = solution.duplicate();
+		neighbor.setValues(cities);
 		
 		return neighbor;
+	}
+	
+	/**
+	 * Returns the random number generator.
+	 * @return random number generator
+	 */
+	public Random getRandom() {
+		return random;
+	}
+
+	/**
+	 * Sets the random number generator.
+	 * @param random number generator
+	 */
+	public void setRandom(Random random) {
+		this.random = random;
 	}
 }

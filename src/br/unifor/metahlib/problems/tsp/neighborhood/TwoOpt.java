@@ -48,13 +48,11 @@ public class TwoOpt extends NeighborhoodStructure {
 	 */
 	public List<double[]> getNeighbours(List<double[]> parents, int k1, int k2) {
 		
-		Random r = new Random();
-		
 		double[] p = parents.get(0);
 		
 		do {
-			edge1 = k1 < 0 ? r.nextInt(p.length) : k1;
-			edge2 = k2 < 0 ? r.nextInt(p.length) : k2;
+			edge1 = k1 < 0 ? random.nextInt(p.length) : k1;
+			edge2 = k2 < 0 ? random.nextInt(p.length) : k2;
 	
 			if(edge1 > edge2){
 				int aux = edge1;
