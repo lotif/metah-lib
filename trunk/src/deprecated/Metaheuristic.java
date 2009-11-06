@@ -1,4 +1,4 @@
-package br.unifor.metahlib.base;
+package deprecated;
 
 /**
  * This class groups the commons characteristics of a metaheuristic.

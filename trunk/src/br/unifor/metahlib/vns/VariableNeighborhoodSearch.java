@@ -1,7 +1,7 @@
 package br.unifor.metahlib.vns;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.base.Metaheuristic;
+import deprecated.Function;
+import deprecated.Metaheuristic;
 
 public class VariableNeighborhoodSearch extends Metaheuristic {
 

@@ -1,14 +1,15 @@
 package br.unifor.metahlib.exec;
 
 import java.io.File;
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.functions.tsp.TSPFunction;
-import br.unifor.metahlib.functions.tsp.TSPLibReader;
-import br.unifor.metahlib.functions.tsp.TSPProblemDefinition;
-import br.unifor.metahlib.functions.tsp.structures.ThreeOpt;
-import br.unifor.metahlib.functions.tsp.structures.TwoOpt;
+
+import deprecated.Function;
+import deprecated.TSPFunction;
+import deprecated.TSPLibReader;
+import deprecated.TSPProblemDefinition;
 import br.unifor.metahlib.hillclimbing.HillClimbing;
 import br.unifor.metahlib.sa.SimulatedAnnealing;
+import br.unifor.metahlib.tsp.neighborhood.ThreeOpt;
+import br.unifor.metahlib.tsp.neighborhood.TwoOpt;
 
 public class Test {
 

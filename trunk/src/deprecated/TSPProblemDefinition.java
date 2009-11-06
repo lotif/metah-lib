@@ -1,4 +1,4 @@
-package br.unifor.metahlib.functions.tsp;
+package deprecated;
 
 import java.io.File;
 import java.io.IOException;

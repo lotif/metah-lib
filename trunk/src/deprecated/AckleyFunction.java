@@ -1,8 +1,8 @@
-package br.unifor.metahlib.functions;
+package deprecated;
 
 import java.util.Random;
 
-import br.unifor.metahlib.base.Function;
+
 
 public class AckleyFunction extends Function {
 

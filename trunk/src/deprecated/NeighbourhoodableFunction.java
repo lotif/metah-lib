@@ -1,7 +1,9 @@
-package br.unifor.metahlib.base;
+package deprecated;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.unifor.metahlib.base.NeighborhoodStructure;
 
 /**
  * Defines if a function has a neighborhood structure to be defined.
@@ -16,14 +18,14 @@ public abstract class NeighbourhoodableFunction extends Function {
 	/**
 	 * The neighborhood structure of the function.
 	 */
-	protected NeighbourhoodStructure neighbourhoodStructure;
+	protected NeighborhoodStructure neighbourhoodStructure;
 	
 	/**
 	 * Mandatory abstract constructor for the child classes.
 	 * 
 	 * @param neighbourhoodStructure
 	 */
-	public NeighbourhoodableFunction(NeighbourhoodStructure neighbourhoodStructure) {
+	public NeighbourhoodableFunction(NeighborhoodStructure neighbourhoodStructure) {
 		this.neighbourhoodStructure = neighbourhoodStructure;
 	}
 	
@@ -61,12 +63,12 @@ public abstract class NeighbourhoodableFunction extends Function {
 		return -1;
 	}
 
-	public NeighbourhoodStructure getNeighbourhoodStructure() {
+	public NeighborhoodStructure getNeighbourhoodStructure() {
 		return neighbourhoodStructure;
 	}
 
 	public void setNeighbourhoodStructure(
-			NeighbourhoodStructure neighbourhoodStructure) {
+			NeighborhoodStructure neighbourhoodStructure) {
 		this.neighbourhoodStructure = neighbourhoodStructure;
 	}
 

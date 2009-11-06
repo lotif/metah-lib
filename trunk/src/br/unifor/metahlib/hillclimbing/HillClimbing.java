@@ -2,8 +2,9 @@ package br.unifor.metahlib.hillclimbing;
 
 import java.util.Random;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.base.Metaheuristic;
+import deprecated.Function;
+import deprecated.Metaheuristic;
+
 
 /**
  * An implementation of the hill climbing optimization method 

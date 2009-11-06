@@ -1,9 +1,9 @@
 package br.unifor.metahlib.sa;
 
-import java.util.Random;
+import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.Problem;
+import br.unifor.metahlib.base.Solution;
 
-import br.unifor.metahlib.base.Function;
-import br.unifor.metahlib.base.Metaheuristic;
 
 /**
  * The simulated annealing optimization method
@@ -11,7 +11,7 @@ import br.unifor.metahlib.base.Metaheuristic;
  * @author marcelo lotif
  *
  */
-public class SimulatedAnnealing extends Metaheuristic {
+public class SimulatedAnnealing extends Heuristic {
 	
 	/**
 	 * Maximum number of iterations for each temperature reached
@@ -39,12 +39,19 @@ public class SimulatedAnnealing extends Metaheuristic {
 	 * @param b the decreasing step
 	 * @param k the maximum number of iterations for each temperature reached
 	 */
-	public SimulatedAnnealing(Function function, double tmax, double tmin, double b, int k){
-		super(function);
+	public SimulatedAnnealing(Problem problem, double tmax, double tmin, double b, int k){
+		super(problem);
 		this.maxIterations = k;
 		this.maxTemperature = tmax;
 		this.minTemperature = tmin;
 		this.decreaseStep = b;
+	}
+	
+	private Solution newPertubedSolution(Solution s){
+		// TODO: avaliar comportamento do pertub, pois podem ser geradas v‡rias solu›es
+	    Solution[] neighbors = problem.getNeighborhoodStructure().getNeighbors(s);
+	    assert(neighbors.length >= 0);
+	    return neighbors[0];
 	}
 
 	/**
@@ -52,51 +59,45 @@ public class SimulatedAnnealing extends Metaheuristic {
 	 * 
 	 * @return the best solution found
 	 */
-	public double[] execute() {
-		Random r = new Random();
-		
-		double[] x;
-		if(initialSolution == null){
-			x = function.getRandomSolution();
-		} else {
-			x = initialSolution;
-		}
+	@Override
+	public Solution execute() {
+		Solution x = problem.getInitialSolution();
 		
 		double temperature = maxTemperature;
 		
 		int currentIteration = 0;
-		double eval = eval(x);
+		double eval = x.getCost();
 		
 		int totalIt = 1;
 		while(temperature > minTemperature){
 			for(int i = 0; i < maxIterations; i++){
 				currentIteration++;
 				
-				double[] _x = function.perturb(x);
-				double _eval = eval(_x);
-
+				Solution _x = newPertubedSolution(x);
+				double _eval = _x.getCost();
+				
 				if(_eval < eval){
 					x = _x;
 					eval = _eval;
 					lastBestFoundOn = totalIt;
+					System.out.println("improved to: " + x);
+					
 				} else {
-					double rand = r.nextDouble();
+					double rand = problem.getRandom().nextDouble();
 					double exp = Math.exp((eval - _eval)/temperature);
 					if(rand < exp){
 						x = _x;
 						eval = _eval;
+						System.out.println("worsened to: " + x);
 					}
 				}
+				
 				totalIt++;
 			}
 			temperature *= decreaseStep;
 		}
 		
 		return x;
-	}
-	
-	private double eval(double[] x) {
-		return function.eval(x);
 	}
 	
 	public int getMaxIterations() {
