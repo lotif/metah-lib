@@ -5,9 +5,9 @@ import java.io.File;
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Solution;
-import br.unifor.metahlib.sa.SimulatedAnnealing;
-import br.unifor.metahlib.tsp.TSPProblem;
-import br.unifor.metahlib.tsp.neighborhood.TwoOpt;
+import br.unifor.metahlib.metaheuristics.sa.SimulatedAnnealing;
+import br.unifor.metahlib.problems.tsp.TSPProblem;
+import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
 public class TestSimulatedAnnealing {
 

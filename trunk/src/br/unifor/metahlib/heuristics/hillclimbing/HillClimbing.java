@@ -1,4 +1,4 @@
-package br.unifor.metahlib.hillclimbing;
+package br.unifor.metahlib.heuristics.hillclimbing;
 
 import java.util.Random;
 

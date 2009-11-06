@@ -6,10 +6,10 @@ import deprecated.Function;
 import deprecated.TSPFunction;
 import deprecated.TSPLibReader;
 import deprecated.TSPProblemDefinition;
-import br.unifor.metahlib.hillclimbing.HillClimbing;
-import br.unifor.metahlib.sa.SimulatedAnnealing;
-import br.unifor.metahlib.tsp.neighborhood.ThreeOpt;
-import br.unifor.metahlib.tsp.neighborhood.TwoOpt;
+import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
+import br.unifor.metahlib.metaheuristics.sa.SimulatedAnnealing;
+import br.unifor.metahlib.problems.tsp.neighborhood.ThreeOpt;
+import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
 public class Test {
 

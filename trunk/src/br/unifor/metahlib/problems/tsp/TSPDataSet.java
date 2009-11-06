@@ -1,4 +1,4 @@
-package br.unifor.metahlib.tsp;
+package br.unifor.metahlib.problems.tsp;
 
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
