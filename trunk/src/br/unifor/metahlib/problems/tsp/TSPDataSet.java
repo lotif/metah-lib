@@ -115,10 +115,16 @@ public class TSPDataSet {
     	return r;
     }
     
-    private int calcDistance(int c1, int c2){
+	/**
+	 * Calculates the distance between two cities.
+	 * @param i the index of the city of origin
+	 * @param j the index of the destination city
+	 * @return distance between the two cities
+	 */
+    private int calcDistance(int i, int j){
     	int distance;
-    	Point2D.Double p1 = cities.get(c1-1);
-    	Point2D.Double p2 = cities.get(c2-1);
+    	Point2D.Double p1 = cities.get(i-1);
+    	Point2D.Double p2 = cities.get(j-1);
     	switch (edgeWeightType){
     		case EUC_2D:
     			double xd = p1.x - p2.x;
@@ -141,6 +147,10 @@ public class TSPDataSet {
     	return distance;
     }
     
+	/**
+	 * Calculates distances between cities.
+	 * @return distance matrix between cities.
+	 */
     private int[][] calcDistances(){
     	int[][] distances = new int[dimension][dimension];
     	int d;

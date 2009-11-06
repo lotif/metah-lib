@@ -19,8 +19,8 @@ public abstract class NeighborhoodStructure {
 	
 	/**
 	 * Create a new random neighbor solution.
-	 * @param solution Base of neighborhood.
-	 * @return A random solution into neighborhood of informed solution. 
+	 * @param solution base of neighborhood
+	 * @return a random solution into neighborhood of informed solution 
 	 */
 	public Solution getRandomNeighbor(Solution solution){
 		// TODO Otimizar solução eliminando o deprecated getNeighbours
