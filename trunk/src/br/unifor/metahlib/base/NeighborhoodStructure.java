@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An interface that defines a neighborhood structure.
- * 
+ * A class that defines a neighborhood structure.
  * @author marcelo lotif
  */
 public abstract class NeighborhoodStructure {
@@ -13,13 +12,17 @@ public abstract class NeighborhoodStructure {
 	/**
 	 * Given a group of parents, this method should return a group of sons, depending
 	 * on the structure used.
-	 * 
 	 * @param parents the list of parent solutions
 	 * @return a list of child solutions
 	 */
 	public abstract List<double[]> getNeighbours(List<double[]> parents);
 	
-	public Solution[] getNeighbors(Solution solution){
+	/**
+	 * Create a new random neighbor solution.
+	 * @param solution Base of neighborhood.
+	 * @return A random solution into neighborhood of informed solution. 
+	 */
+	public Solution getRandomNeighbor(Solution solution){
 		// TODO Otimizar solução eliminando o deprecated getNeighbours
 		Object[] cities = solution.getValues();
 		double[] parent = new double[cities.length];
@@ -31,28 +34,23 @@ public abstract class NeighborhoodStructure {
 		parents.add(parent);
 
 		List<double[]> neighbors = getNeighbours(parents);
-		Solution s;
 		double[] n;
-		Solution[] result = new Solution[neighbors.size()];
-		for (int i = 0; i < neighbors.size(); ++i){
-			n = neighbors.get(i);
-			cities = new Object[n.length];
-			for (int j = 0; j < n.length; ++j){
-				cities[j] = new Integer((int) n[j]);
-			}
+		n = neighbors.get(0);
+		cities = new Object[n.length];
+		for (int i = 0; i < n.length; ++i){
+			cities[i] = new Integer((int) n[i]);
+		}
 			
-			try {
-				s = (Solution) solution.clone();
-				s.setValues(cities);
-				result[i] = s;
-				
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-				assert(false);
-			}
+		Solution neighbor = null;
+		try {
+			neighbor = (Solution) solution.clone();
+			neighbor.setValues(cities);
+			
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			assert(false);
 		}
 		
-		return result;
-
+		return neighbor;
 	}
 }

@@ -1,6 +1,7 @@
 package br.unifor.metahlib.metaheuristics.sa;
 
 import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
@@ -32,7 +33,6 @@ public class SimulatedAnnealing extends Heuristic {
 
 	/**
 	 * Constructor of the class
-	 * 
 	 * @param function the function to be optimized
 	 * @param tmax the maximum temperature of the system
 	 * @param tmin the minimum temperature of the system
@@ -47,13 +47,6 @@ public class SimulatedAnnealing extends Heuristic {
 		this.decreaseStep = b;
 	}
 	
-	private Solution newPertubedSolution(Solution s){
-		// TODO: avaliar comportamento do pertub, pois podem ser geradas v‡rias solu›es
-	    Solution[] neighbors = problem.getNeighborhoodStructure().getNeighbors(s);
-	    assert(neighbors.length >= 0);
-	    return neighbors[0];
-	}
-
 	/**
 	 * Executes the simulated annealing optimization
 	 * 
@@ -61,43 +54,38 @@ public class SimulatedAnnealing extends Heuristic {
 	 */
 	@Override
 	public Solution execute() {
-		Solution x = problem.getInitialSolution();
-		
+		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		double temperature = maxTemperature;
-		
 		int currentIteration = 0;
-		double eval = x.getCost();
-		
+
+		Solution s = problem.getInitialSolution();
 		int totalIt = 1;
 		while(temperature > minTemperature){
 			for(int i = 0; i < maxIterations; i++){
 				currentIteration++;
 				
-				Solution _x = newPertubedSolution(x);
-				double _eval = _x.getCost();
-				
-				if(_eval < eval){
-					x = _x;
-					eval = _eval;
+				Solution _s = neighborhood.getRandomNeighbor(s);
+				if(_s.getCost() < s.getCost()){
+					s = _s;
 					lastBestFoundOn = totalIt;
-					System.out.println("improved to: " + x);
+					System.out.println("improved to: " + s);
 					
 				} else {
 					double rand = problem.getRandom().nextDouble();
-					double exp = Math.exp((eval - _eval)/temperature);
+					double exp = Math.exp((s.getCost() - _s.getCost())/temperature);
 					if(rand < exp){
-						x = _x;
-						eval = _eval;
-						System.out.println("worsened to: " + x);
+						s = _s;
+						System.out.println("worsened to: rand" + s);
 					}
 				}
 				
 				totalIt++;
 			}
+			
 			temperature *= decreaseStep;
 		}
 		
-		return x;
+		return s;
 	}
 	
 	public int getMaxIterations() {
@@ -123,5 +111,4 @@ public class SimulatedAnnealing extends Heuristic {
 	public void setDecreaseStep(double decreaseStep) {
 		this.decreaseStep = decreaseStep;
 	}
-	
 }
