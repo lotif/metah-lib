@@ -25,7 +25,7 @@ public abstract class Problem {
 	private NeighborhoodStructure neighborhoodStructure;
 	
 	/**
-	 * Unique random generator. Allows reproducible executions when a seed is informed through 
+	 * Unique random number generator shared with other classes. Allows reproducible executions when a seed is informed through 
 	 * the setRandomSeed method.
 	 */
 	protected Random random;
@@ -77,6 +77,7 @@ public abstract class Problem {
 	 */
 	public void setNeighborhoodStructure(NeighborhoodStructure neighborhoodStructure) {
 		this.neighborhoodStructure = neighborhoodStructure;
+		this.neighborhoodStructure.setRandom(random);
 	}
 
 	/**

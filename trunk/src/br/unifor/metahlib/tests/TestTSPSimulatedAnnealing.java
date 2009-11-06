@@ -9,7 +9,7 @@ import br.unifor.metahlib.metaheuristics.sa.SimulatedAnnealing;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
-public class TestSimulatedAnnealing {
+public class TestTSPSimulatedAnnealing {
 
 	public static void main(String[] args) {
 		try{
