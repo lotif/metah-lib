@@ -1,4 +1,4 @@
-package br.unifor.metahlib.tsp;
+package br.unifor.metahlib.problems.tsp;
 
 public class EdgeWeightTypeNotSupported extends Exception {
 	

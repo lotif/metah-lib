@@ -1,7 +1,7 @@
-package br.unifor.metahlib.pso.neighborhood;
+package br.unifor.metahlib.metaheuristics.pso.neighborhood;
 
-import br.unifor.metahlib.pso.Neighborhood;
-import br.unifor.metahlib.pso.Particle;
+import br.unifor.metahlib.metaheuristics.pso.Neighborhood;
+import br.unifor.metahlib.metaheuristics.pso.Particle;
 
 public class GlobalBest extends Neighborhood{
 

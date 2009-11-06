@@ -1,4 +1,4 @@
-package br.unifor.metahlib.pso;
+package br.unifor.metahlib.metaheuristics.pso;
 
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;

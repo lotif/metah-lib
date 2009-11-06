@@ -8,9 +8,9 @@ import deprecated.TSPLibReader;
 import deprecated.TSPProblemDefinition;
 
 import br.unifor.metahlib.gls.GuidedLocalSearch;
-import br.unifor.metahlib.hillclimbing.HillClimbing;
-import br.unifor.metahlib.tsp.neighborhood.ThreeOpt;
-import br.unifor.metahlib.tsp.neighborhood.TwoOpt;
+import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
+import br.unifor.metahlib.problems.tsp.neighborhood.ThreeOpt;
+import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
 public class GLSTest {
 

@@ -1,4 +1,4 @@
-package br.unifor.metahlib.sa;
+package br.unifor.metahlib.metaheuristics.sa;
 
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Problem;

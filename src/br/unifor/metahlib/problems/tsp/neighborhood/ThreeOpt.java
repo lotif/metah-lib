@@ -1,4 +1,4 @@
-package br.unifor.metahlib.tsp.neighborhood;
+package br.unifor.metahlib.problems.tsp.neighborhood;
 
 import java.util.ArrayList;
 import java.util.List;

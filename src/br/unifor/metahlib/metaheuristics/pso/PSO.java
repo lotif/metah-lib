@@ -1,4 +1,4 @@
-package br.unifor.metahlib.pso;
+package br.unifor.metahlib.metaheuristics.pso;
 
 public class PSO {
 

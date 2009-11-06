@@ -1,6 +1,6 @@
-package br.unifor.metahlib.pso.inertia;
+package br.unifor.metahlib.metaheuristics.inertia;
 
-import br.unifor.metahlib.pso.Inertia;
+import br.unifor.metahlib.metaheuristics.pso.Inertia;
 
 public class LinearDescendingInertia extends Inertia {
 

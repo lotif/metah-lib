@@ -1,4 +1,4 @@
-package br.unifor.metahlib.tsp;
+package br.unifor.metahlib.problems.tsp;
 
 import br.unifor.metahlib.base.CostEvaluator;
 import br.unifor.metahlib.base.Solution;
