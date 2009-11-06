@@ -4,7 +4,7 @@ import br.unifor.metahlib.base.CostEvaluator;
 import br.unifor.metahlib.base.Solution;
 
 /**
- * Cost evaluator of TSP problems.
+ * Cost evaluator for TSP problems.
  */
 public class TourCostEvaluator extends CostEvaluator {
 	

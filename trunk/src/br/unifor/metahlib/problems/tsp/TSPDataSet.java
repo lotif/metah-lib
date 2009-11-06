@@ -7,23 +7,63 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
 
+/**
+ * TSP problem dataSet. The properties of this class represents the TSPLib file content.
+ */
 public class TSPDataSet {
 	
-    static public enum EdgeWeightType { GEO, EUC_2D };
+    /**
+     * Supported edged weight types.  
+     */
+	static public enum EdgeWeightType { GEO, EUC_2D };
     
+	/**
+	 * Coordinates of cities. 
+	 */
 	Vector<Point2D.Double> cities = new Vector<Point2D.Double>();
-    String name;
+	
+    /**
+     * DataSet name.
+     */
+	String name;
+	
+	/**
+	 * Comments about this dataSet.
+	 */
     String comment;
+    
+    /**
+     * Quantity of cities.
+     */
     int dimension;
+    
+    /**
+     * Format of edge weight. Determines how distances are calculated.  
+     */
     EdgeWeightType edgeWeightType;
-    String displayDataType;
+    
+    /**
+     * Cities distances matrix. Zero-indexed arrays.
+     */
     int[][] distances;
     
+    /**
+     * Constructs a new TSPDataSet from the informed TSPLib file.
+     * @param file TSPlib file
+     * @throws IOException
+     * @throws EdgeWeightTypeNotSupported
+     */
     public TSPDataSet(File file) throws IOException, EdgeWeightTypeNotSupported{
         loadFile(file);
         distances = calcDistances();
     }
     
+    /**
+     * Reads TSPlib file contents.
+     * @param file TSPlib file
+     * @throws IOException
+     * @throws EdgeWeightTypeNotSupported
+     */
     private void loadFile(File file) throws IOException, EdgeWeightTypeNotSupported{
 
         /* Format TSP file
@@ -75,8 +115,6 @@ public class TSPDataSet {
                 	} catch (IllegalArgumentException e){
                 		throw new EdgeWeightTypeNotSupported(headerValue);
                 	}
-                } else if (headerName.equals("DISPLAY_DATA_TYPE")){
-                    displayDataType = headerValue;
                 } else if (headerName.equals("NODE_COORD_SECTION")){
                     readingHeader = false;
                 }
@@ -95,16 +133,33 @@ public class TSPDataSet {
         assert( dimension == cities.size());
     }
 
+    /**
+     * Constant specified in TSPLib documentation to calculate geographics coordinates.
+     */
     static private double RRR = 6378.388;
+
+    /**
+     * Constant PI. Used the same precision of TSPLib documentation.
+     */
     static private double PI = 3.141592;
     
-    private double coordinateToRadian(double coordinate){
+    /**
+     * Converts a degree coordinate to a radian coordinate. 
+     * @param coordinate degree coordinate
+     * @return radian coordinate
+     */
+    private double degreeToRadian(double coordinate){
     	int deg = (int) coordinate;
     	double min = coordinate - deg;
     	double rad = (PI * (deg + (5 * min)/3)) / 180;
     	return rad;
     }
     
+    /**
+     * Round function specified in TSPLib documentation.
+     * @param d value to round
+     * @return rounded value
+     */
     private int nint(double d){
     	int r;
     	if (d >= 0){
@@ -116,7 +171,8 @@ public class TSPDataSet {
     }
     
 	/**
-	 * Calculates the distance between two cities.
+	 * Calculates the distance between two cities. The first city index is 1.
+	 * The distances are integer values as specified by the TSPLib documentation. 
 	 * @param i the index of the city of origin
 	 * @param j the index of the destination city
 	 * @return distance between the two cities
@@ -133,9 +189,9 @@ public class TSPDataSet {
     			break;
     	
     		case GEO:
-    			 double q1 = Math.cos(coordinateToRadian(p1.y) - coordinateToRadian(p2.y)); 
-    			 double q2 = Math.cos(coordinateToRadian(p1.x) - coordinateToRadian(p2.x)); 
-    			 double q3 = Math.cos(coordinateToRadian(p1.x) + coordinateToRadian(p2.x)); 
+    			 double q1 = Math.cos(degreeToRadian(p1.y) - degreeToRadian(p2.y)); 
+    			 double q2 = Math.cos(degreeToRadian(p1.x) - degreeToRadian(p2.x)); 
+    			 double q3 = Math.cos(degreeToRadian(p1.x) + degreeToRadian(p2.x)); 
     			 distance = (int) ( RRR * Math.acos( 0.5*((1.0+q1)*q2 - (1.0-q1)*q3) ) + 1.0);
     			break;
     	
@@ -164,23 +220,42 @@ public class TSPDataSet {
     	return distances;
     }
 
+    /**
+     * Name of dataSet.
+     */
     public String getName(){
         return name;
     }
 
+	/**
+	 * Comments about this dataSet.
+	 */
     public String getComment(){
         return comment;
     }
 
+    /**
+     * Returns the quantity of cities.
+     */
     public int getDimension(){
         return dimension;
     }
 
+	/**
+	 * Returns the cities coordinates. 
+	 */
     public Vector<Point2D.Double> getCities(){
         return cities;
     }
     
-    public int getDistance(int c1, int c2){
-    	return distances[c1-1][c2-1];
+	/**
+	 * Returns the distance between two cities. The first city index is 1.
+	 * The distances are integer values as specified by the TSPLib documentation. 
+	 * @param i the index of the city of origin
+	 * @param j the index of the destination city
+	 * @return distance between the two cities
+	 */
+    public int getDistance(int i, int j) {
+    	return distances[i-1][j-1];
     }
 }
