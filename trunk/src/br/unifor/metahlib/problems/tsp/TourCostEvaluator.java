@@ -3,14 +3,27 @@ package br.unifor.metahlib.problems.tsp;
 import br.unifor.metahlib.base.CostEvaluator;
 import br.unifor.metahlib.base.Solution;
 
+/**
+ * Cost evaluator of TSP problems.
+ */
 public class TourCostEvaluator extends CostEvaluator {
 	
+	/**
+	 * TSP dataSet with cities distances.
+	 */
 	private TSPDataSet dataSet;
 	
+	/**
+	 * Class constructor.
+	 * @param dataSet dataset with cities distances
+	 */
 	public TourCostEvaluator(TSPDataSet dataSet){
 		this.dataSet = dataSet;
 	}
 
+	/**
+	 * Calculate the sum of cities distances of a tour.
+	 */
 	@Override
 	protected double calculateCost(Solution s) {
 		Object[] cities = s.getValues();
@@ -22,5 +35,4 @@ public class TourCostEvaluator extends CostEvaluator {
 		
 		return d;
 	}
-
 }
