@@ -1,4 +1,4 @@
-package br.unifor.metahlib.exec;
+package br.unifor.metahlib.tests;
 
 import java.io.File;
 
