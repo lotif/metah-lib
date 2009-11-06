@@ -1,4 +1,4 @@
-package br.unifor.metahlib.vns;
+package br.unifor.metahlib.metaheuristics.vns;
 
 import deprecated.Function;
 import deprecated.Metaheuristic;
