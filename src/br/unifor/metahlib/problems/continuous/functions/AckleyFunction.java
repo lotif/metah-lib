@@ -4,6 +4,9 @@ import br.unifor.metahlib.problems.continuous.OptimizableFunction;
 
 public class AckleyFunction extends OptimizableFunction {
 	
+	/**
+	 * Class constructor.
+	 */
 	public AckleyFunction(){
 		super(10/*dimensions*/);
 		setAllRanges(-32.768, 32.768);
@@ -11,8 +14,11 @@ public class AckleyFunction extends OptimizableFunction {
 		optimizationType = OptimizationType.MINIMIZATION;
 	}
 
+	/**
+	 * Executes the function.
+	 */
 	@Override
-	public double execute(Object[] values) {
+	public double eval(Object[] values) {
 		double sum1 = 0;
 		double sum2 = 0;
 		

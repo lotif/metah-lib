@@ -112,10 +112,60 @@ public abstract class Perturber extends NeighborhoodStructure {
 	}
 	
 	/**
-	 * Perturb the value. 
+	 * Perturb the value of a dimension. 
 	 * @param dimension dimension of value
 	 * @param value value to be perturbed
 	 * @return perturbed value
 	 */
 	protected abstract double perturb(int dimension, double value);
+
+	/**
+	 * Returns how the dimensions are chosen for perturbation. 
+	 * @return dimension selector strategy
+	 */
+	public DimensionSelector getDimensionSelector() {
+		return dimensionSelector;
+	}
+
+	/**
+	 * Sets how  the dimensions are chosen for perturbation.
+	 * @param dimensionSelector dimension selector strategy
+	 */
+	public void setDimensionSelector(DimensionSelector dimensionSelector) {
+		this.dimensionSelector = dimensionSelector;
+	}
+
+	/**
+	 * Returns the quantity of perturbed dimensions simultaneously.
+	 * @return quantity dimensions
+	 */
+	public int getPerturbedDimensionsCount() {
+		return perturbedDimensionsCount;
+	}
+
+	/**
+	 * Sets the quantity of perturbed dimensions simultaneously.
+	 * @param perturbedDimensionsCount quantity dimensions
+	 */
+	public void setPerturbedDimensionsCount(int perturbedDimensionsCount) {
+		assert(perturbedDimensionsCount <= function.getDimensionCount());
+		this.perturbedDimensionsCount = perturbedDimensionsCount;
+	}
+
+	/**
+	 * Returns the maximal percent change of a dimension during a perturbation.
+	 * @return number into interval [0,1] 
+	 */
+	public double getMaxPercentChange() {
+		return maxPercentChange;
+	}
+
+	/**
+	 * Sets the maximal percent change of a dimension during a perturbation.
+	 * @param maxPercentChange number into interval [0,1]
+	 */
+	public void setMaxPercentChange(double maxPercentChange) {
+		assert(maxPercentChange >= 0 && maxPercentChange <= 1);
+		this.maxPercentChange = maxPercentChange;
+	}
 }

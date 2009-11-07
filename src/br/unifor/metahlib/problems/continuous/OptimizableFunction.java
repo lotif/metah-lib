@@ -21,9 +21,9 @@ public abstract class OptimizableFunction {
 	protected double[][] ranges;
 	
 	/**
-	 * Decimal precision required by the function.
+	 * Decimal precision required by function.
 	 */
-	protected int decimalPrecision = 6;
+	protected int decimalPrecision = 4;
 	
 	/**
 	 * Best result of the function. Null indicates that best result is unknown.
@@ -74,7 +74,13 @@ public abstract class OptimizableFunction {
 	 * @param values function arguments
 	 * @return function result
 	 */
-	public abstract double execute(Object[] values);
+	protected abstract double eval(Object[] values);
+	
+	public double execute(Object[] values){
+		double result = eval(values);
+		double pow = Math.pow(10, decimalPrecision);
+		return Math.round(result * pow) / pow;
+	}
 	
 	/**
 	 * Returns the quantity of dimensions.

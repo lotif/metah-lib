@@ -75,7 +75,7 @@ public class SimulatedAnnealing extends Heuristic {
 					double exp = Math.exp((s.getCost() - _s.getCost())/temperature);
 					if(rand < exp){
 						s = _s;
-						System.out.println("worsened to: rand" + s);
+						System.out.println("worsened to: " + s);
 					}
 				}
 				

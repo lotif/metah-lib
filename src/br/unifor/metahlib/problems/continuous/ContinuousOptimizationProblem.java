@@ -2,7 +2,6 @@ package br.unifor.metahlib.problems.continuous;
 
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
-import br.unifor.metahlib.problems.continuous.perturbers.UniformPertuber;
 
 /**
  * Defines an instance of a continuous optimization problem.
@@ -17,11 +16,19 @@ public class ContinuousOptimizationProblem extends Problem {
 	/**
 	 * Constructs a new instance.
 	 * @param function function to be optimized
+	 * @param pertuber object responsible to perturb the solutions
 	 */
-	public ContinuousOptimizationProblem(OptimizableFunction function){
+	public ContinuousOptimizationProblem(OptimizableFunction function, Perturber perturber){
 		this.function = function;
-		this.setNeighborhoodStructure(new UniformPertuber(function));
-		this.setCostEvaluator(new FunctionCostEvaluator(function));
+		this.setNeighborhoodStructure(perturber);
+		
+		FunctionCostEvaluator evaluator = new FunctionCostEvaluator(function); 
+		this.setCostEvaluator(evaluator);
+		
+		Double optimalResult = function.getOptimalResult(); 
+		if (optimalResult != null){
+			setOptimalSolutionCost(evaluator.calculateCost(optimalResult));
+		}
 	}
 
 	/**

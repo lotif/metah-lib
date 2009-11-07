@@ -2,8 +2,15 @@ package br.unifor.metahlib.problems.continuous.functions;
 
 import br.unifor.metahlib.problems.continuous.OptimizableFunction;
 
+/**
+ * Simple one dimensional benchmark function extracted from the book 
+ * "Fundamentals of Natural Computing", page 72. 
+ */
 public class UnidFunction extends OptimizableFunction {
 
+	/**
+	 * Class constructor.
+	 */
 	public UnidFunction(){
 		super(1/*dimensions*/);
 		setAllRanges(0, 1);
@@ -11,8 +18,11 @@ public class UnidFunction extends OptimizableFunction {
 		optimizationType = OptimizationType.MAXIMIZATION;
 	}
 	
+	/**
+	 * Executes the function.
+	 */
 	@Override
-	public double execute(Object[] values) {
+	public double eval(Object[] values) {
         assert(values.length == 1);
         double value = (Double) values[0];
 
