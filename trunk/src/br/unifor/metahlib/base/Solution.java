@@ -80,7 +80,13 @@ public class Solution implements Cloneable {
 	 */
 	@Override
 	public String toString(){
-		String s = "Cost: " + getCost() + " [";
+		double cost = getCost();
+		Double optimal = problem.getOptimalSolutionCost();
+		String s = "Cost: " + cost;
+		if (optimal != null){
+			s+= String.format(" OptimalCost: %f Error: %f)", optimal, optimal - cost);
+		}
+		s+= " [";		
 		if (values.length > 0){
 			s+= values[0];
 			for (int i = 1; i < values.length; ++i){

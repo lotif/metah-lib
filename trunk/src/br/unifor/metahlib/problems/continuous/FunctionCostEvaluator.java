@@ -29,6 +29,15 @@ public class FunctionCostEvaluator extends CostEvaluator {
 	@Override
 	protected double calculateCost(Solution s) {
 		double value = function.execute(s.getValues());
+		return calculateCost(value);
+	}
+	
+	/**
+	 * Calculates a cost of a function result.
+	 * @param value result of the function execution.
+	 * @return Cost of result.
+	 */
+	public double calculateCost(double value){
 		if (function.getOptimizationType() == OptimizationType.MAXIMIZATION){
 			value = -1 * value;
 		}
