@@ -6,19 +6,46 @@ import java.util.Vector;
 import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Solution;
 
+/**
+ * Perturb the values of a possible solution for a continuous optimization problem. 
+ */
 public abstract class Perturber extends NeighborhoodStructure {
 	
+	/**
+	 * Indicates how the dimensions are chosen for perturbation. 
+	 */
 	static public enum DimensionSelector { ALEATORY, SEQUENCIAL }; 
 	
+	/**
+	 * Function to be optimized.
+	 */
 	protected OptimizableFunction function;
 	
+	/**
+	 * Indicates how the dimensions are chosen for perturbation. 
+	 */
 	protected DimensionSelector dimensionSelector = DimensionSelector.ALEATORY;
+	
+	/**
+	 * Quantity of perturbed dimensions simultaneously.
+	 */
 	protected int perturbedDimensionsCount = 1;
+	
+	/**
+	 * Maximal percent change of a dimension during a perturbation. 
+	 */
 	protected double maxPercentChange = 0.05;
 	
-    private int lastPerturbedDimension = -1;
+    /**
+     * Last perturbed dimension;
+     */
+	private int lastPerturbedDimension = -1;
 
-    private int[] choiceDimensionsForPerturb(){
+    /**
+     * Choices the dimensions that will be perturbed.
+     * @return array of dimension indexes
+     */
+	private int[] choiceDimensionsForPerturb(){
         int[] idxs = new int[perturbedDimensionsCount];
         if ( perturbedDimensionsCount == 1 ){
             idxs[0] = random.nextInt(function.getDimensionCount());
@@ -50,6 +77,10 @@ public abstract class Perturber extends NeighborhoodStructure {
         return idxs;
     }
 
+	/**
+	 * Class constructor.
+	 * @param function function to be optimized
+	 */
 	public Perturber(OptimizableFunction function){
 		this.function = function;
 	}
@@ -60,6 +91,11 @@ public abstract class Perturber extends NeighborhoodStructure {
 		return null;
 	}
 	
+	/**
+	 * Create a new random neighbor solution.
+	 * @param solution base of neighborhood
+	 * @return a random solution into neighborhood of informed solution 
+	 */
 	@Override
 	public Solution getRandomNeighbor(Solution solution){
 		Solution n = solution.duplicate();
@@ -75,5 +111,11 @@ public abstract class Perturber extends NeighborhoodStructure {
 		return n;
 	}
 	
+	/**
+	 * Perturb the value. 
+	 * @param dimension dimension of value
+	 * @param value value to be perturbed
+	 * @return perturbed value
+	 */
 	protected abstract double perturb(int dimension, double value);
 }

@@ -8,7 +8,7 @@ import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
 /**
- * Defines an instance of the Traveling Salesman Problem.
+ * Defines an instance of a Traveling Salesman Problem.
  */
 public class TSPProblem extends Problem {
 	
