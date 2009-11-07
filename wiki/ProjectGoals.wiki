@@ -14,6 +14,8 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * 2-opt para o TSP (Marcelo)
     * 3-opt para o TSP (Marcelo)
 
+    * Problemas variados de otimização numérica (Marcelo/Paulo Moreno)
+
 *Falta implementar:*
     * Variable Neighborhood Search (Marcelo)
     * GRASP (Marcelo)
@@ -24,5 +26,4 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Ant Colony Optimization
 
     * LK-opt para TSP (Marcelo)
-    * Problemas variados de otimização numérica (Marcelo)
     * Knapsack Problem
