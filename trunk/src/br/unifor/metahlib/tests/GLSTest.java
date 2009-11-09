@@ -26,7 +26,14 @@ public class GLSTest {
 			neighborhoodStructure.setProblem(problem);
 			
 			HillClimbing h = new HillClimbing(problem, HillClimbing.DEFAULT, 1500, 0, 0);
-			Heuristic gls = new GuidedLocalSearch(problem, h, 2000, 1.0/6.0);
+			
+			/* 
+			 * Possible values for the GLS parameter "a", according with Vordouris 1997:	
+			 * 2-OPT: 1/8 <= a <= 1/2
+			 * 3-OPT: 1/10 <= a <= 1/4
+			 * LK-OPT: 1/12 <= a <= 1/6	
+			 */
+			Heuristic gls = new GuidedLocalSearch(problem, h, 2000, 1.0/10.0);
 			Solution s = gls.execute();
 			System.out.println("Distance: " + s.getCost());
 
