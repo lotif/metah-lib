@@ -53,4 +53,13 @@ public class TSPProblem extends Problem {
 		
 		return s;
 	}
+
+	public TSPDataSet getDataSet() {
+		return dataSet;
+	}
+
+	public void setDataSet(TSPDataSet dataSet) {
+		this.dataSet = dataSet;
+	}
+	
 }

@@ -3,9 +3,9 @@ package br.unifor.metahlib.problems.tsp.neighborhood;
 import java.util.ArrayList;
 import java.util.List;
 
-import deprecated.Function;
-
 import br.unifor.metahlib.base.NeighborhoodStructure;
+import br.unifor.metahlib.base.Problem;
+import br.unifor.metahlib.base.Solution;
 
 /**
  * An implementation of the 3-opt TSP neighborhood structure 
@@ -18,11 +18,11 @@ import br.unifor.metahlib.base.NeighborhoodStructure;
  */
 public class ThreeOpt extends NeighborhoodStructure {
 
-	public Function function;
+	public Problem problem;
 	
-	public ThreeOpt(Function function){
+	public ThreeOpt(Problem problem){
 		super();
-		this.function = function;
+		this.problem = problem;
 	}
 	
 	/**
@@ -46,7 +46,23 @@ public class ThreeOpt extends NeighborhoodStructure {
 		
 		List<double[]> resultChild = new ArrayList<double[]>();
 		
-		if(function.eval(child1) < function.eval(child2)){
+		Solution c1 = new Solution(problem);
+		Solution c2 = new Solution(problem);
+		
+		Object[] ch1 = new Object[child1.length];
+		Object[] ch2 = new Object[child1.length];
+		
+		for(int i = 0; i < ch1.length; i++){
+			ch1[i] = (int) Double.parseDouble(child1[i] + "");
+		}
+		for(int i = 0; i < ch2.length; i++){
+			ch2[i] = (int) Double.parseDouble(child2[i] + "");
+		}
+		
+		c1.setValues(ch1);
+		c2.setValues(ch2);
+		
+		if(problem.getCostEvaluator().eval(c1) < problem.getCostEvaluator().eval(c2)){
 			resultChild.add(child1);
 		} else {
 			resultChild.add(child2);
@@ -55,11 +71,11 @@ public class ThreeOpt extends NeighborhoodStructure {
 		return resultChild;
 	}
 
-	public Function getFunction() {
-		return function;
+	public Problem getProblem() {
+		return problem;
 	}
 
-	public void setFunction(Function function) {
-		this.function = function;
+	public void setProblem(Problem problem) {
+		this.problem = problem;
 	}
 }

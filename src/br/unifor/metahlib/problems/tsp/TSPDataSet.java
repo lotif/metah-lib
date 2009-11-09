@@ -47,6 +47,8 @@ public class TSPDataSet {
      */
     int[][] distances;
     
+    File file;
+    
     /**
      * Constructs a new TSPDataSet from the informed TSPLib file.
      * @param file TSPlib file
@@ -54,6 +56,7 @@ public class TSPDataSet {
      * @throws EdgeWeightTypeNotSupported
      */
     public TSPDataSet(File file) throws IOException, EdgeWeightTypeNotSupported{
+    	this.file = file;
         loadFile(file);
         distances = calcDistances();
     }
@@ -258,4 +261,13 @@ public class TSPDataSet {
     public int getDistance(int i, int j) {
     	return distances[i-1][j-1];
     }
+
+	public int[][] getDistances() {
+		return distances;
+	}
+
+	public File getFile() {
+		return file;
+	}
+	
 }

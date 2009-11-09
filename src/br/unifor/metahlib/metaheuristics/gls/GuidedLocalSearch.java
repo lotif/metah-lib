@@ -1,9 +1,12 @@
 package br.unifor.metahlib.metaheuristics.gls;
 
+import java.io.IOException;
 import java.util.List;
 
-import deprecated.Function;
-import deprecated.Metaheuristic;
+import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.Problem;
+import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.problems.tsp.EdgeWeightTypeNotSupported;
 
 
 /**
@@ -14,12 +17,12 @@ import deprecated.Metaheuristic;
  * @author marcelo lotif
  *
  */
-public class GuidedLocalSearch extends Metaheuristic {
+public class GuidedLocalSearch extends Heuristic {
 
 	/**
 	 * The local search method used inside the GLS execution
 	 */
-	private Metaheuristic localSearchMethod;
+	private Heuristic localSearchMethod;
 	
 	/**
 	 * The parameter "a" defined by Voudouris (1997) p. 64-65.
@@ -55,8 +58,8 @@ public class GuidedLocalSearch extends Metaheuristic {
 	 * be set depending on the problem one's trying to solve.
 	 * @param maxIterations The maximum number of iterations of this GLS execution. 
 	 */
-	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod,  double lambda, int maxIterations) {
-		super(function);
+	public GuidedLocalSearch(Problem problem, Heuristic localSearchMethod,  double lambda, int maxIterations) {
+		super(problem);
 		this.localSearchMethod = localSearchMethod;
 		this.a = 0;
 		this.lambda = lambda;
@@ -80,8 +83,8 @@ public class GuidedLocalSearch extends Metaheuristic {
 	 * One can still force the lamba parameter by using the setLambda(double) method before
 	 * the beginning of the execution.
 	 */
-	public GuidedLocalSearch(Function function, Metaheuristic localSearchMethod, int maxIterations, double a) {
-		super(function);
+	public GuidedLocalSearch(Problem problem, Heuristic localSearchMethod, int maxIterations, double a) {
+		super(problem);
 		this.localSearchMethod = localSearchMethod;
 		this.a = a;
 		this.lambda = 0;
@@ -91,26 +94,33 @@ public class GuidedLocalSearch extends Metaheuristic {
 	/**
 	 * The execution method
 	 */
-	public double[] execute(){
+	public Solution execute(){
 		
-		double[] s = function.getRandomSolution();
+		Solution s = problem.getInitialSolution();
 		
-		double[] best = null;
+		Solution best = null;
 		Double bestEval = null;
 		
-		localSearchMethod.setFunction(function);
-		localSearchMethod.setInitialSolution(s);
+		localSearchMethod.setProblem(problem);
+		localSearchMethod.getProblem().setInitialSolution(s);
 		s = localSearchMethod.execute();
 		
 		if(lambda == 0){
-			lambda = a*(function.eval(s)/function.getNumVariables());
+			lambda = a*(problem.getCostEvaluator().eval(s)/s.getValues().length);
 		}
 		
-		AugmentedCostFunction f_ = AugmentedCostFunctionFactory.getInstance(function, lambda); 
+		AugmentedCostProblem f_ = null;
+		try {
+			f_ = AugmentedCostFunctionFactory.getInstance(problem, lambda);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (EdgeWeightTypeNotSupported e1) {
+			e1.printStackTrace();
+		} 
 		
 		for(int i = 0; i < maxIterations; i++){
 			
-			List<SolutionFeature> features = f_.getSolutionFeatures(s, function);
+			List<SolutionFeature> features = f_.getSolutionFeatures(s);
 			
 			double[] util = new double[features.size()];
 			double maxUtil = -1;
@@ -118,7 +128,7 @@ public class GuidedLocalSearch extends Metaheuristic {
 			
 			for(int k = 0; k < util.length; k++){
 				SolutionFeature feature = features.get(k);
-				util[k] = feature.getCost()/(1 + f_.getP(feature));
+				util[k] = feature.getCost()/(1 + ((AugmentedCostEvaluator)f_.getCostEvaluator()).getP(feature));
 				if(util[k] > maxUtil){
 					maxUtil = util[k];
 					maxUtilIndex = k;
@@ -126,19 +136,23 @@ public class GuidedLocalSearch extends Metaheuristic {
 			}
 			
 			if(maxUtilIndex >= 0){
-				f_.updateP(features.get(maxUtilIndex));
+				((AugmentedCostEvaluator)f_.getCostEvaluator()).updateP(features.get(maxUtilIndex));
 			}
 			
-			double currentEval = function.eval(s);
+			double currentEval = problem.getCostEvaluator().eval(s);
 			System.out.println("*" + i + ": " + currentEval);
 			
 			if(bestEval == null || currentEval < bestEval){
 				bestEval = currentEval;
-				best = s.clone();
+				try {
+					best = (Solution) s.clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
 			}
 			
-			localSearchMethod.setFunction(f_);
-			localSearchMethod.setInitialSolution(s);
+			localSearchMethod.setProblem(f_);
+			localSearchMethod.getProblem().setInitialSolution(s);
 			s = localSearchMethod.execute();
 		}
 		

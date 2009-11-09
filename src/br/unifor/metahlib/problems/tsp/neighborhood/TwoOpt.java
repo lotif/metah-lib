@@ -48,6 +48,10 @@ public class TwoOpt extends NeighborhoodStructure {
 	 */
 	public List<double[]> getNeighbours(List<double[]> parents, int k1, int k2) {
 		
+		if(random == null){
+			random = new Random();
+		}
+		
 		double[] p = parents.get(0);
 		
 		do {
