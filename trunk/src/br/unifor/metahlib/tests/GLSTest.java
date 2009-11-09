@@ -2,13 +2,12 @@ package br.unifor.metahlib.tests;
 
 import java.io.File;
 
-import deprecated.Function;
-import deprecated.TSPFunction;
-import deprecated.TSPLibReader;
-import deprecated.TSPProblemDefinition;
-
+import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.NeighborhoodStructure;
+import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
+import br.unifor.metahlib.problems.tsp.TSPProblem;
 import br.unifor.metahlib.problems.tsp.neighborhood.ThreeOpt;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
@@ -16,32 +15,24 @@ public class GLSTest {
 
 	public static void main(String[] args) {
 		try{
-			TSPProblemDefinition tsp = new TSPLibReader(new File(System.getProperty("user.dir") + "/a280.tsp"));
+			File file = new File(System.getProperty("user.dir") + "/berlin52.tsp");
+			Object[] optTour = new Object[] {1, 49, 32, 45, 19, 41, 8, 9, 10, 43, 33, 51, 11, 52, 14, 13, 47, 26, 27, 28, 12, 25, 4, 6, 15, 5, 24, 48, 38, 37, 40, 39, 36, 35, 34, 44, 46, 16, 29, 50, 20, 23, 30, 2, 7, 42, 21, 17, 3, 18, 31, 22 };
 			
-			Function f = new TSPFunction(tsp, new TwoOpt());
-//			Function f = new TSPFunction(tsp, null);
-//			ThreeOpt t = new ThreeOpt(f);
-//			((TSPFunction)f).setNeighbourhoodStructure(t);
+//			NeighborhoodStructure neighborhoodStructure = new TwoOpt(); 
+//			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			
-//			SimulatedAnnealing h = new SimulatedAnnealing(f, 1, 0.00001, 0.9, 1000);
-			HillClimbing h = new HillClimbing(f, HillClimbing.DEFAULT, 1500, 0, 0);
+			ThreeOpt neighborhoodStructure = new ThreeOpt(null);
+			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
+			neighborhoodStructure.setProblem(problem);
 			
-			/*
-			 * Possible values for the GLS parameter "a", according with Vordouris 1997:
-			 * 2-OPT: 1/8 <= a <= 1/2
-			 * 3-OPT: 1/10 <= a <= 1/4
-			 * LK-OPT: 1/12 <= a <= 1/6
-			 */
-			GuidedLocalSearch gls = new GuidedLocalSearch(f, h, 2000, 1.0/6.0);
-			
-			double[] minx = gls.execute();
-			System.out.println("Melhor avaliacao: "+ f.eval(minx));
-			
-			System.out.print("Rota da melhor Avaliacao: [");
-			for(int i = 0; i < minx.length; i++){
-				System.out.print((minx[i] + 1) + ",");
-			}
-			System.out.print("]");
+			HillClimbing h = new HillClimbing(problem, HillClimbing.DEFAULT, 1500, 0, 0);
+			Heuristic gls = new GuidedLocalSearch(problem, h, 2000, 1.0/6.0);
+			Solution s = gls.execute();
+			System.out.println("Distance: " + s.getCost());
+
+			Solution optimal = new Solution(problem);
+			optimal.setValues(optTour);
+			System.out.println("Optimal: " + optimal);
 			
 		} catch (Exception e){
 			e.printStackTrace();

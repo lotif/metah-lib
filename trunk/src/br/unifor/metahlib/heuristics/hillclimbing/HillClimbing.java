@@ -2,8 +2,10 @@ package br.unifor.metahlib.heuristics.hillclimbing;
 
 import java.util.Random;
 
-import deprecated.Function;
-import deprecated.Metaheuristic;
+import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.NeighborhoodStructure;
+import br.unifor.metahlib.base.Problem;
+import br.unifor.metahlib.base.Solution;
 
 
 /**
@@ -12,7 +14,7 @@ import deprecated.Metaheuristic;
  * @author marcelo lotif
  *
  */
-public class HillClimbing extends Metaheuristic {
+public class HillClimbing extends Heuristic {
 
 	/**
 	 * Executes the default hill climbing
@@ -49,8 +51,8 @@ public class HillClimbing extends Metaheuristic {
 	 */
 	private double T;
 	
-	public HillClimbing(Function function, int type, int maxIterations,int maxIterations2, double t) {
-		super(function);
+	public HillClimbing(Problem problem, int type, int maxIterations,int maxIterations2, double t) {
+		super(problem);
 		this.maxIterations = maxIterations;
 		this.maxIterations2 = maxIterations2;
 		this.type = type;
@@ -62,7 +64,7 @@ public class HillClimbing extends Metaheuristic {
 	 * 
 	 * @return the best solution found
 	 */
-	public double[] execute() {
+	public Solution execute() {
 		lastBestFoundOn = 0;
 		switch(type){
 			case DEFAULT: return executeDefault(); 
@@ -78,22 +80,18 @@ public class HillClimbing extends Metaheuristic {
 	 * 
 	 * @return the best solution found
 	 */
-	private double[] executeDefault(){
-		double[] x;
-		if(initialSolution == null){
-			x = function.getRandomSolution();
-		} else {
-			x = initialSolution;
-		}
+	private Solution executeDefault(){
+		Solution x = problem.getInitialSolution();
 		
-		double eval = function.eval(x);
+		double eval = problem.getCostEvaluator().eval(x);
+		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		//if(type == DEFAULT) { }
 		
 		for(int i = 0; i < maxIterations; i++){
-			double[] _x = function.perturb(x);
+			Solution _x = neighborhood.getRandomNeighbor(x);
 			
-			eval = function.eval(x);
-			double _eval = function.eval(_x);
+			eval = problem.getCostEvaluator().eval(x);
+			double _eval = problem.getCostEvaluator().eval(_x);
 			
 			if(_eval < eval){
 				x = _x;
@@ -110,26 +108,23 @@ public class HillClimbing extends Metaheuristic {
 	 * 
 	 * @return the best solution found
 	 */
-	private double[] executeIterated(){
-		double[] bestx;
-		if(initialSolution == null){
-			bestx = function.getRandomSolution();
-		} else {
-			bestx = initialSolution;
-		}
+	private Solution executeIterated(){
 		
-		double bestEval = function.eval(bestx);
+		Solution bestx = problem.getInitialSolution();
+		
+		double bestEval = problem.getCostEvaluator().eval(bestx);
+		
 		for(int i = 0; i < maxIterations2; i++){
 	
-			double[] thisx; 
+			Solution thisx; 
 			if(type == ITERATED_DEFAULT) {
 				thisx = executeDefault();
 			} else {
 				thisx = executeStochastic();
 			}
 			
-			double thisEval = function.eval(thisx);
-			bestEval = function.eval(bestx);
+			double thisEval = problem.getCostEvaluator().eval(thisx);
+			bestEval = problem.getCostEvaluator().eval(bestx);
 			
 			if(thisEval < bestEval){
 				bestx = thisx;
@@ -145,24 +140,20 @@ public class HillClimbing extends Metaheuristic {
 	 * 
 	 * @return the best solution found
 	 */
-	private double[] executeStochastic(){
+	private Solution executeStochastic(){
 		Random r = new Random();
 		
-		double[] x;
-		if(initialSolution == null){
-			x = function.getRandomSolution();
-		} else {
-			x = initialSolution;
-		}
+		Solution x = problem.getInitialSolution();
 		
-		double eval = function.eval(x);
+		double eval = problem.getCostEvaluator().eval(x);
+		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		//if(type == STOCHASTIC) { }
 		
 		for(int i = 0; i < maxIterations; i++){
-			double[] _x = function.perturb(x);
+			Solution _x = neighborhood.getRandomNeighbor(x);
 			
-			eval = function.eval(x);
-			double _eval = function.eval(_x);
+			eval = problem.getCostEvaluator().eval(x);
+			double _eval = problem.getCostEvaluator().eval(_x);
 			
 			double rand = r.nextDouble();
 //			double minus = Math.abs(_eval) - Math.abs(eval);
