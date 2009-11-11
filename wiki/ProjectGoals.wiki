@@ -15,15 +15,16 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * 3-opt para o TSP (Marcelo)
 
     * Problemas variados de otimização numérica (Marcelo/Paulo Moreno)
+    * Particle Swarm Optimization para otimização numérica (Paulo Moreno)
 
 *Falta implementar:*
     * Variable Neighborhood Search (Marcelo)
     * GRASP (Marcelo)
     * Tabu Search
     * Iterated Local Search
-    * Genetic Algorithm
-    * Particle Swarm Optimization (Paulo Moreno)
-    * Ant Colony Optimization
+    * Genetic Algorithm (Paulo Moreno)
+    * Particle Swarm Optimization para TSP (Paulo Moreno)
 
+    * Ant Colony Optimization
     * LK-opt para TSP (Marcelo)
     * Knapsack Problem
