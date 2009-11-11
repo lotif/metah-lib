@@ -1,26 +1,243 @@
 package br.unifor.metahlib.metaheuristics.pso;
 
-public class PSO {
+import br.unifor.metahlib.base.Heuristic;
+import br.unifor.metahlib.base.Problem;
+import br.unifor.metahlib.base.Solution;
 
+public class PSO extends Heuristic {
+	
+	/**
+	 * Quantity of particles (solutions).
+	 */
+	private int populationSize = 10;
+	
+	/**
+	 * "Cognitive" acceleration coefficient. 
+	 */
+	private double c1 = 2.05;
+
+	/**
+	 *  "Social" acceleration coefficient. 
+	 */
+    private double c2 = 2.05;
+    
+    /**
+     * Max quantity of iterations;
+     */
+    private int max_it = 500;
+    
+	/**
+	 * Movement model that controls the particle moves.
+	 */
+    private MovementModel movementModel;
+    
+    /**
+     * Determines the neighborhood topology of particles.
+     */
+    private NeighborhoodTopology neighborhoodTopology;
+    
+    /**
+     * Calculates the inertia of particles.
+     */
+    private Inertia inertia;
+	
+    /**
+     * Class constructor.
+     * @param problem problem to optimize.
+     * @param neighborhoodTopology particle neighborhood topology
+     * @param inertia particle inertia calculator
+     * @param movementModel particle movement model
+     */
+    public PSO(Problem problem, NeighborhoodTopology neighborhoodTopology, Inertia inertia,
+    		MovementModel movementModel) {
+		super(problem);
+		this.neighborhoodTopology = neighborhoodTopology;
+		this.inertia = inertia;
+		this.movementModel = movementModel;
+	}
+	
+    /**
+     * Constructs a particle swarm.
+     * @return array of Particle
+     */
+	private Particle[] newSwarm(){
+       Particle[] particles = new Particle[populationSize];
+        for (int i = 0; i < particles.length; ++i){
+        	particles[i] = new Particle(problem, movementModel);
+        }
+
+        neighborhoodTopology.bind(particles);
+
+        return particles;
+    }
+	
+    /**
+     * Calculates the attraction of current particle position to other position. 
+     * @param position particle position
+     * @param attractor attractor position
+     * @param accelerationCoefficient controls the effect of the attractor
+     * @return position attraction 
+     */
+	private double[] calcAttraction(Object[] position, Object[] attractor, double accelerationCoefficient){
+        double[] attraction = new double[position.length];
+        for ( int i = 0; i < attraction.length; ++i ){
+            attraction[i] = (problem.getRandom().nextDouble() * accelerationCoefficient) * 
+                           ((Double) attractor[i] - (Double) position[i]);
+        }
+
+        return attraction;
+    }
+	
+    /**
+     * Updates the particle velocity vector.
+     * @param velocity current velocity
+     * @param attraction attraction to a new position
+     */
+	private void incVelocity(double[] velocity, double[] attraction){
+        assert(velocity.length == attraction.length);
+        for (int i = 0; i < velocity.length; ++i){
+            velocity[i]+= attraction[i];
+        }
+    }
+	
+    /**
+     * Get the best particle of array or null if array is empty.
+     * @param particles particle array
+     * @return the best particle
+     */
+	private Particle getBestParticle(Particle[] particles){
+		Particle best;
+		if (particles.length > 0){
+	        best = particles[0];
+	        double bestValue = best.getValue();
+	        double value;
+	        for (int i = 1; i < particles.length; ++i ){
+	            value = particles[i].getValue();
+	            if (value > bestValue){
+	                best = particles[i];
+	                bestValue = value;
+	            }
+	        }
+	        
+		} else {
+			best = null;
+		}
+
+        return best;
+    }
+
+	@Override
+	public Solution execute() {
+        Particle[] particles = newSwarm();
+        Particle p;
+        Particle bestParticle;
+        Particle bestNeighbor;
+        double[] velocity;
+        double[] attraction;
+        Solution pos_i;
+        Solution pos_g;
+
+        bestParticle = getBestParticle(particles).duplicate();
+        lastBestFoundOn = 0;
+
+        int it = 0;
+        while (it <  max_it){
+            for (int i = 0; i < particles.length; ++i){
+                p = particles[i];
+                if ( p.getValue() < p.getBestValue()){
+                    p.setBestPosition(p.getPosition());
+                }
+                pos_i = p.getBestPosition();
+
+                bestNeighbor = getBestParticle(p.getNeighbors());
+                pos_g = bestNeighbor.getPosition();
+
+                velocity = p.getVelocity().clone();
+                for ( int j = 0; j < velocity.length; ++j ){
+                    velocity[j] = velocity[j] * inertia.calculate(it, max_it);
+                }
+
+                attraction = calcAttraction(p.getPosition().getValues(), pos_i.getValues(), c1); 
+                incVelocity(velocity, attraction);
+
+                attraction = calcAttraction(p.getPosition().getValues(), pos_g.getValues(), c2);
+                incVelocity(velocity, attraction);
+
+                p.setVelocity(velocity);
+                p.move();
+                
+                if ( p.getValue() < bestParticle.getValue()){
+                	lastBestFoundOn = it;
+                    bestParticle = p.duplicate();
+                    System.out.println("Improved to: " + bestParticle.getPosition());
+                }
+            }
+            //p = getMelhorParticula(particulas);
+            //r.evolucaoMelhor.add(melhorParticula.getValor());
+            //r.evolucaoMedia.add(calculaMedia(particles));
+
+            it++;
+        }
+
+        //r.x = melhorParticula.getPosicao();
+        //r.eval_x = avaliarX( melhorParticula.getPosicao());
+        //r.qtdIteracoes = it;
+        //r.qtdAvaliacoes = a;
+
+        return bestParticle.getPosition();
+	}
+
+	public int getPopulationSize() {
+		return populationSize;
+	}
+
+	public void setPopulationSize(int populationSize) {
+		this.populationSize = populationSize;
+	}
+
+	public double getC1() {
+		return c1;
+	}
+
+	public void setC1(double c1) {
+		this.c1 = c1;
+	}
+
+	public double getC2() {
+		return c2;
+	}
+
+	public void setC2(double c2) {
+		this.c2 = c2;
+	}
+
+	public MovementModel getMovementModel() {
+		return movementModel;
+	}
+
+	public void setMovementModel(MovementModel movementModel) {
+		this.movementModel = movementModel;
+	}
+
+	public NeighborhoodTopology getNeighborhoodTopology() {
+		return neighborhoodTopology;
+	}
+
+	public void setNeighborhoodTopology(NeighborhoodTopology neighborhoodTopology) {
+		this.neighborhoodTopology = neighborhoodTopology;
+	}
+
+	public Inertia getInertia() {
+		return inertia;
+	}
+
+	public void setInertia(Inertia inertia) {
+		this.inertia = inertia;
+	}
+	
 }
 
 /*
-import busca.*;
-import funcoes.FuncaoObjetivo;
-import funcoes.FuncaoObjetivoNumerica;
-import funcoes.TipoOtimizacao;
-import java.util.Random;
-
-public class OtimizacaoEnxameParticulas extends AlgoritmoBusca {
-
-    private Random random = new Random();
-
-    public int tamanhoPopulacao = 10;
-    public double c1 = 2.05;
-    public double c2 = 2.05;
-    public Inercia inercia;
-    public Vizinhanca vizinhanca;
-
     @Override
     protected String getDescricaoParametros(){
         return String.format( "TamPopulacao=%d,c1=%.2f,c2=%.2f,qtdMaxGeracoes=%d,vizinhanca=%s,inercia=%s",
@@ -28,148 +245,12 @@ public class OtimizacaoEnxameParticulas extends AlgoritmoBusca {
                 inercia.toString());
     }
 
-    private Particula[] iniciar(){
-        Particula[] particulas = new Particula[tamanhoPopulacao];
-        for ( int i = 0; i < particulas.length; ++i){
-            particulas[i] = new Particula((FuncaoObjetivoNumerica) funcao);
-        }
-
-        vizinhanca.ligaVizinhos(particulas);
-
-        return particulas;
-    }
-
-    private double[] calculaAtracao( Object[] atual, Object[] melhor, double constAceleracao ){
-        double[] variacao = new double[atual.length];
-        for ( int i = 0; i < variacao.length; ++i ){
-            variacao[i] = (random.nextDouble() * constAceleracao) * 
-                          ((Double) melhor[i] - (Double) atual[i]);
-        }
-
-        return variacao;
-    }
-
-    private boolean eMelhor( Particula p1, Particula p2 ){
-        return normaliza_eval_x(p1.getValor()) > normaliza_eval_x(p2.getValor());
-    }
-
-    private boolean eMelhor( double v1, double v2 ){
-        return normaliza_eval_x(v1) > normaliza_eval_x(v2);
-    }
-
-    private void incVelocidade( double[] velocidade, double[] atracao){
-        assert( velocidade.length == atracao.length );
-        for ( int i = 0; i < velocidade.length; ++i ){
-            velocidade[i] = velocidade[i] + atracao[i];
-        }
-    }
-
     private double calculaMedia( Particula[] particulas ){
         double soma = 0.0;
         for ( int i = 0; i < particulas.length; ++i ){
             soma+= particulas[i].getValor();
         }
-        
         return soma / particulas.length;
     }
-
-    private Particula getMelhorParticula( Particula[] particulas ){
-        Particula melhorParticula = particulas[0];
-        double melhorValor = normaliza_eval_x(melhorParticula.getValor());
-        double valor;
-        for ( int i = 1; i < particulas.length; ++i ){
-            valor = normaliza_eval_x(particulas[i].getValor());
-            if ( valor > melhorValor ){
-                melhorParticula = particulas[i];
-                melhorValor = valor;
-            }
-        }
-
-        return melhorParticula;
-    }
-
-    @Override
-    protected void executa(ResultadoBusca r) throws Exception {
-        
-        Particula[] particulas = iniciar();
-
-        Particula p;
-        Particula[] vizinhos;
-        double[] velocidade;
-        double[] atracao;
-
-        Object[] pos_i;
-        Object[] pos_g;
-
-        Particula melhorParticula = getMelhorParticula(particulas);
-        r.evolucaoMelhor.add(melhorParticula.getValor());
-        r.evolucaoMedia.add(calculaMedia(particulas));
-
-        r.xInicial = melhorParticula.getPosicao();
-
-        int t = 0;
-        int a = 0;
-        while ( t < qtdMaxIteracoes && a < qtdMaxAvaliacoes ){
-            for ( int i = 0; i < particulas.length; ++i ){
-                p = particulas[i];
-                if ( eMelhor(p.getValor(), p.getValorMelhorPosicao())){
-                    p.setMelhorPosicao(p.getPosicao());
-                }
-                pos_i = p.getMelhorPosicao();
-
-                vizinhos = p.getVizinhos();
-                pos_g = vizinhos[0].getPosicao();
-                double eval_pos_g = vizinhos[0].getValor();
-                for ( int j = 1; j < vizinhos.length; j++){
-                    if ( eMelhor(vizinhos[j].getValor(), eval_pos_g) ){
-                        pos_g = vizinhos[j].getPosicao();
-                        eval_pos_g = vizinhos[j].getValor();
-                    }
-                }
-
-                velocidade = p.getVelocidade().clone();
-
-                for ( int j = 0; j < velocidade.length; ++j ){
-                    velocidade[j] = velocidade[j] * inercia.calcula(t, qtdMaxIteracoes);
-                }
-
-                atracao = calculaAtracao( p.getPosicao(), pos_i, c1);
-                incVelocidade( velocidade, atracao );
-
-                atracao = calculaAtracao( p.getPosicao(), pos_g, c2);
-                incVelocidade( velocidade, atracao );
-
-                p.setVelocidade(velocidade);
-                p.move();
-                
-                a++;
-                if ( eMelhor(p, melhorParticula) ){
-                    r.qtdIteracoesAteMelhorSolucao = t + 1;
-                    r.qtdAvaliacoesAteMelhorSolucao = a;
-                    melhorParticula = (Particula) p.clone();
-                }
-
-            }
-
-
-            //p = getMelhorParticula(particulas);
-            r.evolucaoMelhor.add(melhorParticula.getValor());
-            r.evolucaoMedia.add(calculaMedia(particulas));
-
-            t++;
-        }
-
-        r.x = melhorParticula.getPosicao();
-        r.eval_x = avaliarX( melhorParticula.getPosicao());
-        r.qtdIteracoes = t;
-        r.qtdAvaliacoes = a;
-    }
-
-    public OtimizacaoEnxameParticulas( FuncaoObjetivo funcao ){
-        super(funcao);
-        tipo = TipoOtimizacao.MAXIMIZACAO;
-        qtdMaxIteracoes = 100;
-    }
-
 }
 */

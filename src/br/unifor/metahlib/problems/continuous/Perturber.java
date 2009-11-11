@@ -103,8 +103,7 @@ public abstract class Perturber extends NeighborhoodStructure {
 		int[] idxs = choiceDimensionsForPerturb();
 		for (int i = 0; i < idxs.length; ++i){
 			int idx = idxs[i];
-			double value = perturb(idx, (Double) values[idx]);
-			values[idx] = function.rangeValue(idx, value);
+			values[idx] = perturb(idx, (Double) values[idx]);
 		}
 		n.setValues(values);
 		

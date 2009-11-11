@@ -3,13 +3,11 @@ package br.unifor.metahlib.tests;
 import java.io.File;
 
 import br.unifor.metahlib.base.Heuristic;
-import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
-import br.unifor.metahlib.problems.tsp.neighborhood.ThreeOpt;
-import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
+import br.unifor.metahlib.problems.tsp.neighborhood.*;
 
 public class GLSTest {
 

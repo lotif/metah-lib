@@ -54,12 +54,50 @@ public class TSPProblem extends Problem {
 		return s;
 	}
 
+	/**
+	 * Returns the TSP dataSet with cities distances.
+	 * @return a TSPDataSet instance
+	 */
 	public TSPDataSet getDataSet() {
 		return dataSet;
 	}
 
+	/**
+	 * Sets the TSP dataSet with cities distances.
+	 * @param dataSet a TSPDataSet instance
+	 */
 	public void setDataSet(TSPDataSet dataSet) {
 		this.dataSet = dataSet;
 	}
 	
+	/**
+	 * Checks if cities indexes are valid. 
+	 * @param values solution values
+	 * @return ranged values
+	 */
+	@Override
+	public Object[] rangeSolutionValues(Object[] values){
+		Object[] result = new Object[values.length];
+		for(int i = 0; i < values.length; ++i){
+			int idx = (Integer) values[i];
+			if (idx >= 1 && idx <= dataSet.getDimension()){
+				result[i] = idx;
+			} else {
+				throw new IndexOutOfBoundsException("Tour contains invalid index at position "
+						+ i + ". Index found: " + idx + ".");
+			}
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public double[] getSolutionValueRange(int idx){
+		return new double[] { 1.0, dataSet.getDimension() };
+	}
+	
+	@Override
+	public int getDimension(){
+		return dataSet.getDimension();
+	}
 }
