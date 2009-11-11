@@ -44,7 +44,7 @@ public class Solution implements Cloneable {
 	 * @param values solution values
 	 */
 	public void setValues(Object[] values){
-		this.values = values;
+		this.values = problem.rangeSolutionValues(values);
 		this.cost = null;
 	}
 	

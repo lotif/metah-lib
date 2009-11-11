@@ -5,8 +5,6 @@ import java.util.List;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
-import deprecated.Function;
-
 
 /**
  * The abstract class for the Augmented Cost Function of GLS metaheuristic.
@@ -47,6 +45,21 @@ public abstract class AugmentedCostProblem extends Problem {
 	@Override
 	public Solution newRandomSolution() {
 		return problem.newRandomSolution();
+	}
+	
+	@Override
+	public Object[] rangeSolutionValues(Object[] values){
+		return problem.rangeSolutionValues(values);
+	}
+	
+	@Override
+	public double[] getSolutionValueRange(int idx){
+		return problem.getSolutionValueRange(idx);
+	}
+	
+	@Override
+	public int getDimension(){
+		return problem.getDimension();
 	}
 	
 }

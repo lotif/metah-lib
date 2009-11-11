@@ -120,4 +120,24 @@ public abstract class Problem {
 		}
 		return initialSolution;
 	}
+	
+	/**
+	 * Limits the solution values to the allowed ranges. 
+	 * @param values solution values
+	 * @return ranged values
+	 */
+	public abstract Object[] rangeSolutionValues(Object[] values);
+	
+	/**
+	 * Returns the minimal and maximal values allowed for the informed solution values index.
+	 * @param idx solution values index
+	 * @return array with two values, minimal e maximal allowed values
+	 */
+	public abstract double[] getSolutionValueRange(int idx);
+	
+	/**
+	 * Returns the dimension of the problem. The solution values length is equal to the dimension.
+	 * @return dimension
+	 */
+	public abstract int getDimension();
 }

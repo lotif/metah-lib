@@ -51,4 +51,29 @@ public class ContinuousOptimizationProblem extends Problem {
 		s.setValues(values);
 		return s;
 	}
+	
+	/**
+	 * Limits the solution values to the allowed ranges. 
+	 * @param values solution values
+	 * @return ranged values
+	 */
+	@Override
+	public Object[] rangeSolutionValues(Object[] values){
+		Object[] result = new Object[values.length];
+		for(int i = 0; i < values.length; ++i){
+			result[i] = function.rangeValue(i, (Double) values[i]);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public double[] getSolutionValueRange(int idx){
+		return function.getDimensionRange(idx);
+	}
+	
+	@Override
+	public int getDimension(){
+		return function.getDimensionCount();
+	}
 }

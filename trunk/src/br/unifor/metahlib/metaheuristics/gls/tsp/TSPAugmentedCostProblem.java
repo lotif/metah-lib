@@ -2,13 +2,10 @@ package br.unifor.metahlib.metaheuristics.gls.tsp;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.metaheuristics.gls.AugmentedCostProblem;
 import br.unifor.metahlib.metaheuristics.gls.SolutionFeature;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
-import deprecated.Function;
-import deprecated.TSPFunction;
 
 /**
  * An implementation of the AugmentedCostFunction for the TSPFunction class
@@ -59,5 +56,4 @@ public class TSPAugmentedCostProblem extends AugmentedCostProblem {
 		
 		return solutionFeatures;
 	}
-	
 }

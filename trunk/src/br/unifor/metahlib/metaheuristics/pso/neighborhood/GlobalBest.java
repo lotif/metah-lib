@@ -1,10 +1,17 @@
 package br.unifor.metahlib.metaheuristics.pso.neighborhood;
 
-import br.unifor.metahlib.metaheuristics.pso.Neighborhood;
+import br.unifor.metahlib.metaheuristics.pso.NeighborhoodTopology;
 import br.unifor.metahlib.metaheuristics.pso.Particle;
 
-public class GlobalBest extends Neighborhood{
+/**
+ * Implements a star topology, known as gbest.
+ */
+public class GlobalBest extends NeighborhoodTopology{
 
+	/**
+	 * Binds each particle to all other particles.
+	 * @param particles all particles of a swarm
+	 */
 	@Override
 	public void bind(Particle[] particles) {
         Particle p, n;
@@ -20,10 +27,9 @@ public class GlobalBest extends Neighborhood{
                     idx++;
                 }
             }
-
             assert( idx == neighbors.length);
-            assert(false); // TODO
-            //p.setNeighbors(neighbors.clone());
+
+            p.setNeighbors(neighbors.clone());
         }
 	}
 
