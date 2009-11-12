@@ -12,7 +12,8 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
 
     * Traveling Salesman Problem (Marcelo)
     * 2-opt para o TSP (Marcelo)
-    * 3-opt para o TSP (Marcelo)
+    * K-opt para o TSP (Marcelo)
+    * Método construtivo guloso para gerar soluções aleatórias do TSP (Marcelo)
 
     * Problemas variados de otimização numérica (Marcelo/Paulo Moreno)
     * Particle Swarm Optimization para otimização numérica (Paulo Moreno)
