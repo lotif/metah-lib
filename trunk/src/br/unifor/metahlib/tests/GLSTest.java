@@ -19,7 +19,7 @@ public class GLSTest {
 //			NeighborhoodStructure neighborhoodStructure = new TwoOpt(); 
 //			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			
-			ThreeOpt neighborhoodStructure = new ThreeOpt(null);
+			KOpt neighborhoodStructure = new KOpt(null, 4);
 			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			neighborhoodStructure.setProblem(problem);
 			
