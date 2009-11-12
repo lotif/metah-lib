@@ -18,7 +18,7 @@ import br.unifor.metahlib.base.Solution;
  */
 public class ThreeOpt extends NeighborhoodStructure {
 
-	public Problem problem;
+	private Problem problem;
 	
 	public ThreeOpt(Problem problem){
 		super();
