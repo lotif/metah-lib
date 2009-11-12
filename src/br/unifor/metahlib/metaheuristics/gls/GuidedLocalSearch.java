@@ -50,6 +50,11 @@ public class GuidedLocalSearch extends Heuristic {
 	private int maxIterations;
 	
 	/**
+	 * The initial solution for the GLS
+	 */
+	private Solution initialSolution;
+	
+	/**
 	 * First GLS contructor, using lambda.
 	 * 
 	 * @param function the problem this instance will try to solve.
@@ -96,7 +101,7 @@ public class GuidedLocalSearch extends Heuristic {
 	 */
 	public Solution execute(){
 		
-		Solution s = problem.getInitialSolution();
+		Solution s = initialSolution == null ? problem.getInitialSolution() : initialSolution;
 		
 		Solution best = null;
 		Double bestEval = null;
@@ -173,6 +178,30 @@ public class GuidedLocalSearch extends Heuristic {
 
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
+	}
+
+	public Heuristic getLocalSearchMethod() {
+		return localSearchMethod;
+	}
+
+	public void setLocalSearchMethod(Heuristic localSearchMethod) {
+		this.localSearchMethod = localSearchMethod;
+	}
+
+	public double getA() {
+		return a;
+	}
+
+	public void setA(double a) {
+		this.a = a;
+	}
+
+	public Solution getInitialSolution() {
+		return initialSolution;
+	}
+
+	public void setInitialSolution(Solution initialSolution) {
+		this.initialSolution = initialSolution;
 	}
 
 }

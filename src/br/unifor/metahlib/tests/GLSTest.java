@@ -6,6 +6,7 @@ import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.gls.GuidedLocalSearch;
+import br.unifor.metahlib.problems.tsp.GreedyConstructiveSolutionGenerator;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 import br.unifor.metahlib.problems.tsp.neighborhood.*;
 
@@ -19,7 +20,7 @@ public class GLSTest {
 //			NeighborhoodStructure neighborhoodStructure = new TwoOpt(); 
 //			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			
-			KOpt neighborhoodStructure = new KOpt(null, 4);
+			KOpt neighborhoodStructure = new KOpt(null, 3);
 			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			neighborhoodStructure.setProblem(problem);
 			
@@ -32,6 +33,10 @@ public class GLSTest {
 			 * LK-OPT: 1/12 <= a <= 1/6	
 			 */
 			Heuristic gls = new GuidedLocalSearch(problem, h, 2000, 1.0/10.0);
+			
+			GreedyConstructiveSolutionGenerator generator = new GreedyConstructiveSolutionGenerator(problem);
+			((GuidedLocalSearch)gls).setInitialSolution(generator.generateNewGreedySolution());
+			
 			Solution s = gls.execute();
 			System.out.println("Distance: " + s.getCost());
 
