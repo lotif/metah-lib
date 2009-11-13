@@ -11,7 +11,7 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Guided Local Search (Marcelo)
     * Variable Neighborhood Search (Marcelo)
 
-    * Traveling Salesman Problem (Marcelo)
+    * Traveling Salesman Problem (Marcelo\Paulo)
     * 2-opt para o TSP (Marcelo)
     * K-opt para o TSP (Marcelo)
     * Método construtivo guloso para gerar soluções aleatórias do TSP (Marcelo)
