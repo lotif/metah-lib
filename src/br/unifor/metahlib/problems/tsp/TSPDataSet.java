@@ -106,7 +106,7 @@ public class TSPDataSet {
         while (!line.isEmpty() && !line.equals("EOF")){
             if (readingHeader){
                 items= line.split(":");
-                headerName = items[0].toUpperCase();
+                headerName = items[0].trim().toUpperCase();
                 headerValue = items.length > 1 ? items[1].trim() : "";
                 if (headerName.equals("NAME")){
                     name = headerValue;

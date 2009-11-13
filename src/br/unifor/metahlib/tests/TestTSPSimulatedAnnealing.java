@@ -13,7 +13,8 @@ public class TestTSPSimulatedAnnealing {
 
 	public static void main(String[] args) {
 		try{
-			File file = new File(System.getProperty("user.dir") + "/ulysses16.tsp");
+			//File file = new File(System.getProperty("user.dir") + "/ulysses16.tsp");
+			File file = new File(System.getProperty("user.dir") + "/d198.tsp");
 			Object[] optTour = new Object[] { 1, 14, 13, 12, 7, 6, 15, 5, 11, 9, 10, 16, 3, 2, 4, 8 };
 			
 			//File file = new File(System.getProperty("user.dir") + "/berlin52.tsp");
