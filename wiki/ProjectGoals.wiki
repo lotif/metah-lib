@@ -9,6 +9,7 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Hill Climbing (Marcelo)
     * Simulated Annealing (Marcelo)
     * Guided Local Search (Marcelo)
+    * Variable Neighborhood Search (Marcelo)
 
     * Traveling Salesman Problem (Marcelo)
     * 2-opt para o TSP (Marcelo)
@@ -19,7 +20,6 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Particle Swarm Optimization para otimização numérica (Paulo Moreno)
 
 *Falta implementar:*
-    * Variable Neighborhood Search (Marcelo)
     * GRASP (Marcelo)
     * Tabu Search
     * Iterated Local Search
