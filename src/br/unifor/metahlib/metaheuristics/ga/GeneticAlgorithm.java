@@ -5,65 +5,134 @@ import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
 public class GeneticAlgorithm extends Heuristic {
+	
+    /**
+     * Quantity of individuals.
+     */
+	private int populationSize = 50;
+    
+    /**
+     * Probability of an individual be chosen for reproduction.
+     */
+	private double crossoverProbability = 0.75;
+    
+    /**
+     * Probability of an individual suffers a mutation in a generation
+     */
+	private double mutationProbability = 0.10;
+    
+    /**
+     * Responsible to select the individuals for reproducing.
+     */
+	private Selector reproductionSelector;
+    
+    /**
+     * Responsible to select the survived individuals of a generation.
+     */
+	private Selector surviveSelector;
+    
+    /**
+     * Responsible to merge two individual genes.
+     */
+	private Crossover crossoverOperator;
+	
+	/**
+	 * Max quantity of generations.
+	 */
+	private int max_it;
+    
+    /**
+     * Responsible to mutate the "genes" of an individual.
+     */
+	public Mutation mutationOperator;	
 
 	public GeneticAlgorithm(Problem problem) {
 		super(problem);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Solution execute() {
-		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String toString(){
+        return String.format( "% (IndividualSize=%d,PopulationSize=%d,pc=%.2f," +
+        		"pm=%.2f,maxGenerations=%d,crossoverOperator=%s,mutationOperator=%s," +
+        		"reproductionSelector=%s,surviveSelector=%s)",
+        		this.getClass().getName(),
+        		problem.getDimension(), populationSize, crossoverProbability, 
+        		mutationProbability, max_it, getCrossoverOperator().toString(),
+        		mutationOperator.toString(), reproductionSelector.toString(),
+        		surviveSelector.toString());
+	}
+	
+    /**
+     * Creates a new random population.
+     * @return population
+     */
+	protected Population newPopulation() {
+    	Population pop = new Population();
+        for (int i = 0; i < populationSize; ++i ){
+        	pop.add(new Individual(problem));
+        }
+        return pop;
+    }
+	
+    /**
+     * Reproduces the individuals of population. The new individuals will be added to
+     * informed population.
+     * @param population
+     * @return new individuals
+     */
+	protected Population reproduce(Population population){
+        Population newPopulation = new Population();
+        Individual[] selection = reproductionSelector.select(population.getArray(),
+        		population.getSize());
+
+        for (int i = 0; i < selection.length; i+=2){
+        	Individual[] children = selection[i].reproduce(selection[i+1],
+            		crossoverProbability, crossoverOperator);
+            
+            population.addAll(children);
+            newPopulation.addAll(children);
+        }
+
+        return newPopulation;
+    }
+	
+    /**
+     * Mutates the individuals of population with probability determined by 
+     * property "mutationProbability". 
+     * @param population
+     */
+	protected void mutate(Population population){
+        for ( int i = 0; i < population.getSize(); ++i ){
+        	population.get(i).mutate(mutationProbability, mutationOperator);
+        }
+    }
+
+    /**
+     * Sets the object responsible to merge two individual genes.
+     */
+	public void setCrossoverOperator(Crossover crossoverOperator) {
+		this.crossoverOperator = crossoverOperator;
+		this.crossoverOperator.setRandom(problem.getRandom());
+	}
+
+    /**
+     * Returns the object responsible to merge two individual genes.
+     */
+	public Crossover getCrossoverOperator() {
+		return crossoverOperator;
+	}
+	
 /*
  * 
- *     public int tamanhoPopulacao = 50;
-    public double pc = 0.75;
-    public double pm = 0.10;
-    public Seletor seletorReproducao;
-    public Seletor seletorNovaGeracao;
-    public Crossover operadorCrossover;
-    public Mutacao operadorMutacao;
+ *
 
-    @Override
-    protected String getDescricaoParametros(){
-        return String.format( "TamIndiv=%d,TamPopul=%d,pc=%.2f,pm=%.2f,qtdMaxGeracoes=%d," +
-                              "%s,%s,selReproducao=%s,selNovaGeracao=%s",
-                tamanhoIndividuo, tamanhoPopulacao, pc, pm, qtdMaxIteracoes,
-                operadorCrossover.getClass().getName(), operadorMutacao.getClass().getName(),
-                seletorReproducao.getClass().getName(), seletorNovaGeracao.getClass().getName());
-    }
-
-    protected Populacao iniciar() {
-        Populacao populacao = new Populacao();
-        for ( int i = 0; i < tamanhoPopulacao; ++i ){
-            populacao.adicionar( new Individuo(funcao) );
-        }
-        tamanhoIndividuo = funcao.getQtdDimensoes();
-
-        return populacao;
-    }
     
-    protected Populacao reproduzir( Populacao populacao ) throws CloneNotSupportedException{
-        Populacao populacaoFilhos = new Populacao();
-        Individuo[] selecao = seletorReproducao.selecionar(populacao.getArray(),
-                                                           populacao.getTamanho());
 
-        for ( int i = 0; i < selecao.length; i+=2 ){
-            Individuo[] filhos = selecao[i].reproduzir(selecao[i+1], pc, operadorCrossover);
-            populacao.adicionar(filhos);
-            populacaoFilhos.adicionar(filhos);
-        }
-
-        return populacaoFilhos;
-    }
-
-    protected void mutar( Populacao populacao ){
-        for ( int i = 0; i < populacao.getTamanho(); ++i ){
-            populacao.get(i).mutar( pm, operadorMutacao );
-        }
-    }
 
     protected Populacao selecionar( Populacao populacao ) throws CloneNotSupportedException{
         Individuo[] selecao = seletorNovaGeracao.selecionar(populacao.getArray(), tamanhoPopulacao);

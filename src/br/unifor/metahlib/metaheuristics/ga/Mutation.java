@@ -1,10 +1,5 @@
 package br.unifor.metahlib.metaheuristics.ga;
 
-public class Mutation {
-/*
- *     protected Random random = new Random();
-
-    public abstract boolean mutar( Object[] genes, double pm );
-
- */
+public abstract class Mutation {
+    public abstract boolean mutate(Object[] genes, double mutationProbability);
 }

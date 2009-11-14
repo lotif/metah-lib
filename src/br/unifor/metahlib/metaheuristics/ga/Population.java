@@ -1,21 +1,94 @@
 package br.unifor.metahlib.metaheuristics.ga;
 
+import java.util.ArrayList;
+
+/**
+ * Groups individuals in Genetic Algorithm.
+ */
 public class Population {
+	
+	/**
+	 * Individuals of this population.
+	 */
+	private ArrayList<Individual> individuals = new ArrayList<Individual>();
+	
+    /**
+     * Creates a array with the individuals of this population.
+     * @return array of Individual
+     */
+	public Individual[] getArray(){
+        Individual[] ar = new Individual[individuals.size()];
+        for (int i = 0; i < ar.length; ++i){
+            ar[i] = individuals.get(i);
+        }
 
-	/*
-    public Vector<Individuo> individuos;
-
-    public void adicionar( Individuo individuo ){
-        individuos.add( individuo );
+        return ar;
     }
 
-    public void adicionar( Individuo[] individuos ){
-        for ( int i = 0; i < individuos.length; ++i ){
-            this.individuos.add( individuos[i] );
+    /**
+     * Adds the individual.
+     * @param individual
+     */
+	public void add(Individual individual){
+        individuals.add(individual);
+	}
+
+    /**
+     * Adds all individuals.
+     * @param invididuals
+     */
+	public void addAll(Individual[] individuals){
+        for (int i = 0; i < individuals.length; ++i ){
+            this.individuals.add(individuals[i]);
         }
     }
+	
+    /**
+     * Returns the population size.
+     * @return population size
+     */
+	public int getSize(){
+        return individuals.size();
+    }
+	
 
-    public double getSomatorioValor(){
+    /**
+     * Returns a individual of population.
+     * @param idx index of individual
+     * @return individual
+     */
+	public Individual get(int idx){
+        return individuals.get(idx);
+    }
+	
+    /**
+     * Returns the individual with best fitness.
+     * @return individual
+     */
+	public Individual getBestIndividual(){
+		if (individuals.size() > 0){
+	        Individual best = individuals.get(0);
+	        double bestFitness = best.getFitness();
+	        Individual ind;
+	        double fitness;
+	        for (int i = 1; i < individuals.size(); ++i){
+	            ind = individuals.get(i);
+	        	fitness = ind.getFitness();
+	            if (fitness > bestFitness){
+	            	bestFitness = fitness;
+	                best = ind;
+	            }
+	        }
+	
+	        return best;
+	        
+		} else {
+			return null;
+		}
+    }
+
+    /**
+	public double getSomatorioValor(){
         double soma = 0.0;
         for ( int i = 0; i < individuos.size(); ++i ){
             soma+= get(i).getValor();
@@ -28,41 +101,5 @@ public class Population {
         return getSomatorioValor() / getTamanho();
     }
 
-    public Individuo getMelhorIndividuo(){
-        Individuo individuo = individuos.firstElement();
-        double melhor = individuo.getFitness();
-        double fitness;
-        for ( int i = 1; i < individuos.size(); ++i ){
-            fitness = get(i).getFitness();
-            if ( fitness > melhor ){
-                melhor = fitness;
-                individuo = get(i);
-            }
-        }
-
-        return individuo;
-    }
-
-    public int getTamanho(){
-        return individuos.size();
-    }
-
-    public Individuo get( int index ){
-        return individuos.get(index);
-    }
-
-    public Individuo[] getArray(){
-        Individuo[] resultado = new Individuo[individuos.size()];
-        for ( int i = 0; i < resultado.length; ++i ){
-            resultado[i] = individuos.get(i);
-        }
-
-        return resultado;
-    }
-
-    
-    public Populacao(){
-        individuos = new Vector<Individuo>();
-    }
     */
 }

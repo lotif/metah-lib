@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.ga.selection;
+package br.unifor.metahlib.metaheuristics.ga.selector;
 
 public class RouletteSelection {
 	/*
