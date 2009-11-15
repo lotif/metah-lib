@@ -12,6 +12,11 @@ public abstract class Heuristic {
 	protected int lastBestFoundOn = 0;
 	
 	/**
+	 * Max quantity of iterations.
+	 */
+	protected int max_it = 100;
+	
+	/**
 	 * The problem to be optimized by this heuristic.
 	 */
 	protected Problem problem;
@@ -51,5 +56,19 @@ public abstract class Heuristic {
 	 */
 	public int getLastBestFoundOn() {
 		return lastBestFoundOn;
+	}
+	
+	/**
+	 * Returns the max quantity of iterations.
+	 */
+	public int getMax_it(){
+		return max_it;
+	}
+
+	/**
+	 * Sets the max quantity of iterations.
+	 */
+	public void setMax_it(int value){
+		max_it = value;
 	}
 }

@@ -3,9 +3,9 @@ package br.unifor.metahlib.metaheuristics.ga;
 import java.util.Random;
 
 /**
- * Class responsible to select individuals of a population.
+ * Class responsible to merge two solutions to create a new one.
  */
-public abstract class Selector {
+public abstract class CrossoverOperator {
 	
 	/**
 	 * Problem random number generator.
@@ -13,17 +13,12 @@ public abstract class Selector {
 	protected Random random;
 	
 	/**
-	 * Selects the informed quantity of individuals using a determined strategy.
-	 * @param individuals
-	 * @param quantity
-	 * @return selected individuals
+	 * Crossovers the informed chains of genes creating two new chains.
+	 * @param g1 
+	 * @param g2
+	 * @return new chains of genes
 	 */
-	public abstract Individual[] select(Individual[] individuals, int quantity);
-
-	@Override
-	public String toString(){
-		return this.getClass().getName();		
-	}
+	public abstract Object[][] crossover(Object[] g1, Object[] g2);
 	
 	/**
 	 * Sets the random number generator.
@@ -39,5 +34,10 @@ public abstract class Selector {
 	 */
 	protected Random getRandom() {
 		return random;
+	}
+	
+	@Override
+	public String toString(){
+		return this.getClass().getName();		
 	}
 }

@@ -23,7 +23,7 @@ public class UniformPertuber extends Perturber {
 	 * @return perturbed value
 	 */
 	@Override
-	protected double perturb(int dimension, double value) {
+	public double perturb(int dimension, double value) {
 		double[] range = function.getDimensionRange(dimension);
         double maxDelta = (range[1] - range[0]) * maxPercentChange;
         double delta = random.nextDouble() * maxDelta;
