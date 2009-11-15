@@ -5,7 +5,12 @@ import java.util.Random;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
-public class Individual {
+/**
+ * Class responsible for encapsulate the genetic algorithm methods for diversification and
+ * intensification of solutions. Creates the concepts of fitness (inverse of cost) and chain 
+ * of genes. 
+ */
+public class Individual implements Cloneable, Comparable<Individual> {
 	
 	/**
 	 * Problem to be optimized.
@@ -18,9 +23,19 @@ public class Individual {
 	Random random;
 	
 	/**
-	 * 
+	 * Solution represented by this individual.
 	 */
 	Solution solution;
+	
+    /**
+     * Class constructor.
+     * @param problem problem to be optimized.
+     */
+    public Individual(Problem problem){
+        this.problem = problem;
+        this.random = problem.getRandom();
+        this.solution = problem.newRandomSolution();
+    }
 	
 	/**
 	 * Reproduces the individuals creating two new individuals.
@@ -29,7 +44,7 @@ public class Individual {
 	 * @param operator object that will crossover the genes of individuals
 	 * @return two new individuals
 	 */
-	public Individual[] reproduce(Individual individual, double crossoverProbability, Crossover operator){
+	public Individual[] reproduce(Individual individual, double crossoverProbability, CrossoverOperator operator){
 		Individual child1 = duplicate();
 		Individual child2 = individual.duplicate();
 
@@ -50,7 +65,7 @@ public class Individual {
      * @param mutationProbability probability that mutation occurs
      * @param operator object that will mutate the individual
      */
-	public void mutate(double mutationProbability, Mutation operator){
+	public void mutate(double mutationProbability, MutationOperator operator){
     	Object[] genes = getGenes();
         if (operator.mutate(genes, mutationProbability)){
             setGenes(genes);
@@ -95,10 +110,20 @@ public class Individual {
     	ind.solution = solution.duplicate();
     	return ind;
     }
-
-    public Individual(Problem problem){
-        this.problem = problem;
-        this.random = problem.getRandom();
-        this.solution = problem.newRandomSolution();
+    
+	/**
+	 * Returns the solution represented by this individual.
+	 */
+    public Solution getSolution(){
+    	return solution;
     }
+
+	@Override
+	public int compareTo(Individual o) {
+		if (getFitness() == o.getFitness()){
+			return 0;
+		} else {
+			return getFitness() > o.getFitness() ? 1 : -1; 
+		}
+	}
 }

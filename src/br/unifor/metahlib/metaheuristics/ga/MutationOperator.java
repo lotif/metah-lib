@@ -3,23 +3,23 @@ package br.unifor.metahlib.metaheuristics.ga;
 import java.util.Random;
 
 /**
- * Class responsible to merge two solutions to create a new one.
+ * Class responsible for apply a randomized change in a chain of genes.
  */
-public abstract class Crossover {
+public abstract class MutationOperator {
 	
 	/**
 	 * Problem random number generator.
 	 */
-	private Random random;
+	protected Random random;
 	
 	/**
-	 * Crossovers the informed chains of genes creating two new chains.
-	 * @param g1 
-	 * @param g2
-	 * @return new chains of genes
+	 * Mutate the genes. 
+	 * @param genes genes that will be changed
+	 * @param mutationProbability probability that mutation occurs
+	 * @return true if a mutation occurred
 	 */
-	public abstract Object[][] crossover(Object[] g1, Object[] g2);
-	
+    public abstract boolean mutate(Object[] genes, double mutationProbability);
+    
 	/**
 	 * Sets the random number generator.
 	 * @param random random number generator
@@ -34,10 +34,5 @@ public abstract class Crossover {
 	 */
 	protected Random getRandom() {
 		return random;
-	}
-	
-	@Override
-	public String toString(){
-		return this.getClass().getName();		
 	}
 }

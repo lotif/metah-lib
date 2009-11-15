@@ -4,7 +4,10 @@ import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
-public class PSO extends Heuristic {
+/**
+ * The Particle Swarm Optimization algorithm.
+ */
+public class ParticleSwamOptimization extends Heuristic {
 	
 	/**
 	 * Quantity of particles (solutions).
@@ -48,7 +51,7 @@ public class PSO extends Heuristic {
      * @param inertia particle inertia calculator
      * @param movementModel particle movement model
      */
-    public PSO(Problem problem, NeighborhoodTopology neighborhoodTopology, Inertia inertia,
+    public ParticleSwamOptimization(Problem problem, NeighborhoodTopology neighborhoodTopology, Inertia inertia,
     		MovementModel movementModel) {
 		super(problem);
 		this.neighborhoodTopology = neighborhoodTopology;

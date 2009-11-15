@@ -116,7 +116,7 @@ public abstract class Perturber extends NeighborhoodStructure {
 	 * @param value value to be perturbed
 	 * @return perturbed value
 	 */
-	protected abstract double perturb(int dimension, double value);
+	public abstract double perturb(int dimension, double value);
 
 	/**
 	 * Returns how the dimensions are chosen for perturbation. 

@@ -1,18 +1,23 @@
 package br.unifor.metahlib.metaheuristics.ga.crossover;
 
-public class TwoPoints {
-	
-	/*
-    public Object[][] crossover( Object[] genes1, Object[] genes2){
-        assert( genes1.length == genes2.length );
-        int len = genes1.length;
-        Object[] filho1 = new Object[len];
-        Object[] filho2 = new Object[len];
+import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
+
+/**
+ * Two points crossover operator.
+ */
+public class TwoPoints extends CrossoverOperator {
+
+	@Override
+	public Object[][] crossover(Object[] g1, Object[] g2) {
+        assert( g1.length == g2.length );
+        int len = g1.length;
+        Object[] child1 = new Object[len];
+        Object[] child2 = new Object[len];
 
         int r1;
         int r2;
 
-        switch ( len ){
+        switch (len){
             case 1:
                 r1 = 0;
                 r2 = 1;
@@ -23,26 +28,23 @@ public class TwoPoints {
                 r2 = random.nextInt(len-r1) + r1;
         }
 
-
-        for ( int i = 0; i < r1; ++i ){
-            filho1[i] = genes1[i];
-            filho2[i] = genes2[i];
+        for (int i = 0; i < r1; ++i){
+        	child1[i] = g1[i];
+        	child2[i] = g2[i];
         }
 
-        for ( int i = r1; i < r2; ++i ){
-            filho1[i] = genes2[i];
-            filho2[i] = genes1[i];
+        for (int i = r1; i < r2; ++i){
+        	child1[i] = g2[i];
+        	child2[i] = g1[i];
         }
 
-        for ( int i = r2; i < len; ++i ){
-            filho1[i] = genes1[i];
-            filho2[i] = genes2[i];
+        for (int i = r2; i < len; ++i){
+        	child1[i] = g1[i];
+        	child2[i] = g2[i];
         }
 
-        Object[][] filhos = new Object[][] { filho1, filho2 };
+        Object[][] children = new Object[][] {child1, child2};
 
-        return filhos;
-
-    }
-    */
+        return children;
+	}
 }
