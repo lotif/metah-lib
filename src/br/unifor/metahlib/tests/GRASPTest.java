@@ -5,33 +5,27 @@ import java.io.File;
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
-import br.unifor.metahlib.metaheuristics.vns.VariableNeighborhoodSearch;
+import br.unifor.metahlib.metaheuristics.grasp.GRASP;
+import br.unifor.metahlib.metaheuristics.grasp.tsp.TSPGreedyRandomizedContructor;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
-import br.unifor.metahlib.problems.tsp.neighborhood.KOpt;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
-public class VNSTest {
-	
+public class GRASPTest {
 	public static void main(String[] args) {
 		try{
-			File file = new File(System.getProperty("user.dir") + "/a280.tsp");
+			File file = new File(System.getProperty("user.dir") + "/berlin52.tsp");
 			
 			TwoOpt twoOpt = new TwoOpt();
-			TSPProblem problem = new TSPProblem(file, twoOpt);
-			
-			KOpt threeOpt = new KOpt(problem, 3);
-			KOpt fourOpt = new KOpt(problem, 4);
-			KOpt fiveOpt = new KOpt(problem, 5);			
+			TSPProblem problem = new TSPProblem(file, twoOpt);		
 			
 			HillClimbing h = new HillClimbing(problem, HillClimbing.DEFAULT, 1500, 0, 0);
 			
-			Heuristic vns = new VariableNeighborhoodSearch(problem, h, 20, fiveOpt, fourOpt, threeOpt, twoOpt);
-			Solution s = vns.execute();
+			Heuristic grasp = new GRASP(problem, h, 1000, new TSPGreedyRandomizedContructor(problem, 0.5));
+			Solution s = grasp.execute();
 			System.out.println("Distance: " + s.getCost());
 			
 		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
-
 }

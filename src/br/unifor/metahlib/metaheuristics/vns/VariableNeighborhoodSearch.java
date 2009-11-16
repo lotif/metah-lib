@@ -20,11 +20,6 @@ public class VariableNeighborhoodSearch extends Heuristic {
 	private NeighborhoodStructure[] neighborhoods;
 	
 	/**
-	 * The maximum number of iterations allowed to execute without improvement
-	 */
-	private int maxIt;
-	
-	/**
 	 * The initial solution for the metahuristic
 	 */
 	private Solution initialSolution;
@@ -46,7 +41,7 @@ public class VariableNeighborhoodSearch extends Heuristic {
 		super(problem);
 		this.neighborhoods = neighborhoods;
 		this.localSearchMethod = localSearchMethod;
-		this.maxIt = maxIt;
+		this.max_it = maxIt;
 	}
 
 	@Override
@@ -55,7 +50,7 @@ public class VariableNeighborhoodSearch extends Heuristic {
 		System.out.println("Initial s: " + problem.getCostEvaluator().eval(s));
 		
 		int i = 0;
-		while(i < maxIt) {
+		while(i < max_it) {
 			System.out.println("#### i = " + i + "####");
 			double lastSCost = s.getCost();
 			int k = 0;
@@ -104,24 +99,6 @@ public class VariableNeighborhoodSearch extends Heuristic {
 	 */
 	public void setNeighborhoods(NeighborhoodStructure[] neighborhoods) {
 		this.neighborhoods = neighborhoods;
-	}
-
-	/**
-	 * Returns the maximum number of iterations allowed to execute without improvement
-	 * 
-	 * @return the maximum number of iterations allowed to execute without improvement
-	 */
-	public int getMaxIt() {
-		return maxIt;
-	}
-
-	/**
-	 * Sets the maximum number of iterations allowed to execute without improvement
-	 * 
-	 * @param maxIt the maximum number of iterations allowed to execute without improvement
-	 */
-	public void setMaxIt(int maxIt) {
-		this.maxIt = maxIt;
 	}
 
 	/**
