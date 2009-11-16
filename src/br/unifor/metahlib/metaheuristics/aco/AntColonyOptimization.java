@@ -1,5 +1,7 @@
 package br.unifor.metahlib.metaheuristics.aco;
 
+import java.util.ArrayList;
+
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
@@ -40,21 +42,36 @@ public class AntColonyOptimization extends Heuristic {
 
 	@Override
 	public Solution execute() {
-		// TODO Auto-generated method stub
+		ArrayList<Ant> ants = new ArrayList<Ant>();
+		for (int i = 0; i < n; i++) {
+			Ant ant = new Ant(problem);
+			ants.add(ant);
+		}
+		// Let best be the best tour found from the beginning and lbest its
+		// length
 		Solution best = problem.getInitialSolution();
 		double lbest = best.getCost();
 		e = best.getValues().length;
 		// Initialize Tij
 		Double[] tij = t0;
-		// Place each ant k in a random selected city
-		// Let best be the best tour found from the beginning and lbest its
-		// length
 		int t = 1;
 		while (t < max_it) {
-			// for each ant do
+			// for each ant build a new tour
 			// evaluate the tour performed by each ant
+			for (int i = 0; i < n; i++) {
+				Ant ant = ants.get(i);
+				ant.buildNewTour();
+			}
 			// if a shorter tour is found, update best and lbest
+			for (int i = 0; i < ants.size(); i++) {
+				Ant ant = ants.get(i);
+				if (lbest > ant.getSolution().getCost()) {
+					best = ant.getSolution().duplicate();
+					lbest = ant.getSolution().getCost();
+				}
+			}
 			// update pheromone trails
+			// TODO Auto-generated method stub
 			t++;
 		}
 		return best;
