@@ -123,7 +123,7 @@ public class TSPDataSet {
                 }
 
             } else {
-                items = line.split("\\s");
+            	items = line.split("(\\s)+");
                 assert( cities.size() + 1 == Integer.parseInt(items[0]));
                 x = Double.parseDouble(items[1]);
                 y = Double.parseDouble(items[2]);

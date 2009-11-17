@@ -1,9 +1,9 @@
 package br.unifor.metahlib.metaheuristics.sa;
 
-import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.TrajectoryHeuristic;
 
 
 /**
@@ -12,7 +12,7 @@ import br.unifor.metahlib.base.Solution;
  * @author marcelo lotif
  *
  */
-public class SimulatedAnnealing extends Heuristic {
+public class SimulatedAnnealing extends TrajectoryHeuristic {
 	
 	/**
 	 * Maximum number of iterations for each temperature reached
@@ -39,8 +39,9 @@ public class SimulatedAnnealing extends Heuristic {
 	 * @param b the decreasing step
 	 * @param k the maximum number of iterations for each temperature reached
 	 */
-	public SimulatedAnnealing(Problem problem, double tmax, double tmin, double b, int k){
-		super(problem);
+	public SimulatedAnnealing(Problem problem, NeighborhoodStructure neighborhoodStructure,
+			double tmax, double tmin, double b, int k){
+		super(problem, neighborhoodStructure);
 		this.maxIterations = k;
 		this.maxTemperature = tmax;
 		this.minTemperature = tmin;
@@ -54,7 +55,6 @@ public class SimulatedAnnealing extends Heuristic {
 	 */
 	@Override
 	public Solution execute() {
-		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		double temperature = maxTemperature;
 		int currentIteration = 0;
 
@@ -64,7 +64,7 @@ public class SimulatedAnnealing extends Heuristic {
 			for(int i = 0; i < maxIterations; i++){
 				currentIteration++;
 				
-				Solution _s = neighborhood.getRandomNeighbor(s);
+				Solution _s = neighborhoodStructure.getRandomNeighbor(s);
 				if(_s.getCost() < s.getCost()){
 					s = _s;
 					lastBestFoundOn = totalIt;

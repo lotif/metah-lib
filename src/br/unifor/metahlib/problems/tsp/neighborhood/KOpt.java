@@ -1,8 +1,5 @@
 package br.unifor.metahlib.problems.tsp.neighborhood;
 
-import java.util.List;
-
-import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
@@ -19,7 +16,7 @@ import br.unifor.metahlib.base.Solution;
  * @author marcelo lotif
  *
  */
-public class KOpt extends NeighborhoodStructure {
+public class KOpt extends TwoOpt {
 
 	/**
 	 * The number of edges to be removed
@@ -30,7 +27,7 @@ public class KOpt extends NeighborhoodStructure {
 	 * The problem which this operation is applied 
 	 */
 	private Problem problem;
-	
+
 	/**
 	 * Constructor of the class
 	 * 
@@ -40,6 +37,7 @@ public class KOpt extends NeighborhoodStructure {
 	public KOpt(Problem problem, int k){
 		super();
 		this.problem = problem;
+		this.setRandom(problem.getRandom());
 		this.k = k;
 	}
 	
@@ -50,42 +48,27 @@ public class KOpt extends NeighborhoodStructure {
 	 * @param parents the list of parents. For the k-opt operation, only one parent is needed.
 	 * @return the child route.
 	 */
-	@Override
-	public List<double[]> getNeighbours(List<double[]> parents) {
+	public Object[] kOpt(Object[] values) {
 		
-		TwoOpt two_opt1 = new TwoOpt();
-		List<double[]> c = two_opt1.getNeighbours(parents);
+		TwoOptResult resultOpt1 = twoOpt(values, -1, -1);
+		Object[] c = resultOpt1.neighbor;
 		
 		int opt = 2;
 		
-		do{
-		
-			TwoOpt two_opt2_1 = new TwoOpt();
-			TwoOpt two_opt2_2 = new TwoOpt();
-			
-			double[] child1 = two_opt2_1.getNeighbours(c, two_opt1.getEdge1(), -1).get(0);
-			double[] child2 = two_opt2_2.getNeighbours(c, -1, two_opt1.getEdge2()).get(0);
+		do {
+			TwoOptResult child1 = twoOpt(c, resultOpt1.removedEdges[0], -1);
+			TwoOptResult child2 = twoOpt(c, -1, resultOpt1.removedEdges[1]);
 			
 			Solution c1 = new Solution(problem);
+			c1.setValues(child1.neighbor);
+			
 			Solution c2 = new Solution(problem);
+			c2.setValues(child2.neighbor);
 			
-			Object[] ch1 = new Object[child1.length];
-			Object[] ch2 = new Object[child1.length];
-			
-			for(int i = 0; i < ch1.length; i++){
-				ch1[i] = (int) Double.parseDouble(child1[i] + "");
-			}
-			for(int i = 0; i < ch2.length; i++){
-				ch2[i] = (int) Double.parseDouble(child2[i] + "");
-			}
-			
-			c1.setValues(ch1);
-			c2.setValues(ch2);
-			
-			if(problem.getCostEvaluator().eval(c1) < problem.getCostEvaluator().eval(c2)){
-				c.set(0, child1);
+			if (c1.getCost() < c2.getCost()){
+				c = child1.neighbor;
 			} else {
-				c.add(0, child2);//
+				c = child2.neighbor;
 			}
 			
 			opt++;
@@ -95,12 +78,10 @@ public class KOpt extends NeighborhoodStructure {
 		return c;
 	}
 	
-	public Problem getProblem() {
-		return problem;
+	@Override
+	public Solution getRandomNeighbor(Solution solution) {
+		Solution s = solution.duplicate();
+		s.setValues(kOpt(s.getValues()));
+		return s;
 	}
-
-	public void setProblem(Problem problem) {
-		this.problem = problem;
-	}
-
 }

@@ -1,10 +1,7 @@
 package br.unifor.metahlib.problems.tsp.neighborhood;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import br.unifor.metahlib.base.NeighborhoodStructure;
+import br.unifor.metahlib.base.Solution;
 
 /**
  * An implementation of the 2-opt TSP neighborhood structure 
@@ -14,45 +11,35 @@ import br.unifor.metahlib.base.NeighborhoodStructure;
  */
 public class TwoOpt extends NeighborhoodStructure {
 	
-	/**
-	 * Edge removed #1
-	 */
-	private int edge1;
+    public static class TwoOptResult {
+    	/**
+		 * Removed edges.
+		 */
+		public int[] removedEdges;
+		
+		/**
+		 * Generated neighbor.
+		 */
+		public Object[] neighbor;
+		
+		public TwoOptResult(Object[] neighbor, int[] removedEdges){
+			this.neighbor = neighbor;
+			this.removedEdges = removedEdges;
+		}
+    }
 	
-	/**
-	 * Edge removed #2
-	 */
-	private int edge2;
-	
-	/**
-	 * This method implements the 2-opt operation.
-	 * The removed edges are randomly generated.
-	 * 
-	 * @param parents the list of parents. For the 2-opt operation, only one parent is needed.
-	 * @return the child route.
-	 */
-	@Override
-	public List<double[]> getNeighbours(List<double[]> parents) {
-		return getNeighbours(parents, -1, -1);
-	}
-
 	/**
 	 * This method implements the 2-opt with fixed edge removal.
 	 * For random generation of any of the two edges, one must assign it with a negative number.
-	 * 
-	 * 
 	 * @param parents the list of parents. For the 2-opt operation, only one parent is needed.
 	 * @param k1 the first edge to be removed. If it is a negative number, a random number will be assigned.
 	 * @param k2 the second edge to be removed. If it is a negative number, a random number will be assigned.
 	 * @return the child route.
 	 */
-	public List<double[]> getNeighbours(List<double[]> parents, int k1, int k2) {
-		
-		if(random == null){
-			random = new Random();
-		}
-		
-		double[] p = parents.get(0);
+    public TwoOptResult twoOpt(Object[] values, int k1, int k2){
+		Object[] p = values;
+		int edge1;
+		int edge2;
 		
 		do {
 			edge1 = k1 < 0 ? random.nextInt(p.length) : k1;
@@ -65,8 +52,7 @@ public class TwoOpt extends NeighborhoodStructure {
 			}
 		} while (edge1 == edge2);
 		
-		double[] child = new double[p.length];
-		
+		Object[] child = new Object[p.length];
 		int i = 0;
 		while(i < edge1){
 			child[i] = p[i];
@@ -85,25 +71,14 @@ public class TwoOpt extends NeighborhoodStructure {
 			i++;
 		}
 		
-		List<double[]> l = new ArrayList<double[]>();
-		l.add(child);
-		
-		return l;
-	}
-
-	public int getEdge1() {
-		return edge1;
-	}
-
-	public void setEdge1(int edge1) {
-		this.edge1 = edge1;
-	}
-
-	public int getEdge2() {
-		return edge2;
-	}
-
-	public void setEdge2(int edge2) {
-		this.edge2 = edge2;
+		return new TwoOptResult(child, new int[]{edge1, edge2});
+    }
+    
+	@Override
+	public Solution getRandomNeighbor(Solution solution) {
+		Solution s = solution.duplicate();
+		TwoOptResult twoOptResult = twoOpt(s.getValues(), -1, -1);
+		s.setValues(twoOptResult.neighbor);
+		return s;
 	}
 }

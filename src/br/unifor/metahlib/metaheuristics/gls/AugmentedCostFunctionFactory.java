@@ -27,10 +27,9 @@ public class AugmentedCostFunctionFactory {
 	 */
 	public static AugmentedCostProblem getInstance(Problem problem, double lambda) throws IOException, EdgeWeightTypeNotSupported{
 		if(problem instanceof TSPProblem){
-			TSPProblem p = new TSPProblem(((TSPProblem) problem).getDataSet().getFile(), problem.getNeighborhoodStructure());
+			TSPProblem p = new TSPProblem(((TSPProblem) problem).getDataSet().getFile());
 			TSPAugmentedCostEvaluator evaluator = new TSPAugmentedCostEvaluator(p, lambda, problem.getInitialSolution().getValues().length);
 			TSPAugmentedCostProblem t = new TSPAugmentedCostProblem(p, evaluator);
-			t.setNeighborhoodStructure(problem.getNeighborhoodStructure());
 			return t;
 		} else {
 			return null;

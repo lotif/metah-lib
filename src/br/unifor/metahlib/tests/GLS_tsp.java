@@ -10,7 +10,7 @@ import br.unifor.metahlib.problems.tsp.GreedyConstructiveSolutionGenerator;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 import br.unifor.metahlib.problems.tsp.neighborhood.*;
 
-public class GLSTest {
+public class GLS_tsp {
 
 	public static void main(String[] args) {
 		try{
@@ -20,11 +20,9 @@ public class GLSTest {
 //			NeighborhoodStructure neighborhoodStructure = new TwoOpt(); 
 //			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
 			
-			KOpt neighborhoodStructure = new KOpt(null, 3);
-			TSPProblem problem = new TSPProblem(file, neighborhoodStructure);
-			neighborhoodStructure.setProblem(problem);
-			
-			HillClimbing h = new HillClimbing(problem, HillClimbing.DEFAULT, 1500, 0, 0);
+			TSPProblem problem = new TSPProblem(file);
+			KOpt neighborhoodStructure = new KOpt(problem, 3);
+			HillClimbing h = new HillClimbing(problem, neighborhoodStructure, HillClimbing.DEFAULT, 1500, 0, 0);
 			
 			/* 
 			 * Possible values for the GLS parameter "a", according with Vordouris 1997:	

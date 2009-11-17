@@ -10,7 +10,7 @@ import br.unifor.metahlib.problems.continuous.Perturber.DimensionSelector;
 import br.unifor.metahlib.problems.continuous.functions.SumPowFunction;
 import br.unifor.metahlib.problems.continuous.perturbers.UniformPertuber;
 
-public class TestHillClimbing {
+public class HillClimbing_continuous {
 
 	public static void main(String[] args) {
 		try{
@@ -23,8 +23,8 @@ public class TestHillClimbing {
 			perturber.setDimensionSelector(DimensionSelector.ALEATORY);
 			perturber.setPerturbedDimensionsCount(1);
 			
-			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function, perturber);
-			Heuristic h = new HillClimbing(problem, HillClimbing.DEFAULT, 1500, 0, 0);
+			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function);
+			Heuristic h = new HillClimbing(problem, perturber, HillClimbing.DEFAULT, 1500, 0, 0);
 			Solution s = h.execute();
 
 			System.out.println("Cost: " + s.getCost() + ". Optimal: " + function.getOptimalResult());

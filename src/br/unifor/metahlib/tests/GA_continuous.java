@@ -1,29 +1,21 @@
 package br.unifor.metahlib.tests;
 
-import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
 import br.unifor.metahlib.metaheuristics.ga.GeneticAlgorithm;
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
 import br.unifor.metahlib.metaheuristics.ga.Selector;
-import br.unifor.metahlib.metaheuristics.ga.crossover.TwoPoints;
 import br.unifor.metahlib.metaheuristics.ga.selector.RouletteSelector;
-import br.unifor.metahlib.metaheuristics.pso.Inertia;
-import br.unifor.metahlib.metaheuristics.pso.MovementModel;
-import br.unifor.metahlib.metaheuristics.pso.NeighborhoodTopology;
-import br.unifor.metahlib.metaheuristics.pso.ParticleSwamOptimization;
-import br.unifor.metahlib.metaheuristics.pso.inertia.ConstantInertia;
-import br.unifor.metahlib.metaheuristics.pso.movement.ContinuousMovementModel;
-import br.unifor.metahlib.metaheuristics.pso.neighborhood.GlobalBest;
 import br.unifor.metahlib.problems.continuous.ContinuousOptimizationProblem;
 import br.unifor.metahlib.problems.continuous.OptimizableFunction;
 import br.unifor.metahlib.problems.continuous.Perturber;
 import br.unifor.metahlib.problems.continuous.Perturber.DimensionSelector;
 import br.unifor.metahlib.problems.continuous.functions.*;
 import br.unifor.metahlib.problems.continuous.ga.PerturbMutationOperator;
+import br.unifor.metahlib.problems.continuous.ga.TwoPointsCrossover;
 import br.unifor.metahlib.problems.continuous.perturbers.*;
 
-public class TestContinuousGA {
+public class GA_continuous {
 	public static void main(String[] args) {
 		try{
 			//OptimizableFunction function = new SumPowFunction();
@@ -35,9 +27,9 @@ public class TestContinuousGA {
 			perturber.setDimensionSelector(DimensionSelector.ALEATORY);
 			perturber.setPerturbedDimensionsCount(1);
 			
-			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function, perturber);
+			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function);
 			
-			CrossoverOperator crossoverOperator = new TwoPoints();
+			CrossoverOperator crossoverOperator = new TwoPointsCrossover();
 			MutationOperator mutationOperator = new PerturbMutationOperator(perturber);
 			Selector reproductionSelector = new RouletteSelector();
 			Selector surviveSelector = new RouletteSelector();
