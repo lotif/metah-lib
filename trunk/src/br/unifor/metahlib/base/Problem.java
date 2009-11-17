@@ -20,11 +20,6 @@ public abstract class Problem {
 	private CostEvaluator costEvaluator;
 	
 	/**
-	 * Responsible to create the neighbors of a solution.
-	 */
-	private NeighborhoodStructure neighborhoodStructure;
-	
-	/**
 	 * Unique random number generator shared with other classes. Allows reproducible executions when a seed is informed through 
 	 * the setRandomSeed method.
 	 */
@@ -63,21 +58,6 @@ public abstract class Problem {
 	 */
 	public void setCostEvaluator(CostEvaluator costEvaluator) {
 		this.costEvaluator = costEvaluator;
-	}
-
-	/**
-	 * Returns the object responsible to create the neighbors of a solution.
-	 */
-	public NeighborhoodStructure getNeighborhoodStructure() {
-		return neighborhoodStructure;
-	}
-	
-	/**
-	 * Sets the object responsible to create the neighbors of a solution.
-	 */
-	public void setNeighborhoodStructure(NeighborhoodStructure neighborhoodStructure) {
-		this.neighborhoodStructure = neighborhoodStructure;
-		this.neighborhoodStructure.setRandom(random);
 	}
 
 	/**

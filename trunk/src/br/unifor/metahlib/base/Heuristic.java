@@ -1,5 +1,7 @@
 package br.unifor.metahlib.base;
 
+import java.util.Random;
+
 /**
  * This class groups the commons characteristics of heuristics.
  */
@@ -22,11 +24,17 @@ public abstract class Heuristic {
 	protected Problem problem;
 	
 	/**
+	 * Problem random number generator.
+	 */
+	protected Random random;
+	
+	/**
 	 * Construct a new heuristic for optimize the informed problem.
 	 * @param problem the problem to be optimized
 	 */
 	public Heuristic(Problem problem){
 		this.problem = problem;
+		this.random = problem.getRandom();
 	}
 	
 	/**

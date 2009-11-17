@@ -1,11 +1,11 @@
-package br.unifor.metahlib.metaheuristics.ga.crossover;
+package br.unifor.metahlib.problems.continuous.ga;
 
 import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
 
 /**
  * Two points crossover operator.
  */
-public class TwoPoints extends CrossoverOperator {
+public class TwoPointsCrossover extends CrossoverOperator {
 
 	@Override
 	public Object[][] crossover(Object[] g1, Object[] g2) {

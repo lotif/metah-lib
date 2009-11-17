@@ -2,10 +2,10 @@ package br.unifor.metahlib.heuristics.hillclimbing;
 
 import java.util.Random;
 
-import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.TrajectoryHeuristic;
 
 
 /**
@@ -14,7 +14,7 @@ import br.unifor.metahlib.base.Solution;
  * @author marcelo lotif
  *
  */
-public class HillClimbing extends Heuristic {
+public class HillClimbing extends TrajectoryHeuristic {
 
 	/**
 	 * Executes the default hill climbing
@@ -51,8 +51,9 @@ public class HillClimbing extends Heuristic {
 	 */
 	private double T;
 	
-	public HillClimbing(Problem problem, int type, int maxIterations,int maxIterations2, double t) {
-		super(problem);
+	public HillClimbing(Problem problem, NeighborhoodStructure neighborhoodStructure, 
+			int type, int maxIterations,int maxIterations2, double t) {
+		super(problem, neighborhoodStructure);
 		this.maxIterations = maxIterations;
 		this.maxIterations2 = maxIterations2;
 		this.type = type;
@@ -84,11 +85,10 @@ public class HillClimbing extends Heuristic {
 		Solution x = problem.getInitialSolution();
 		
 		double eval = problem.getCostEvaluator().eval(x);
-		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		//if(type == DEFAULT) { }
 		
 		for(int i = 0; i < maxIterations; i++){
-			Solution _x = neighborhood.getRandomNeighbor(x);
+			Solution _x = neighborhoodStructure.getRandomNeighbor(x);
 			
 			eval = problem.getCostEvaluator().eval(x);
 			double _eval = problem.getCostEvaluator().eval(_x);
@@ -146,11 +146,10 @@ public class HillClimbing extends Heuristic {
 		Solution x = problem.getInitialSolution();
 		
 		double eval = problem.getCostEvaluator().eval(x);
-		NeighborhoodStructure neighborhood = problem.getNeighborhoodStructure();
 		//if(type == STOCHASTIC) { }
 		
 		for(int i = 0; i < maxIterations; i++){
-			Solution _x = neighborhood.getRandomNeighbor(x);
+			Solution _x = neighborhoodStructure.getRandomNeighbor(x);
 			
 			eval = problem.getCostEvaluator().eval(x);
 			double _eval = problem.getCostEvaluator().eval(_x);

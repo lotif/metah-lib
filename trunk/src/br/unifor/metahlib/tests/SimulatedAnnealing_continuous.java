@@ -2,13 +2,7 @@ package br.unifor.metahlib.tests;
 
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Solution;
-import br.unifor.metahlib.metaheuristics.pso.Inertia;
-import br.unifor.metahlib.metaheuristics.pso.MovementModel;
-import br.unifor.metahlib.metaheuristics.pso.NeighborhoodTopology;
-import br.unifor.metahlib.metaheuristics.pso.ParticleSwamOptimization;
-import br.unifor.metahlib.metaheuristics.pso.inertia.ConstantInertia;
-import br.unifor.metahlib.metaheuristics.pso.movement.ContinuousMovementModel;
-import br.unifor.metahlib.metaheuristics.pso.neighborhood.GlobalBest;
+import br.unifor.metahlib.metaheuristics.sa.SimulatedAnnealing;
 import br.unifor.metahlib.problems.continuous.ContinuousOptimizationProblem;
 import br.unifor.metahlib.problems.continuous.OptimizableFunction;
 import br.unifor.metahlib.problems.continuous.Perturber;
@@ -16,7 +10,7 @@ import br.unifor.metahlib.problems.continuous.Perturber.DimensionSelector;
 import br.unifor.metahlib.problems.continuous.functions.*;
 import br.unifor.metahlib.problems.continuous.perturbers.*;
 
-public class TestContinuousPSO {
+public class SimulatedAnnealing_continuous {
 
 	public static void main(String[] args) {
 		try{
@@ -29,15 +23,8 @@ public class TestContinuousPSO {
 			perturber.setDimensionSelector(DimensionSelector.ALEATORY);
 			perturber.setPerturbedDimensionsCount(1);
 			
-			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function, perturber);
-			
-			MovementModel movementModel = new ContinuousMovementModel(problem);
-			
-			NeighborhoodTopology topology = new GlobalBest();
-			
-			Inertia inertia = new ConstantInertia(0.25);
-			
-			Heuristic h = new ParticleSwamOptimization(problem, topology, inertia, movementModel);
+			ContinuousOptimizationProblem problem = new ContinuousOptimizationProblem(function);
+			Heuristic h = new SimulatedAnnealing(problem, perturber, 1, 0.00001, 0.9, 1000);
 			Solution s = h.execute();
 
 			System.out.println("Result: " + function.execute(s.getValues()) + ". OptimalResult: " + function.getOptimalResult());
@@ -46,5 +33,4 @@ public class TestContinuousPSO {
 			e.printStackTrace();
 		}
 	}
-
 }

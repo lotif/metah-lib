@@ -18,9 +18,8 @@ public class ContinuousOptimizationProblem extends Problem {
 	 * @param function function to be optimized
 	 * @param pertuber object responsible to perturb the solutions
 	 */
-	public ContinuousOptimizationProblem(OptimizableFunction function, Perturber perturber){
+	public ContinuousOptimizationProblem(OptimizableFunction function){
 		this.function = function;
-		this.setNeighborhoodStructure(perturber);
 		
 		FunctionCostEvaluator evaluator = new FunctionCostEvaluator(function); 
 		this.setCostEvaluator(evaluator);

@@ -3,7 +3,6 @@ package br.unifor.metahlib.problems.tsp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
@@ -24,11 +23,10 @@ public class TSPProblem extends Problem {
 	 * @throws IOException
 	 * @throws EdgeWeightTypeNotSupported
 	 */
-	public TSPProblem(File file, NeighborhoodStructure neighborhoodStructure) throws IOException, EdgeWeightTypeNotSupported {
+	public TSPProblem(File file) throws IOException, EdgeWeightTypeNotSupported {
 		super();
 		dataSet = new TSPDataSet(file);
 		setCostEvaluator(new TourCostEvaluator(dataSet));
-		setNeighborhoodStructure(neighborhoodStructure);
 	}
 
 	/**

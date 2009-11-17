@@ -1,5 +1,7 @@
 package br.unifor.metahlib.problems.continuous.ga;
 
+import java.util.Random;
+
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
 import br.unifor.metahlib.problems.continuous.Perturber;
 
@@ -32,5 +34,11 @@ public class PerturbMutationOperator extends MutationOperator {
         }
         
         return changed;
+	}
+	
+	@Override
+	public void setRandom(Random random){
+		super.setRandom(random);
+		perturber.setRandom(random);
 	}
 }

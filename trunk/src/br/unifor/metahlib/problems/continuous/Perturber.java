@@ -1,8 +1,6 @@
 package br.unifor.metahlib.problems.continuous;
 
-import java.util.List;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Solution;
 
@@ -52,7 +50,7 @@ public abstract class Perturber extends NeighborhoodStructure {
 
         } else {
             if (dimensionSelector == DimensionSelector.ALEATORY){
-                Vector<Integer> leftIdxs = new Vector<Integer>();
+                ArrayList<Integer> leftIdxs = new ArrayList<Integer>();
                 for (int i = 0; i < function.getDimensionCount(); ++i){
                 	leftIdxs.add(i);
                 }
@@ -85,12 +83,6 @@ public abstract class Perturber extends NeighborhoodStructure {
 		this.function = function;
 	}
 
-	@Override
-	public List<double[]> getNeighbours(List<double[]> parents) {
-		assert(false); // deprecated
-		return null;
-	}
-	
 	/**
 	 * Create a new random neighbor solution.
 	 * @param solution base of neighborhood

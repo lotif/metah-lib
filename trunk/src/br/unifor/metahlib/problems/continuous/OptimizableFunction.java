@@ -23,7 +23,7 @@ public abstract class OptimizableFunction {
 	/**
 	 * Decimal precision required by function.
 	 */
-	protected int decimalPrecision = 4;
+	protected int decimalPrecision = 6;
 	
 	/**
 	 * Best result of the function. Null indicates that best result is unknown.
