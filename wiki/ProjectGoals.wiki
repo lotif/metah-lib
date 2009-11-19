@@ -27,6 +27,6 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Genetic Algorithm para TSP (Paulo Moreno)
 
     * Ant Colony Optimization
-    * ScatterSearch
+    * Scatter Search
     * LK-opt para TSP (Marcelo)
     * Knapsack Problem
