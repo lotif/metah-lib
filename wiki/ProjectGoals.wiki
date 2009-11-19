@@ -21,10 +21,10 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Particle Swarm Optimization para otimização numérica (Paulo Moreno)
 
 *Falta implementar:*
-    * Tabu Search
+    * Tabu Search (Paulo Moreno)
     * Iterated Local Search
     * Genetic Algorithm (Paulo Moreno)
-    * Particle Swarm Optimization para TSP (Paulo Moreno)
+    * Particle Swarm Optimization para TSP
 
     * Ant Colony Optimization
     * LK-opt para TSP (Marcelo)
