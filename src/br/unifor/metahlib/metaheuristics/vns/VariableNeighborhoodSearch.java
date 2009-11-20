@@ -30,18 +30,25 @@ public class VariableNeighborhoodSearch extends Heuristic {
 	private Heuristic localSearchMethod;
 	
 	/**
+	 * The maximum number of iterations allowed to execute without improvement
+	 */
+	private int maxItWithoutImprovement;
+	
+	/**
 	 * Contructor of the class
 	 * 
 	 * @param problem the problem which VNS will try to solve
 	 * @param localSearchMethod The local search method for the metahuristic 
+	 * @param maxItWithoutImprovement The maximum number of iterations allowed to execute 
 	 * @param maxIt The maximum number of iterations allowed to execute without improvement
 	 * @param neighborhoods The array of Neighborhood Structures
 	 */
-	public VariableNeighborhoodSearch(Problem problem, Heuristic localSearchMethod, int maxIt, NeighborhoodStructure... neighborhoods) {
+	public VariableNeighborhoodSearch(Problem problem, Heuristic localSearchMethod, int maxItWithoutImprovement, int maxIt, NeighborhoodStructure... neighborhoods) {
 		super(problem);
 		this.neighborhoods = neighborhoods;
 		this.localSearchMethod = localSearchMethod;
 		this.max_it = maxIt;
+		this.maxItWithoutImprovement = maxItWithoutImprovement;
 	}
 
 	@Override
@@ -51,12 +58,15 @@ public class VariableNeighborhoodSearch extends Heuristic {
 		
 		int i = 0;
 		int totalIt = 0;
-		while(i < max_it) {
+		while(i < maxItWithoutImprovement && totalIt < max_it) {
 			System.out.println("#### i = " + i + "####");
 			double lastSCost = s.getCost();
 			int k = 0;
 			
 			while(k < neighborhoods.length){
+				if(totalIt > max_it){
+					break;
+				}
 				Solution s_ = neighborhoods[k].getRandomNeighbor(s); //pick at random
 				localSearchMethod.setProblem(problem);
 				localSearchMethod.getProblem().setInitialSolution(s_);
@@ -138,6 +148,14 @@ public class VariableNeighborhoodSearch extends Heuristic {
 	 */
 	public void setInitialSolution(Solution initialSolution) {
 		this.initialSolution = initialSolution;
+	}
+
+	public int getMaxItWithoutImprovement() {
+		return maxItWithoutImprovement;
+	}
+
+	public void setMaxItWithoutImprovement(int maxItWithoutImprovement) {
+		this.maxItWithoutImprovement = maxItWithoutImprovement;
 	}
 
 }

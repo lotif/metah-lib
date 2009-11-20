@@ -25,7 +25,7 @@ public class VNS_tsp {
 			
 			HillClimbing h = new HillClimbing(problem, twoOpt, HillClimbing.DEFAULT, 1500, 0, 0);
 			
-			Heuristic vns = new VariableNeighborhoodSearch(problem, h, 20, fiveOpt, fourOpt, threeOpt, twoOpt);
+			Heuristic vns = new VariableNeighborhoodSearch(problem, h, 100, 100, fiveOpt, fourOpt, threeOpt, twoOpt);
 			Solution s = vns.execute();
 			System.out.println("Distance: " + s.getCost());
 			System.out.println("Found on iteration " + vns.getLastBestFoundOn());
