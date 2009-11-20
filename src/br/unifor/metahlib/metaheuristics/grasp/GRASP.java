@@ -28,6 +28,7 @@ public class GRASP extends Heuristic {
 			
 			if(s == null || s_.getCost() < s.getCost()){
 				s = s_;
+				lastBestFoundOn = i;
 			}
 			
 			System.out.println(i + ": " + s.getCost());
