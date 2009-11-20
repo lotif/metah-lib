@@ -50,6 +50,7 @@ public class VariableNeighborhoodSearch extends Heuristic {
 		System.out.println("Initial s: " + problem.getCostEvaluator().eval(s));
 		
 		int i = 0;
+		int totalIt = 0;
 		while(i < max_it) {
 			System.out.println("#### i = " + i + "####");
 			double lastSCost = s.getCost();
@@ -66,9 +67,11 @@ public class VariableNeighborhoodSearch extends Heuristic {
 				if(s_.getCost() < s.getCost()){
 					s = s_;
 					k = 0;
+					lastBestFoundOn = totalIt;
 				} else {
 					k++;
 				}
+				totalIt++;
 			}
 			
 			if(lastSCost > s.getCost()){

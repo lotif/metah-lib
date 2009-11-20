@@ -45,11 +45,6 @@ public class GuidedLocalSearch extends Heuristic {
 	private double lambda;
 	
 	/**
-	 * The maximum number of iterations of this GLS execution.
-	 */
-	private int maxIterations;
-	
-	/**
 	 * The initial solution for the GLS
 	 */
 	private Solution initialSolution;
@@ -68,7 +63,7 @@ public class GuidedLocalSearch extends Heuristic {
 		this.localSearchMethod = localSearchMethod;
 		this.a = 0;
 		this.lambda = lambda;
-		this.maxIterations = maxIterations;
+		this.max_it = maxIterations;
 	}
 	
 	/**
@@ -93,7 +88,7 @@ public class GuidedLocalSearch extends Heuristic {
 		this.localSearchMethod = localSearchMethod;
 		this.a = a;
 		this.lambda = 0;
-		this.maxIterations = maxIterations;
+		this.max_it = maxIterations;
 	}
 	
 	/**
@@ -123,7 +118,7 @@ public class GuidedLocalSearch extends Heuristic {
 			e1.printStackTrace();
 		} 
 		
-		for(int i = 0; i < maxIterations; i++){
+		for(int i = 0; i < max_it; i++){
 			
 			List<SolutionFeature> features = f_.getSolutionFeatures(s);
 			
@@ -151,6 +146,7 @@ public class GuidedLocalSearch extends Heuristic {
 				bestEval = currentEval;
 				try {
 					best = (Solution) s.clone();
+					lastBestFoundOn = i;
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
@@ -170,14 +166,6 @@ public class GuidedLocalSearch extends Heuristic {
 
 	public void setLambda(double lambda) {
 		this.lambda = lambda;
-	}
-
-	public int getMaxIterations() {
-		return maxIterations;
-	}
-
-	public void setMaxIterations(int maxIterations) {
-		this.maxIterations = maxIterations;
 	}
 
 	public Heuristic getLocalSearchMethod() {

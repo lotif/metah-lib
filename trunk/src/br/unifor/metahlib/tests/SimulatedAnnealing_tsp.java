@@ -25,7 +25,8 @@ public class SimulatedAnnealing_tsp {
 			Heuristic h = new SimulatedAnnealing(problem, neighborhoodStructure, 1, 0.00001, 0.9, 1000);
 			Solution s = h.execute();
 			System.out.println("Distance: " + s.getCost());
-
+			System.out.println("Found on iteration " + h.getLastBestFoundOn());
+			
 			Solution optimal = new Solution(problem);
 			optimal.setValues(optTour);
 			System.out.println("Optimal: " + optimal);

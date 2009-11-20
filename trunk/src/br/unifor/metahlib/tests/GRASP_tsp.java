@@ -23,6 +23,7 @@ public class GRASP_tsp {
 			Heuristic grasp = new GRASP(problem, h, 1000, new TSPGreedyRandomizedContructor(problem, 0.5));
 			Solution s = grasp.execute();
 			System.out.println("Distance: " + s.getCost());
+			System.out.println("Found on iteration " + grasp.getLastBestFoundOn());
 			
 		} catch (Exception e){
 			e.printStackTrace();

@@ -28,6 +28,7 @@ public class VNS_tsp {
 			Heuristic vns = new VariableNeighborhoodSearch(problem, h, 20, fiveOpt, fourOpt, threeOpt, twoOpt);
 			Solution s = vns.execute();
 			System.out.println("Distance: " + s.getCost());
+			System.out.println("Found on iteration " + vns.getLastBestFoundOn());
 			
 		} catch (Exception e){
 			e.printStackTrace();
