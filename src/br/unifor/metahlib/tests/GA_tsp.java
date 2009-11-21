@@ -26,8 +26,8 @@ public class GA_tsp {
 			
 			TSPProblem problem = new TSPProblem(file);
 			
-			CrossoverOperator crossoverOperator = new CycleCrossover();
-			MutationOperator mutationOperator = new TwoOptMutationOperator();
+			CrossoverOperator crossoverOperator = new OrdenatedCrossover();
+			MutationOperator mutationOperator = new ShiftMutationOperator();
 			Selector reproductionSelector = new RouletteSelector();
 			Selector surviveSelector = new DeterministicSelector();
 			
@@ -44,22 +44,7 @@ public class GA_tsp {
 			Solution optimal = new Solution(problem);
 			optimal.setValues(optTour);
 			System.out.println("Optimal: " + optimal);
-			
-			System.out.println("Crossover test:");
-			
-			Object[][] result = crossoverOperator.crossover(
-					new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9},
-					new Integer[]{ 4, 1, 2, 8, 7, 6, 9, 3, 5});
-			
-			Solution s1 = new Solution(problem);
-			s1.setValues(result[0]);
-			
-			Solution s2 = new Solution(problem);
-			s2.setValues(result[1]);
-			
-			System.out.println(s1.toString());
-			System.out.println(s2.toString());
-			
+						
 		} catch (Exception e){
 			e.printStackTrace();
 		}

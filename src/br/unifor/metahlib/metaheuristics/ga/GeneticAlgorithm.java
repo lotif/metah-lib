@@ -116,10 +116,6 @@ public class GeneticAlgorithm extends PopulationHeuristic {
         Individual individual = p.getBestIndividual();
         Individual bestIndividual = individual;
 
-        //r.evolucaoMelhor.add(individuo.getValor());
-        //r.evolucaoMedia.add(p.getMediaValor());
-        //r.xInicial = melhorIndividuo.getGenes();
-
         int it = 0;
         while (it < max_it){
             children = reproduce(p);
@@ -128,22 +124,15 @@ public class GeneticAlgorithm extends PopulationHeuristic {
 
             individual = p.getBestIndividual();
             if ( individual.getFitness() > bestIndividual.getFitness() ){
-                //r.qtdIteracoesAteMelhorSolucao = t + 1;
-                //r.qtdAvaliacoesAteMelhorSolucao = a + tamanhoPopulacao;
             	lastBestFoundOn = it;
             	bestIndividual = individual.duplicate();
             }
-
-            //r.evolucaoMelhor.add(individuo.getValor());
-            //r.evolucaoMedia.add(p.getMediaValor());
+            
+            System.out.println("BestIndividual: " + bestIndividual.getSolution());
 
             it++;
         }
 
-        //r.x = melhorIndividuo.getGenes();
-        //r.eval_x = avaliarX( melhorIndividuo.getGenes());
-        //r.qtdIteracoes = t;
-        
         return bestIndividual.getSolution();
 	}
 	
