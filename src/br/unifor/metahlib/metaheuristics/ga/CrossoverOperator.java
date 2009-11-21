@@ -21,6 +21,21 @@ public abstract class CrossoverOperator {
 	public abstract Object[][] crossover(Object[] g1, Object[] g2);
 	
 	/**
+	 * Returns the index of the value in values array if exists. Otherwise, returns -1.
+	 */
+	protected int indexOf(Object value, Object[] values){
+		int idx = -1;
+		for(int i = 0; i < values.length; ++i){
+			if (values[i] != null && values[i].equals(value)){
+				idx = i;
+				break;
+			}
+		}
+		
+		return idx;
+	}
+	
+	/**
 	 * Sets the random number generator.
 	 * @param random random number generator
 	 */
