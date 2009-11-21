@@ -5,6 +5,7 @@ import java.io.IOException;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.metaheuristics.gls.tsp.TSPAugmentedCostEvaluator;
 import br.unifor.metahlib.metaheuristics.gls.tsp.TSPAugmentedCostProblem;
+import br.unifor.metahlib.problems.tsp.EdgeWeightFormatNotSupported;
 import br.unifor.metahlib.problems.tsp.EdgeWeightTypeNotSupported;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 
@@ -24,8 +25,9 @@ public class AugmentedCostFunctionFactory {
 	 * @return an instance of the AugmentedCostFunction class based on the given function
 	 * @throws EdgeWeightTypeNotSupported 
 	 * @throws IOException 
+	 * @throws EdgeWeightFormatNotSupported 
 	 */
-	public static AugmentedCostProblem getInstance(Problem problem, double lambda) throws IOException, EdgeWeightTypeNotSupported{
+	public static AugmentedCostProblem getInstance(Problem problem, double lambda) throws IOException, EdgeWeightTypeNotSupported, EdgeWeightFormatNotSupported{
 		if(problem instanceof TSPProblem){
 			TSPProblem p = new TSPProblem(((TSPProblem) problem).getDataSet().getFile());
 			TSPAugmentedCostEvaluator evaluator = new TSPAugmentedCostEvaluator(p, lambda, problem.getInitialSolution().getValues().length);

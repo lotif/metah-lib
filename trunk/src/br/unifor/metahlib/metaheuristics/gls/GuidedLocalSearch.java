@@ -6,6 +6,7 @@ import java.util.List;
 import br.unifor.metahlib.base.Heuristic;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.problems.tsp.EdgeWeightFormatNotSupported;
 import br.unifor.metahlib.problems.tsp.EdgeWeightTypeNotSupported;
 
 
@@ -116,6 +117,8 @@ public class GuidedLocalSearch extends Heuristic {
 			e1.printStackTrace();
 		} catch (EdgeWeightTypeNotSupported e1) {
 			e1.printStackTrace();
+		} catch (EdgeWeightFormatNotSupported e) {
+			e.printStackTrace();
 		} 
 		
 		for(int i = 0; i < max_it; i++){

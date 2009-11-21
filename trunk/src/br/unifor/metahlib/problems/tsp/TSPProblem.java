@@ -15,6 +15,11 @@ public class TSPProblem extends Problem {
 	 * TSP dataSet with cities distances.
 	 */
 	private TSPDataSet dataSet;
+	
+	/**
+	 * Optimal tour or null if it's unknown.
+	 */
+	private Solution optimalTour;
 
 	/**
 	 * Constructs a new TSPProblem instance.
@@ -23,10 +28,11 @@ public class TSPProblem extends Problem {
 	 * @throws IOException
 	 * @throws EdgeWeightTypeNotSupported
 	 */
-	public TSPProblem(File file) throws IOException, EdgeWeightTypeNotSupported {
+	public TSPProblem(File file) throws IOException, EdgeWeightTypeNotSupported, EdgeWeightFormatNotSupported {
 		super();
-		dataSet = new TSPDataSet(file);
-		setCostEvaluator(new TourCostEvaluator(dataSet));
+		TSPDataSet ds = new TSPDataSet(file); 
+		setCostEvaluator(new TourCostEvaluator(ds));
+		setDataSet(ds);
 	}
 
 	/**
@@ -66,6 +72,12 @@ public class TSPProblem extends Problem {
 	 */
 	public void setDataSet(TSPDataSet dataSet) {
 		this.dataSet = dataSet;
+		ArrayList<Integer> tour = dataSet.getOptimalTour();
+		if (tour != null){
+			optimalTour = new Solution(this);
+			optimalTour.setValues(tour.toArray());
+			setOptimalSolutionCost(optimalTour.getCost());
+		}
 	}
 	
 	/**
@@ -97,5 +109,9 @@ public class TSPProblem extends Problem {
 	@Override
 	public int getDimension(){
 		return dataSet.getDimension();
+	}
+	
+	public Solution getOptimalTour(){
+		return optimalTour;
 	}
 }
