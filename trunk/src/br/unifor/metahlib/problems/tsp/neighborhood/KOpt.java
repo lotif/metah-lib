@@ -1,5 +1,6 @@
 package br.unifor.metahlib.problems.tsp.neighborhood;
 
+import br.unifor.metahlib.base.NeighborhoodStructure;
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 
@@ -16,7 +17,7 @@ import br.unifor.metahlib.base.Solution;
  * @author marcelo lotif
  *
  */
-public class KOpt extends TwoOpt {
+public class KOpt extends NeighborhoodStructure {
 
 	/**
 	 * The number of edges to be removed
@@ -27,6 +28,11 @@ public class KOpt extends TwoOpt {
 	 * The problem which this operation is applied 
 	 */
 	private Problem problem;
+	
+	/**
+	 * Auxiliary TwoOpt operator.
+	 */
+	private TwoOpt twoOpt;
 
 	/**
 	 * Constructor of the class
@@ -39,6 +45,8 @@ public class KOpt extends TwoOpt {
 		this.problem = problem;
 		this.setRandom(problem.getRandom());
 		this.k = k;
+		this.twoOpt = new TwoOpt();
+		this.twoOpt.setRandom(random);
 	}
 	
 	/**
@@ -48,16 +56,16 @@ public class KOpt extends TwoOpt {
 	 * @param parents the list of parents. For the k-opt operation, only one parent is needed.
 	 * @return the child route.
 	 */
-	public Object[] kOpt(Object[] values) {
+	public Object[] getRandomNeighbor(Object[] values) {
 		
-		TwoOptResult resultOpt1 = twoOpt(values, -1, -1);
+		TwoOpt.Result resultOpt1 = twoOpt.getRandomNeighbor(values, -1, -1);
 		Object[] c = resultOpt1.neighbor;
 		
 		int opt = 2;
 		
 		do {
-			TwoOptResult child1 = twoOpt(c, resultOpt1.removedEdges[0], -1);
-			TwoOptResult child2 = twoOpt(c, -1, resultOpt1.removedEdges[1]);
+			TwoOpt.Result child1 = twoOpt.getRandomNeighbor(c, resultOpt1.removedEdges[0], -1);
+			TwoOpt.Result child2 = twoOpt.getRandomNeighbor(c, -1, resultOpt1.removedEdges[1]);
 			
 			Solution c1 = new Solution(problem);
 			c1.setValues(child1.neighbor);
@@ -81,7 +89,7 @@ public class KOpt extends TwoOpt {
 	@Override
 	public Solution getRandomNeighbor(Solution solution) {
 		Solution s = solution.duplicate();
-		s.setValues(kOpt(s.getValues()));
+		s.setValues(getRandomNeighbor(s.getValues()));
 		return s;
 	}
 }

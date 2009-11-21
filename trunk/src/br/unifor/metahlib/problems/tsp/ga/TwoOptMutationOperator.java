@@ -16,7 +16,7 @@ public class TwoOptMutationOperator extends MutationOperator {
 	@Override
 	public boolean mutate(Object[] genes, double mutationProbability) {
 		if (random.nextDouble() < mutationProbability){
-			Object[] neighbor = twoOpt.twoOpt(genes, -1, -1).neighbor;
+			Object[] neighbor = twoOpt.getRandomNeighbor(genes, -1, -1).neighbor;
 			for (int i = 0; i < neighbor.length; ++i){
 				genes[i] = neighbor[i];
 			}

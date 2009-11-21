@@ -7,12 +7,12 @@ import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
 import br.unifor.metahlib.metaheuristics.ga.GeneticAlgorithm;
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
 import br.unifor.metahlib.metaheuristics.ga.Selector;
-import br.unifor.metahlib.metaheuristics.ga.selector.RouletteSelector;
+import br.unifor.metahlib.metaheuristics.ga.selector.*;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
-import br.unifor.metahlib.problems.tsp.ga.PartialMappedCrossover;
-import br.unifor.metahlib.problems.tsp.ga.TwoOptMutationOperator;
+import br.unifor.metahlib.problems.tsp.ga.*;
 
 public class GA_tsp {
+	
 	public static void main(String[] args) {
 		try{
 			//File file = new File(System.getProperty("user.dir") + "/ulysses16.tsp");
@@ -29,7 +29,7 @@ public class GA_tsp {
 			CrossoverOperator crossoverOperator = new PartialMappedCrossover();
 			MutationOperator mutationOperator = new TwoOptMutationOperator();
 			Selector reproductionSelector = new RouletteSelector();
-			Selector surviveSelector = new RouletteSelector();
+			Selector surviveSelector = new DeterministicSelector();
 			
 			GeneticAlgorithm ga = new GeneticAlgorithm(problem, crossoverOperator, mutationOperator,
 					reproductionSelector, surviveSelector);
@@ -44,6 +44,21 @@ public class GA_tsp {
 			Solution optimal = new Solution(problem);
 			optimal.setValues(optTour);
 			System.out.println("Optimal: " + optimal);
+			
+			System.out.println("Crossover test:");
+			
+			Object[][] result = crossoverOperator.crossover(
+					new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9},
+					new Integer[]{ 4, 2, 6, 1, 8, 5, 9, 3, 7});
+			
+			Solution s1 = new Solution(problem);
+			s1.setValues(result[0]);
+			
+			Solution s2 = new Solution(problem);
+			s2.setValues(result[1]);
+			
+			System.out.println(s1.toString());
+			System.out.println(s2.toString());
 			
 		} catch (Exception e){
 			e.printStackTrace();

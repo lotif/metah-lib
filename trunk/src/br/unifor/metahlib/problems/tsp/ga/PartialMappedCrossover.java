@@ -20,12 +20,13 @@ public class PartialMappedCrossover extends CrossoverOperator {
 	}
 	
 	private void fillChild(Object[] child, Object[] p1, Object[] p2){
-		Object value;
 		for (int i = 0; i < child.length; ++i){
 			if (child[i] == null){
-				value = p1[i];
+				int idx = i;
+				Object value = p1[i];
 				while (indexOf(value, child) >= 0){
-					value = p2[indexOf(value, p1)];
+					idx = indexOf(p2[idx], p1);
+					value = p2[idx];
 				}
 				child[i] = value;
 			}

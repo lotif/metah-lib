@@ -11,7 +11,7 @@ import br.unifor.metahlib.base.Solution;
  */
 public class TwoOpt extends NeighborhoodStructure {
 	
-    public static class TwoOptResult {
+    public static class Result {
     	/**
 		 * Removed edges.
 		 */
@@ -22,7 +22,7 @@ public class TwoOpt extends NeighborhoodStructure {
 		 */
 		public Object[] neighbor;
 		
-		public TwoOptResult(Object[] neighbor, int[] removedEdges){
+		public Result(Object[] neighbor, int[] removedEdges){
 			this.neighbor = neighbor;
 			this.removedEdges = removedEdges;
 		}
@@ -36,7 +36,7 @@ public class TwoOpt extends NeighborhoodStructure {
 	 * @param k2 the second edge to be removed. If it is a negative number, a random number will be assigned.
 	 * @return the child route.
 	 */
-    public TwoOptResult twoOpt(Object[] values, int k1, int k2){
+    public Result getRandomNeighbor(Object[] values, int k1, int k2){
 		Object[] p = values;
 		int edge1;
 		int edge2;
@@ -71,13 +71,13 @@ public class TwoOpt extends NeighborhoodStructure {
 			i++;
 		}
 		
-		return new TwoOptResult(child, new int[]{edge1, edge2});
+		return new Result(child, new int[]{edge1, edge2});
     }
     
 	@Override
 	public Solution getRandomNeighbor(Solution solution) {
 		Solution s = solution.duplicate();
-		TwoOptResult twoOptResult = twoOpt(s.getValues(), -1, -1);
+		TwoOpt.Result twoOptResult = getRandomNeighbor(s.getValues(), -1, -1);
 		s.setValues(twoOptResult.neighbor);
 		return s;
 	}
