@@ -26,7 +26,7 @@ public class GA_tsp {
 			
 			TSPProblem problem = new TSPProblem(file);
 			
-			CrossoverOperator crossoverOperator = new PartialMappedCrossover();
+			CrossoverOperator crossoverOperator = new OrdenatedCrossover();
 			MutationOperator mutationOperator = new TwoOptMutationOperator();
 			Selector reproductionSelector = new RouletteSelector();
 			Selector surviveSelector = new DeterministicSelector();
@@ -49,7 +49,7 @@ public class GA_tsp {
 			
 			Object[][] result = crossoverOperator.crossover(
 					new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9},
-					new Integer[]{ 4, 2, 6, 1, 8, 5, 9, 3, 7});
+					new Integer[]{ 4, 5, 2, 1, 8, 7, 6, 9, 3});
 			
 			Solution s1 = new Solution(problem);
 			s1.setValues(result[0]);
