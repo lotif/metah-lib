@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
 
+/**
+ * Implements the OX crossover operator.
+ */
 public class OrdenatedCrossover extends CrossoverOperator {
 	
 	private void fillChild(Object[] child, Object[] p1, Object[] p2, int startIdx, int endIdx){

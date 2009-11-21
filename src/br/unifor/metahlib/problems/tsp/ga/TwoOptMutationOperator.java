@@ -5,6 +5,9 @@ import java.util.Random;
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
+/**
+ * Implements a mutation operator using the TwoOpt algorithm.
+ */
 public class TwoOptMutationOperator extends MutationOperator {
 
 	TwoOpt twoOpt;
