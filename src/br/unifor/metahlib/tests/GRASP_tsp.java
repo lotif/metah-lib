@@ -13,7 +13,7 @@ import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 public class GRASP_tsp {
 	public static void main(String[] args) {
 		try{
-			File file = new File(System.getProperty("user.dir") + "/berlin52.tsp");
+			File file = new File(System.getProperty("user.dir") + "/ch150.tsp");
 			
 			TwoOpt twoOpt = new TwoOpt();
 			TSPProblem problem = new TSPProblem(file);		
@@ -22,7 +22,7 @@ public class GRASP_tsp {
 			
 			Heuristic grasp = new GRASP(problem, h, 1000, new TSPGreedyRandomizedContructor(problem, 0.5));
 			Solution s = grasp.execute();
-			System.out.println("Distance: " + s.getCost());
+			System.out.println("Solution: " + s);
 			System.out.println("Found on iteration " + grasp.getLastBestFoundOn());
 			
 		} catch (Exception e){

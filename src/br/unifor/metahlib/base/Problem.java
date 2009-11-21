@@ -7,17 +7,17 @@ public abstract class Problem {
 	/**
 	 * Cost of optimal solution. Null when optimal solution is unknown. 
 	 */
-	private Double optimalSolutionCost;
+	protected Double optimalSolutionCost;
 	
 	/**
 	 * Initial solution. If wasn't informed, an initial randomized solution will be created.
 	 */
-	private Solution initialSolution;
+	protected Solution initialSolution;
 	
 	/**
 	 * Responsible to evaluate the cost of a solution.
 	 */
-	private CostEvaluator costEvaluator;
+	protected CostEvaluator costEvaluator;
 	
 	/**
 	 * Unique random number generator shared with other classes. Allows reproducible executions when a seed is informed through 
