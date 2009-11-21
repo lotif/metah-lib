@@ -15,7 +15,7 @@ public class KOptMutationOperator extends MutationOperator {
 	@Override
 	public boolean mutate(Object[] genes, double mutationProbability) {
 		if (random.nextDouble() < mutationProbability){
-			Object[] result = kOpt.kOpt(genes);
+			Object[] result = kOpt.getRandomNeighbor(genes);
 			for (int i = 0; i < result.length; ++i){
 				genes[i] = result[i];
 			}
