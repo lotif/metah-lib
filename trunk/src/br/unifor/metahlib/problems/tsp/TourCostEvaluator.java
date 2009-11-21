@@ -28,10 +28,12 @@ public class TourCostEvaluator extends CostEvaluator {
 	protected double calculateCost(Solution s) {
 		Object[] cities = s.getValues();
 		int d = 0;
-		for (int i = 0; i < cities.length - 1; ++i){
-			d+= dataSet.getDistance((Integer) cities[i], (Integer) cities[i+1]); 
+		if (cities.length > 0){
+			for (int i = 0; i < cities.length - 1; ++i){
+				d+= dataSet.getDistance((Integer) cities[i], (Integer) cities[i+1]); 
+			}
+			d+= dataSet.getDistance((Integer) cities[cities.length - 1], (Integer) cities[0]);
 		}
-		d+= dataSet.getDistance((Integer) cities[cities.length - 1], (Integer) cities[0]);
 		
 		return d;
 	}
