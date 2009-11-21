@@ -4,6 +4,9 @@ import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
 import br.unifor.metahlib.problems.tsp.neighborhood.KOpt;
 
+/**
+ * Implements a mutation operator using the KOpt algorithm.
+ */
 public class KOptMutationOperator extends MutationOperator {
 	
 	KOpt kOpt;
