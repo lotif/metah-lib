@@ -30,7 +30,11 @@ public class SimulatedAnnealing extends TrajectoryHeuristic {
 	 * The temperature decreasing step
 	 */
 	private double decreaseStep;
-
+	/**
+	 * The initial solution for the SimulatedAnnealing
+	 */
+	private Solution initialSolution;
+	
 	/**
 	 * Constructor of the class
 	 * @param function the function to be optimized
@@ -58,27 +62,33 @@ public class SimulatedAnnealing extends TrajectoryHeuristic {
 		double temperature = maxTemperature;
 		int currentIteration = 0;
 
-		Solution s = problem.getInitialSolution();
+		Solution s = initialSolution == null ? problem.getInitialSolution() : initialSolution;
+		
 		int totalIt = 1;
-		while(temperature > minTemperature){
+		while(temperature > minTemperature && totalIt < max_it) {
 			for(int i = 0; i < maxIterations; i++){
+				if(totalIt > max_it){
+					break;
+				}				
 				currentIteration++;
 				
+				System.out.print("i: " + totalIt + " ");
 				Solution _s = neighborhoodStructure.getRandomNeighbor(s);
 				if(_s.getCost() < s.getCost()){
 					s = _s;
 					lastBestFoundOn = totalIt;
-					System.out.println("improved to: " + s);
+					System.out.print("improved to: " + s);
 					
 				} else {
 					double rand = problem.getRandom().nextDouble();
 					double exp = Math.exp((s.getCost() - _s.getCost())/temperature);
 					if(rand < exp){
 						s = _s;
-						System.out.println("worsened to: " + s);
+						System.out.print("worsened to: " + s);
 					}
 				}
 				
+				System.out.println();
 				totalIt++;
 			}
 			
@@ -111,4 +121,21 @@ public class SimulatedAnnealing extends TrajectoryHeuristic {
 	public void setDecreaseStep(double decreaseStep) {
 		this.decreaseStep = decreaseStep;
 	}
+
+	public double getMinTemperature() {
+		return minTemperature;
+	}
+
+	public void setMinTemperature(double minTemperature) {
+		this.minTemperature = minTemperature;
+	}
+
+	public Solution getInitialSolution() {
+		return initialSolution;
+	}
+
+	public void setInitialSolution(Solution initialSolution) {
+		this.initialSolution = initialSolution;
+	}
+	
 }
