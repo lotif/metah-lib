@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.grasp.tsp;
+package br.unifor.metahlib.problems.tsp.grasp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import br.unifor.metahlib.metaheuristics.grasp.SolutionElement;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 
 public class TSPGreedyRandomizedContructor extends GreedyRandomizedConstructor {
-
+	
 	public TSPGreedyRandomizedContructor(Problem problem, double alpha) {
 		super(problem, alpha);
 	}
@@ -102,5 +102,4 @@ public class TSPGreedyRandomizedContructor extends GreedyRandomizedConstructor {
 		
 		return elements;
 	}
-	
 }

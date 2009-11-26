@@ -58,16 +58,17 @@ public class VariableNeighborhoodSearch extends Heuristic {
 		
 		int i = 0;
 		int totalIt = 0;
+		Solution s_;
+		
 		while(i < maxItWithoutImprovement && totalIt < max_it) {
 			System.out.println("#### i = " + i + "####");
 			double lastSCost = s.getCost();
 			int k = 0;
-			
-			while(k < neighborhoods.length){
+			do {
 				if(totalIt > max_it){
 					break;
 				}
-				Solution s_ = neighborhoods[k].getRandomNeighbor(s); //pick at random
+				s_ = neighborhoods[k].getRandomNeighbor(s); //pick at random
 				localSearchMethod.setProblem(problem);
 				localSearchMethod.getProblem().setInitialSolution(s_);
 				s_ = localSearchMethod.execute();
@@ -77,12 +78,12 @@ public class VariableNeighborhoodSearch extends Heuristic {
 				if(s_.getCost() < s.getCost()){
 					s = s_;
 					k = 0;
-					lastBestFoundOn = totalIt;
 				} else {
 					k++;
 				}
 				totalIt++;
-			}
+				
+			} while (endIteration(s_) && k < neighborhoods.length);
 			
 			if(lastSCost > s.getCost()){
 				i = 0;

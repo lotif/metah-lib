@@ -1,6 +1,6 @@
 package br.unifor.metahlib.tests;
 
-import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.OptimizationResult;
 import br.unifor.metahlib.metaheuristics.ga.CrossoverOperator;
 import br.unifor.metahlib.metaheuristics.ga.GeneticAlgorithm;
 import br.unifor.metahlib.metaheuristics.ga.MutationOperator;
@@ -41,9 +41,9 @@ public class GA_continuous {
 			ga.setMutationProbability(0.10);
 			ga.setCrossoverProbability(0.75);
 			
-			Solution s = ga.execute();
+			OptimizationResult r = ga.run();
 
-			System.out.println("Result: " + function.execute(s.getValues()) + ". OptimalResult: " + function.getOptimalResult());
+			System.out.println("Result: " + function.execute(r.getBestSolution().getValues()) + ". OptimalResult: " + function.getOptimalResult());
 			
 		} catch (Exception e){
 			e.printStackTrace();

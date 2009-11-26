@@ -141,10 +141,7 @@ public class ParticleSwamOptimization extends Heuristic {
         Solution pos_g;
 
         bestParticle = getBestParticle(particles).duplicate();
-        lastBestFoundOn = 0;
-
-        int it = 0;
-        while (it <  max_it){
+        do {
             for (int i = 0; i < particles.length; ++i){
                 p = particles[i];
                 if ( p.getValue() < p.getBestValue()){
@@ -157,7 +154,7 @@ public class ParticleSwamOptimization extends Heuristic {
 
                 velocity = p.getVelocity().clone();
                 for ( int j = 0; j < velocity.length; ++j ){
-                    velocity[j] = velocity[j] * inertia.calculate(it, max_it);
+                    velocity[j] = velocity[j] * inertia.calculate(current_it, max_it);
                 }
 
                 attraction = calcAttraction(p.getPosition().getValues(), pos_i.getValues(), c1); 
@@ -170,22 +167,12 @@ public class ParticleSwamOptimization extends Heuristic {
                 p.move();
                 
                 if ( p.getValue() < bestParticle.getValue()){
-                	lastBestFoundOn = it;
                     bestParticle = p.duplicate();
                     System.out.println("Improved to: " + bestParticle.getPosition());
                 }
             }
-            //p = getMelhorParticula(particulas);
-            //r.evolucaoMelhor.add(melhorParticula.getValor());
-            //r.evolucaoMedia.add(calculaMedia(particles));
 
-            it++;
-        }
-
-        //r.x = melhorParticula.getPosicao();
-        //r.eval_x = avaliarX( melhorParticula.getPosicao());
-        //r.qtdIteracoes = it;
-        //r.qtdAvaliacoes = a;
+        } while (endIteration(bestParticle.getPosition()));
 
         return bestParticle.getPosition();
 	}

@@ -4,18 +4,20 @@ import java.util.List;
 
 import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.SolutionFactory;
 
-public abstract class GreedyRandomizedConstructor {
+public abstract class GreedyRandomizedConstructor implements SolutionFactory {
 
-	protected double alpha;
 	protected Problem problem;
 	
+	protected double alpha;
+	
 	public GreedyRandomizedConstructor(Problem problem, double alpha){
-		this.alpha = alpha;
 		this.problem = problem;
+		this.alpha = alpha;		
 	}
 
-	public Solution generateGreedyRandomizedSolution(){
+	public Solution newSolution(){
 		Object[] values = new Object[problem.getDimension()];
 		
 		for(int i = 0; i < values.length; i++){
@@ -35,14 +37,6 @@ public abstract class GreedyRandomizedConstructor {
 
 	protected abstract List<SolutionElement> buildRestrictedCandidateList(Object[] values);
 
-	public double getAlpha() {
-		return alpha;
-	}
-
-	public void setAlpha(double alpha) {
-		this.alpha = alpha;
-	}
-
 	public Problem getProblem() {
 		return problem;
 	}
@@ -51,4 +45,12 @@ public abstract class GreedyRandomizedConstructor {
 		this.problem = problem;
 	}
 	
+	
+	public double getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(double alpha) {
+		this.alpha = alpha;
+	}
 }
