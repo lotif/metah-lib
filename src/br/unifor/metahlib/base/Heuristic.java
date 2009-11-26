@@ -8,10 +8,9 @@ import java.util.Random;
 public abstract class Heuristic {
 
 	/**
-	 * Stores the iteration where the best solution was found.
-	 * Should be set inside the "execute" method of the child class. 
+	 * Max quantity of iterations.
 	 */
-	protected int lastBestFoundOn = 0;
+	protected int current_it = 0;
 	
 	/**
 	 * Max quantity of iterations.
@@ -28,6 +27,8 @@ public abstract class Heuristic {
 	 */
 	protected Random random;
 	
+	protected OptimizationResult optimizationResult; 	
+	
 	/**
 	 * Construct a new heuristic for optimize the informed problem.
 	 * @param problem the problem to be optimized
@@ -38,10 +39,37 @@ public abstract class Heuristic {
 	}
 	
 	/**
-	 * The method which initiates the optimization.
+	 * Abstract method with the optimization algorithm. It must be implemented by subclasses.
 	 * @return best solution found during execution
 	 */
 	public abstract Solution execute();
+	
+	/**
+	 * The method which starts the optimization.
+	 * @return optimization result with the best solution found and execution statistics 
+	 */
+	public OptimizationResult run(){
+		optimizationResult = new OptimizationResult(); 
+		current_it = 0;
+		optimizationResult.start();
+		execute();
+		optimizationResult.finish();
+		
+		return optimizationResult;
+	}
+	
+	/**
+	 * Method used in subclasses to notify the completion of an iteration of the algorithm.
+	 * @param currentSolution solution found at iteration
+	 * @return true if the algorithm should continue to execute
+	 */
+	public boolean endIteration(Solution currentSolution){
+		if (optimizationResult != null){
+			optimizationResult.endIteration(currentSolution);
+		}
+		current_it++;
+		return current_it < max_it;
+	}
 	
 	/**
 	 * Retrieves the problem to be optimized by the heuristic.
@@ -57,13 +85,6 @@ public abstract class Heuristic {
 	 */
 	public void setProblem(Problem problem){
 		this.problem = problem;
-	}
-	
-	/**
-	 * Iteration where the best solution was found.
-	 */
-	public int getLastBestFoundOn() {
-		return lastBestFoundOn;
 	}
 	
 	/**

@@ -218,6 +218,10 @@ public class TSPDataSet {
             }
 
             line = reader.readLine().trim();
+            if (line.equals("DISPLAY_DATA_SECTION")){
+            	// Not supported
+            	break;
+            }
         }
     }
     
@@ -246,7 +250,8 @@ public class TSPDataSet {
         String headerValue;
         String[] items;
         String line = reader.readLine().trim();
-        while (!line.isEmpty() && !line.equals("EOF")){
+        while (line != null && !line.isEmpty() && !line.equals("EOF")){
+        	line = line.trim();
             if (readingHeader){
                 items= line.split(":");
                 headerName = items[0].trim().toUpperCase();
@@ -267,7 +272,7 @@ public class TSPDataSet {
             	}
             }
 
-            line = reader.readLine().trim();
+            line = reader.readLine();
         }
     }
 

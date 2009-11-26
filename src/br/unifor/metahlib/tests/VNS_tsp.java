@@ -3,7 +3,7 @@ package br.unifor.metahlib.tests;
 import java.io.File;
 
 import br.unifor.metahlib.base.Heuristic;
-import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.OptimizationResult;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.vns.VariableNeighborhoodSearch;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
@@ -26,9 +26,9 @@ public class VNS_tsp {
 			HillClimbing h = new HillClimbing(problem, twoOpt, HillClimbing.DEFAULT, 1500, 0, 0);
 			
 			Heuristic vns = new VariableNeighborhoodSearch(problem, h, 100, 100, fiveOpt, fourOpt, threeOpt, twoOpt);
-			Solution s = vns.execute();
-			System.out.println("Distance: " + s.getCost());
-			System.out.println("Found on iteration " + vns.getLastBestFoundOn());
+			OptimizationResult r = vns.run();
+			System.out.println("Best Solution: " + r.getBestSolution());
+			System.out.println("Found on iteration " + r.getBestSolutionIteration());
 			
 		} catch (Exception e){
 			e.printStackTrace();

@@ -1,4 +1,4 @@
-package br.unifor.metahlib.metaheuristics.grasp.tsp;
+package br.unifor.metahlib.problems.tsp.grasp;
 
 import br.unifor.metahlib.metaheuristics.grasp.SolutionElement;
 

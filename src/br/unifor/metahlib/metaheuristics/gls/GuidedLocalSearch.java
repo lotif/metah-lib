@@ -121,8 +121,8 @@ public class GuidedLocalSearch extends Heuristic {
 			e.printStackTrace();
 		} 
 		
-		for(int i = 0; i < max_it; i++){
-			
+		//for(int i = 0; i < max_it; i++){
+		do {
 			List<SolutionFeature> features = f_.getSolutionFeatures(s);
 			
 			double[] util = new double[features.size()];
@@ -143,22 +143,18 @@ public class GuidedLocalSearch extends Heuristic {
 			}
 			
 			double currentEval = problem.getCostEvaluator().eval(s);
-			System.out.println("*" + i + ": " + currentEval);
+			System.out.println("*" + current_it + ": " + currentEval);
 			
 			if(bestEval == null || currentEval < bestEval){
 				bestEval = currentEval;
-				try {
-					best = (Solution) s.clone();
-					lastBestFoundOn = i;
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
+				best = s.duplicate();
 			}
 			
 			localSearchMethod.setProblem(f_);
 			localSearchMethod.getProblem().setInitialSolution(s);
 			s = localSearchMethod.execute();
-		}
+			
+		} while (endIteration(s));
 		
 		return best;
 	}

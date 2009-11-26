@@ -63,20 +63,13 @@ public class SimulatedAnnealing extends TrajectoryHeuristic {
 		int currentIteration = 0;
 
 		Solution s = initialSolution == null ? problem.getInitialSolution() : initialSolution;
-		
-		int totalIt = 1;
-		while(temperature > minTemperature && totalIt < max_it) {
+		while (temperature > minTemperature){
 			for(int i = 0; i < maxIterations; i++){
-				if(totalIt > max_it){
-					break;
-				}				
 				currentIteration++;
 				
-				System.out.print("i: " + totalIt + " ");
 				Solution _s = neighborhoodStructure.getRandomNeighbor(s);
 				if(_s.getCost() < s.getCost()){
 					s = _s;
-					lastBestFoundOn = totalIt;
 					System.out.print("improved to: " + s);
 					
 				} else {
@@ -88,12 +81,12 @@ public class SimulatedAnnealing extends TrajectoryHeuristic {
 					}
 				}
 				
-				System.out.println();
-				totalIt++;
+				endIteration(_s); 
 			}
 			
 			temperature *= decreaseStep;
-		}
+			
+		};
 		
 		return s;
 	}

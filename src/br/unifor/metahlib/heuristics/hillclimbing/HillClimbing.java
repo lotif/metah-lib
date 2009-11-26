@@ -34,10 +34,6 @@ public class HillClimbing extends TrajectoryHeuristic {
 	public static final int ITERATED_STOCHASTIC = 3;
 	
 	/**
-	 * The max number of iterations
-	 */
-	private int maxIterations;
-	/**
 	 * The max number of iterations for the iterated hill climbing
 	 */
 	private int maxIterations2;
@@ -54,7 +50,7 @@ public class HillClimbing extends TrajectoryHeuristic {
 	public HillClimbing(Problem problem, NeighborhoodStructure neighborhoodStructure, 
 			int type, int maxIterations,int maxIterations2, double t) {
 		super(problem, neighborhoodStructure);
-		this.maxIterations = maxIterations;
+		this.max_it = maxIterations;
 		this.maxIterations2 = maxIterations2;
 		this.type = type;
 		T = t;
@@ -66,7 +62,6 @@ public class HillClimbing extends TrajectoryHeuristic {
 	 * @return the best solution found
 	 */
 	public Solution execute() {
-		lastBestFoundOn = 0;
 		switch(type){
 			case DEFAULT: return executeDefault(); 
 			case ITERATED_DEFAULT: return executeIterated(); 
@@ -83,11 +78,9 @@ public class HillClimbing extends TrajectoryHeuristic {
 	 */
 	private Solution executeDefault(){
 		Solution x = problem.getInitialSolution();
-		
 		double eval = problem.getCostEvaluator().eval(x);
-		//if(type == DEFAULT) { }
 		
-		for(int i = 0; i < maxIterations; i++){
+		for(int i = 0; i < max_it; i++){
 			Solution _x = neighborhoodStructure.getRandomNeighbor(x);
 			
 			eval = problem.getCostEvaluator().eval(x);
@@ -95,9 +88,9 @@ public class HillClimbing extends TrajectoryHeuristic {
 			
 			if(_eval < eval){
 				x = _x;
-				if(type == DEFAULT){ lastBestFoundOn = i; }
 			}
-			//if(type == DEFAULT) { }
+			
+			endIteration(_x);
 		}
 		
 		return x;
@@ -111,7 +104,6 @@ public class HillClimbing extends TrajectoryHeuristic {
 	private Solution executeIterated(){
 		
 		Solution bestx = problem.getInitialSolution();
-		
 		double bestEval = problem.getCostEvaluator().eval(bestx);
 		
 		for(int i = 0; i < maxIterations2; i++){
@@ -128,7 +120,6 @@ public class HillClimbing extends TrajectoryHeuristic {
 			
 			if(thisEval < bestEval){
 				bestx = thisx;
-				lastBestFoundOn = i + 2;
 			}
 		}
 		
@@ -144,11 +135,9 @@ public class HillClimbing extends TrajectoryHeuristic {
 		Random r = new Random();
 		
 		Solution x = problem.getInitialSolution();
-		
 		double eval = problem.getCostEvaluator().eval(x);
-		//if(type == STOCHASTIC) { }
 		
-		for(int i = 0; i < maxIterations; i++){
+		for(int i = 0; i < max_it; i++){
 			Solution _x = neighborhoodStructure.getRandomNeighbor(x);
 			
 			eval = problem.getCostEvaluator().eval(x);
@@ -166,20 +155,12 @@ public class HillClimbing extends TrajectoryHeuristic {
 			if(rand < exp){
 				x = _x;
 				eval = _eval;
-				if(type == STOCHASTIC) { lastBestFoundOn = i; }
 			}
-			//if(type == STOCHASTIC) { }
+			
+			endIteration(_x);
 		}
 		
 		return x;
-	}
-
-	public int getMaxIterations() {
-		return maxIterations;
-	}
-
-	public void setMaxIterations(int maxIterations) {
-		this.maxIterations = maxIterations;
 	}
 
 	public int getType() {

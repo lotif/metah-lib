@@ -114,26 +114,16 @@ public class GeneticAlgorithm extends PopulationHeuristic {
         Population children;
 
         Individual individual = p.getBestIndividual();
-        Individual bestIndividual = individual;
-
-        int it = 0;
-        while (it < max_it){
+        do {
             children = reproduce(p);
             mutate(children);
             p = selectForNextGeneration(p);
 
             individual = p.getBestIndividual();
-            if ( individual.getFitness() > bestIndividual.getFitness() ){
-            	lastBestFoundOn = it;
-            	bestIndividual = individual.duplicate();
-            }
-            
-            System.out.println("BestIndividual: " + bestIndividual.getSolution());
 
-            it++;
-        }
+        } while (endIteration(individual.getSolution()));
 
-        return bestIndividual.getSolution();
+        return individual.getSolution();
 	}
 	
 	@Override
