@@ -27,6 +27,6 @@ Por favor, adicionem seus nomes às metaheurísticas e aos problemas que ainda n
     * Iterated Local Search
 
     * Ant Colony Optimization (Lara)
-    * Scatter Search
+    * Scatter Search (Nathanael)
     * LK-opt para TSP (Marcelo)
     * Knapsack Problem
