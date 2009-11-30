@@ -61,4 +61,16 @@ public class OptimizationResult {
 	public ArrayList<Double> getEvolution() {
 		return evolution;
 	}
+	
+	public ArrayList<Double> getBestEvolution() {
+		return bestEvolution;
+	}
+	
+	@Override
+	public String toString(){
+		String s = "Best solution:" + bestSolution + "\n";
+		s+= "Found on iteration " + bestSolutionIteration;
+		s+= "RunTime: " + (runTime / 1000000) + " (ms)";
+		return s;
+	}
 }
