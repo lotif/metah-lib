@@ -2,7 +2,6 @@ package br.unifor.metahlib.metaheuristics.scatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +13,6 @@ import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.base.Utils;
 import br.unifor.metahlib.heuristics.FirstImprovement;
-import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
-import br.unifor.metahlib.metaheuristics.vns.VariableNeighborhoodSearch;
 import br.unifor.metahlib.problems.tsp.neighborhood.KOpt;
 
 /**
@@ -35,10 +32,13 @@ public abstract class ScatterSearch extends Heuristic {
 	 */
 	private int candidateSetSize;
 
+	/**
+	 * Used to know the number of solutions chosen by the best cost
+	 */
 	private int numBestElements;
 
 	/**
-	 * Constructor of the class
+	 * Constructor of the class.
 	 * 
 	 * @param problem
 	 *            the problem to be solved
@@ -67,9 +67,11 @@ public abstract class ScatterSearch extends Heuristic {
 	}
 
 	/**
-	 * The initial phase of the scatter search
+	 * The initial phase of the scatter search. A set of solutions (the
+	 * reference set) are generated to start the scatter search. The size of
+	 * solutions set should be equals of refSetSize variable.
 	 * 
-	 * @return the reference set of size defined by refSetSize variable.
+	 * @return the reference set
 	 */
 	protected List<Solution> initialPhase() {
 
@@ -86,6 +88,12 @@ public abstract class ScatterSearch extends Heuristic {
 		return refSet;
 	}
 
+	/**
+	 * Creates a solution which it is used to generated others trials solutions
+	 * at the initial phase
+	 * 
+	 * @return the seed solution
+	 */
 	protected Solution seedGeneration() {
 
 		return problem.getInitialSolution();
@@ -96,8 +104,7 @@ public abstract class ScatterSearch extends Heuristic {
 	 * 
 	 * @param seed
 	 *            the seed solution which is used to produce the trial solutions
-	 * @return a list of trial solutions with size defined by candidateSetSize
-	 *         variable
+	 * @return a list of trial solutions
 	 */
 	protected List<Solution> diversificationGenerator(Solution seed) {
 
@@ -234,6 +241,13 @@ public abstract class ScatterSearch extends Heuristic {
 		return Utils.sort(meanDiff);
 	}
 
+	/**
+	 * Returns the difference between two solutions.
+	 * 
+	 * @param solution
+	 * @param solution2
+	 * @return the difference between solutions passed by arguments
+	 */
 	protected abstract double getSolutionsDifference(Solution solution,
 			Solution solution2);
 
@@ -254,26 +268,33 @@ public abstract class ScatterSearch extends Heuristic {
 		}
 	}
 
+	/**
+	 * Starts the scatter search phase
+	 * 
+	 * @param refSet
+	 *            the initial reference set
+	 * @return the best solution found
+	 */
 	protected Solution scatterSearchPhase(List<Solution> refSet) {
 
 		List<Solution> solutions = null;
-		
+
 		for (int i = 0; i < max_it; i++) {
 			Subsets subsets = subsetGeneration(refSet);
 			solutions = solutionCombination(subsets, refSet);
 			improvement(solutions);
 			referenceSetUpdate(refSet, solutions);
 		}
-		
+
 		double bestCost = Double.POSITIVE_INFINITY;
 		int bestSolutionIndex = -1;
-		
-		for(int i = 0; i < solutions.size(); i++){
-			
+
+		for (int i = 0; i < solutions.size(); i++) {
+
 			double cost = solutions.get(i).getCost();
 			int solutionIndex = i;
-			
-			if(cost < bestCost){
+
+			if (cost < bestCost) {
 				bestCost = cost;
 				bestSolutionIndex = solutionIndex;
 			}
@@ -282,6 +303,13 @@ public abstract class ScatterSearch extends Heuristic {
 		return solutions.get(bestSolutionIndex);
 	}
 
+	/**
+	 * Generates subsets of solutions
+	 * 
+	 * @param refSet
+	 *            the reference set which is used for generates de subsets
+	 * @return the subsets generated
+	 */
 	protected Subsets subsetGeneration(List<Solution> refSet) {
 
 		double[] costs = new double[refSet.size()];
@@ -378,6 +406,15 @@ public abstract class ScatterSearch extends Heuristic {
 		subsets.addSubset(bestElements);
 	}
 
+	/**
+	 * Combines solutions in the subsets to generate others solutions
+	 * 
+	 * @param subsets
+	 *            the solutions (represented by theirs indices)
+	 * @param refSet
+	 *            the reference set with the original solutions
+	 * @return a set of new solutions
+	 */
 	protected List<Solution> solutionCombination(Subsets subsets,
 			List<Solution> refSet) {
 
@@ -439,11 +476,38 @@ public abstract class ScatterSearch extends Heuristic {
 		return result;
 	}
 
+	/**
+	 * Gets the variables of all solutions
+	 * 
+	 * @param solutions
+	 *            solutions which theirs variables will be extracted
+	 * @return a set of variables
+	 */
 	protected abstract List<Variable> getVariables(List<Solution> solutions);
 
+	/**
+	 * Verifies if a solution contains a variable
+	 * 
+	 * @param solution
+	 *            the solution to be verified
+	 * @param var
+	 *            the variable to be found
+	 * @return <code>true</code> if the variable was found in the solution
+	 */
 	protected abstract boolean solutionContainsVariable(Solution solution,
 			Variable var);
 
+	/**
+	 * Assembles a solution from the variables and theirs scores
+	 * 
+	 * @param refSet
+	 *            reference set
+	 * @param variables
+	 *            variables found in solutions of reference set
+	 * @param scores
+	 *            scores os variables
+	 * @return	the assembled solution 
+	 */
 	protected abstract Solution mountSolution(List<Solution> refSet,
 			List<Variable> variables, List<Double> scores);
 
@@ -462,8 +526,15 @@ public abstract class ScatterSearch extends Heuristic {
 
 		public List<Integer> split(List<List<Integer>> subset) {
 
-			// TODO Auto-generated method stub
-			return null;
+			Set<Integer> set = new HashSet<Integer>();
+
+			for (List<Integer> integer : subset) {
+				for (Integer integer2 : integer) {
+					set.add(integer2);
+				}
+			}
+
+			return new ArrayList<Integer>(set);
 		}
 
 		public void addSubset(List<Integer> indices) {
@@ -512,7 +583,7 @@ public abstract class ScatterSearch extends Heuristic {
 		}
 	}
 
-	protected class Variable {
+	protected interface Variable {
 
 	}
 }
