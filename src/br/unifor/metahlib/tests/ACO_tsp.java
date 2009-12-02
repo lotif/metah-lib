@@ -10,7 +10,10 @@ import br.unifor.metahlib.problems.tsp.TSPProblem;
 public class ACO_tsp {
 	public static void main(String[] args) {
 		try {
+//			File file = new File(System.getProperty("user.dir") + "/ulysses16.tsp");
 			File file = new File(System.getProperty("user.dir") + "/d198.tsp");
+//			File file = new File(System.getProperty("user.dir") + "/berlin52.tsp");
+//			File file = new File(System.getProperty("user.dir") + "/gr48.tsp");
 
 			TSPProblem problem = new TSPProblem(file);
 
@@ -21,7 +24,7 @@ public class ACO_tsp {
 			// pheromone decay rate
 			double p = 0.5;
 			// Number of ants
-			int n = problem.getDataSet().getCities().size();
+			int n = problem.getDimension();
 			// Constant used for updating pheromone trails
 			double q = 100;
 			// elitist ants

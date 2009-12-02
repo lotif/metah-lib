@@ -47,6 +47,9 @@ public class AntColonyOptimization extends Heuristic {
 
 	@Override
 	public Solution execute() {
+		// Initialize Tij
+		Double[][] tij = t0;
+		// Place each ant k on a randomly selected city
 		Random rand = new Random();
 		ArrayList<Ant> ants = new ArrayList<Ant>();
 		for (int i = 0; i < n; i++) {
@@ -60,10 +63,10 @@ public class AntColonyOptimization extends Heuristic {
 		double lbest = best.getCost();
 		e = best.getValues().length;
 		System.out.println("Cost 0: " + lbest);
-		// Initialize Tij
-		Double[][] tij = t0;
 		int t = 1;
-		while (t < max_it) {
+
+		do {
+
 			// for each ant build a new tour
 			// evaluate the tour performed by each ant
 			for (int i = 0; i < n; i++) {
@@ -117,7 +120,8 @@ public class AntColonyOptimization extends Heuristic {
 			tij[cityI - 1][cityJ - 1] += (b * value);
 			tij[cityJ - 1][cityI - 1] += (b * value);
 			t++;
-		}
+
+		} while (endIteration(best));
 		return best;
 	}
 

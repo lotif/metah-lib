@@ -105,15 +105,18 @@ public class Ant implements Comparable<Ant> {
 		}
 		Integer[] sol = new Integer[e];
 		sol[0] = Jki.remove(city - 1);
-		int cityJ = Jki.remove(rand.nextInt(Jki.size()));
-		sol[1] = cityJ;
+		int cityJ;
 
-		double til = tij[sol[0] - 1][sol[1] - 1];
-		double dist = problem.getDataSet().getDistance(sol[0], sol[1]);
-
-		for (int i = 2; i < e; i++) {
+		for (int i = 1; i < e; i++) {
 			double prob;
 			int cityI = sol[i - 1];
+			double til = 0;
+			double dist = 0;
+			for (int l = 0; l < Jki.size(); l++) {
+				int cityL = Jki.get(l);
+				til += tij[cityI - 1][cityL - 1];
+				dist += problem.getDataSet().getDistance(cityI, cityL);
+			}
 			int pos = -1;
 			while (pos == -1) {
 				for (int j = 0; j < Jki.size(); j++) {
@@ -123,13 +126,11 @@ public class Ant implements Comparable<Ant> {
 									cityI, cityJ), beta);
 					double den = Math.pow(til, alpha)
 							* Math.pow(1.0 / dist, beta);
+
 					double pkij = num / den;
-					System.out.println("pkij: " + pkij);
 					prob = rand.nextDouble();
 					if (pkij >= prob) {
 						pos = j;
-						dist += problem.getDataSet().getDistance(cityI, cityJ);
-						til += tij[cityI - 1][cityJ - 1];
 						break;
 					}
 				}
