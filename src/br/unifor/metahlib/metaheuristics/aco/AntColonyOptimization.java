@@ -1,10 +1,11 @@
 package br.unifor.metahlib.metaheuristics.aco;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import br.unifor.metahlib.base.Heuristic;
-import br.unifor.metahlib.base.Problem;
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.problems.tsp.TSPProblem;
 
 /**
  * The ant colony optimization method
@@ -34,17 +35,23 @@ public class AntColonyOptimization extends Heuristic {
 	/**
 	 * initial trail intensity
 	 */
-	private Double[] t0;
+	private Double[][] t0;
 	/**
 	 * number of cities
 	 */
 	private int e;
+	/**
+	 * elitist ants
+	 */
+	double b;
 
 	@Override
 	public Solution execute() {
+		Random rand = new Random();
 		ArrayList<Ant> ants = new ArrayList<Ant>();
 		for (int i = 0; i < n; i++) {
-			Ant ant = new Ant(problem);
+			int city = rand.nextInt(n) + 1;
+			Ant ant = new Ant((TSPProblem) problem, n, city, alpha, beta);
 			ants.add(ant);
 		}
 		// Let best be the best tour found from the beginning and lbest its
@@ -52,15 +59,16 @@ public class AntColonyOptimization extends Heuristic {
 		Solution best = problem.getInitialSolution();
 		double lbest = best.getCost();
 		e = best.getValues().length;
+		System.out.println("Cost 0: " + lbest);
 		// Initialize Tij
-		Double[] tij = t0;
+		Double[][] tij = t0;
 		int t = 1;
 		while (t < max_it) {
 			// for each ant build a new tour
 			// evaluate the tour performed by each ant
 			for (int i = 0; i < n; i++) {
 				Ant ant = ants.get(i);
-				ant.buildNewTour();
+				ant.buildNewTour(tij);
 			}
 			// if a shorter tour is found, update best and lbest
 			for (int i = 0; i < ants.size(); i++) {
@@ -70,8 +78,44 @@ public class AntColonyOptimization extends Heuristic {
 					lbest = ant.getSolution().getCost();
 				}
 			}
+			System.out.println("Cost " + t + ": " + lbest);
 			// update pheromone trails
-			// TODO Auto-generated method stub
+			// decay rate
+			for (int i = 0; i < tij.length; i++) {
+				for (int j = 0; j < tij[i].length; j++) {
+					tij[i][j] *= (1 - p);
+				}
+			}
+			// pheromone at iteration t
+			for (int i = 0; i < n; i++) {
+				Ant ant = ants.get(i);
+				Object[] tour = ant.getSolution().getValues();
+				double Lk = ant.getSolution().getCost();
+				double value = q / Lk;
+				for (int j = 0; j < tour.length - 1; j++) {
+					int cityI = ((Integer) tour[j]).intValue();
+					int cityJ = ((Integer) tour[j + 1]).intValue();
+					tij[cityI - 1][cityJ - 1] += value;
+					tij[cityJ - 1][cityI - 1] += value;
+				}
+				int cityI = ((Integer) tour[tour.length - 1]).intValue();
+				int cityJ = ((Integer) tour[0]).intValue();
+				tij[cityI - 1][cityJ - 1] += value;
+				tij[cityJ - 1][cityI - 1] += value;
+			}
+			// elitist ants
+			Object[] tour = best.getValues();
+			double value = q / lbest;
+			for (int j = 0; j < tour.length - 1; j++) {
+				int cityI = ((Integer) tour[j]).intValue();
+				int cityJ = ((Integer) tour[j + 1]).intValue();
+				tij[cityI - 1][cityJ - 1] += (b * value);
+				tij[cityJ - 1][cityI - 1] += (b * value);
+			}
+			int cityI = ((Integer) tour[tour.length - 1]).intValue();
+			int cityJ = ((Integer) tour[0]).intValue();
+			tij[cityI - 1][cityJ - 1] += (b * value);
+			tij[cityJ - 1][cityI - 1] += (b * value);
 			t++;
 		}
 		return best;
@@ -84,10 +128,11 @@ public class AntColonyOptimization extends Heuristic {
 	 * @param p
 	 * @param n
 	 * @param q
+	 * @param b
 	 * @param t0
 	 */
-	public AntColonyOptimization(Problem problem, double alpha, double beta,
-			double p, int n, double q, Double[] t0) {
+	public AntColonyOptimization(TSPProblem problem, double alpha, double beta,
+			double p, int n, double q, double b, Double[][] t0) {
 		super(problem);
 		this.alpha = alpha;
 		this.beta = beta;
@@ -95,6 +140,7 @@ public class AntColonyOptimization extends Heuristic {
 		this.n = n;
 		this.q = q;
 		this.t0 = t0;
+		this.b = b;
 	}
 
 	/**
@@ -175,7 +221,7 @@ public class AntColonyOptimization extends Heuristic {
 	/**
 	 * @return the t0
 	 */
-	public Double[] getT0() {
+	public Double[][] getT0() {
 		return t0;
 	}
 
@@ -183,7 +229,7 @@ public class AntColonyOptimization extends Heuristic {
 	 * @param t0
 	 *            the t0 to set
 	 */
-	public void setT0(Double[] t0) {
+	public void setT0(Double[][] t0) {
 		this.t0 = t0;
 	}
 
@@ -201,4 +247,20 @@ public class AntColonyOptimization extends Heuristic {
 	public void setE(int e) {
 		this.e = e;
 	}
+
+	/**
+	 * @return the b
+	 */
+	public double getB() {
+		return b;
+	}
+
+	/**
+	 * @param b
+	 *            the b to set
+	 */
+	public void setB(double b) {
+		this.b = b;
+	}
+
 }
