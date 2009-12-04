@@ -4,9 +4,9 @@ package br.unifor.metahlib.base;
  * Class implementing some simple utility methods. Some methods here are the
  * same found in Weka software {@link http://www.cs.waikato.ac.nz/ml/weka/}.
  * 
- * @author Eibe Frank 
- * @author Yong Wang 
- * @author Len Trigg 
+ * @author Eibe Frank
+ * @author Yong Wang
+ * @author Len Trigg
  * @author Julien Prados
  * @author Nathanael de Castro Costa
  */
@@ -55,7 +55,7 @@ public class Utils {
 	// @ requires array != index;
 	// assignable index;
 	private static void quickSort(/* @non_null@ */double[] array, /* @non_null@ */
-			int[] index, int left, int right) {
+	int[] index, int left, int right) {
 
 		if (left < right) {
 			int middle = partition(array, index, left, right);
@@ -106,22 +106,66 @@ public class Utils {
 	}
 
 	/**
-	   * Computes the mean for an array of doubles.
-	   *
-	   * @param vector the array
-	   * @return the mean
-	   */
-	  public static /*@pure@*/ double mean(double[] vector) {
-	  
-	    double sum = 0;
+	 * Computes the mean for an array of doubles.
+	 * 
+	 * @param vector
+	 *            the array
+	 * @return the mean
+	 */
+	public static/* @pure@ */double mean(double[] vector) {
 
-	    if (vector.length == 0) {
-	      return 0;
-	    }
-	    for (int i = 0; i < vector.length; i++) {
-	      sum += vector[i];
-	    }
-	    return sum / (double) vector.length;
-	  }
+		double sum = 0;
+
+		if (vector.length == 0) {
+			return 0;
+		}
+		for (int i = 0; i < vector.length; i++) {
+			sum += vector[i];
+		}
+		return sum / (double) vector.length;
+	}
+
+	/**
+	 * Normalizes the doubles in the array by their sum.
+	 * 
+	 * @param doubles
+	 *            the array of double
+	 * @exception IllegalArgumentException
+	 *                if sum is Zero or NaN
+	 */
+	public static void normalize(double[] doubles) {
+
+		double sum = 0;
+		for (int i = 0; i < doubles.length; i++) {
+			sum += doubles[i];
+		}
+		normalize(doubles, sum);
+	}
+
+	/**
+	 * Normalizes the doubles in the array using the given value.
+	 * 
+	 * @param doubles
+	 *            the array of double
+	 * @param sum
+	 *            the value by which the doubles are to be normalized
+	 * @exception IllegalArgumentException
+	 *                if sum is zero or NaN
+	 */
+	public static void normalize(double[] doubles, double sum) {
+
+		if (Double.isNaN(sum)) {
+			throw new IllegalArgumentException(
+					"Can't normalize array. Sum is NaN.");
+		}
+		if (sum == 0) {
+			// Maybe this should just be a return.
+			throw new IllegalArgumentException(
+					"Can't normalize array. Sum is zero.");
+		}
+		for (int i = 0; i < doubles.length; i++) {
+			doubles[i] /= sum;
+		}
+	}
 
 }
