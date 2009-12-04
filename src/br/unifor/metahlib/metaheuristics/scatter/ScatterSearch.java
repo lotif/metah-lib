@@ -83,7 +83,7 @@ public abstract class ScatterSearch extends Heuristic {
 			List<Solution> candidateSet = diversificationGenerator(seed);
 			candidateSet = initialImprovement(candidateSet);
 			referenceSetUpdate(refSet, candidateSet);
-		} while (refSet.size() == refSetSize);
+		} while (refSet.size() < refSetSize);
 
 		return refSet;
 	}
@@ -128,7 +128,7 @@ public abstract class ScatterSearch extends Heuristic {
 
 				for (int r = 0; r <= rLim; r++, pos++) {
 
-					values[pos] = seed.getValues()[s + (r * h)];
+					values[pos] = seed.getValues()[s + (r * h) - 1];
 				}
 			}
 
@@ -182,7 +182,7 @@ public abstract class ScatterSearch extends Heuristic {
 		double[] costs = new double[candidateSet.size()];
 
 		for (int i = 0; i < candidateSet.size(); i++) {
-			costs[i] = problem.getCostEvaluator().eval(candidateSet.get(i));
+			costs[i] = candidateSet.get(i).getCost();
 		}
 
 		int[] origPos = Utils.sort(costs);
@@ -196,10 +196,10 @@ public abstract class ScatterSearch extends Heuristic {
 		int[] intensificationSet = Arrays.copyOf(origPos, r1);
 
 		// candidate diversification set
-		int[] candDiverSet = new int[r2];
-		System.arraycopy(origPos, r1, candDiverSet, 0, r2);
+		int[] candDiverSet = new int[origPos.length - r1];
+		System.arraycopy(origPos, r1, candDiverSet, 0, candDiverSet.length);
 
-		int[] diversificationSet = getDiversificationSet(candidateSet,
+		int[] diversificationSet = getOrderedDiversificationSet(candidateSet,
 				intensificationSet, candDiverSet);
 
 		for (int i = 0; i < intensificationSet.length
@@ -207,8 +207,7 @@ public abstract class ScatterSearch extends Heuristic {
 			refSet.add(candidateSet.get(intensificationSet[i]));
 		}
 
-		for (int i = 0; i < diversificationSet.length
-				&& refSet.size() < refSetSize; i++) {
+		for (int i = 0; i < r2 && refSet.size() < refSetSize; i++) {
 			refSet.add(candidateSet.get(diversificationSet[i]));
 		}
 
@@ -217,9 +216,10 @@ public abstract class ScatterSearch extends Heuristic {
 	}
 
 	/**
-	 * returns the indices of solutions for diversification set
+	 * returns the indices of solutions for diversification set ordered from the
+	 * best to worst difference
 	 */
-	private int[] getDiversificationSet(List<Solution> candidateSet,
+	private int[] getOrderedDiversificationSet(List<Solution> candidateSet,
 			int[] intensSet, int[] candDiverSet) {
 
 		double[][] diffMatrix = new double[candDiverSet.length][intensSet.length];
@@ -300,7 +300,11 @@ public abstract class ScatterSearch extends Heuristic {
 			}
 		}
 
-		return solutions.get(bestSolutionIndex);
+		Solution solution = solutions.get(bestSolutionIndex);
+
+		endIteration(solution);
+
+		return solution;
 	}
 
 	/**
@@ -320,23 +324,25 @@ public abstract class ScatterSearch extends Heuristic {
 
 		Subsets subsets = new Subsets();
 
-		addTwoElementsSubset(subsets, refSet);
+		addTwoElementsSubset(subsets);
 
-		addThreeElementsSubset(subsets, costs.clone());
+		int[] sortedCostsIndices = Utils.sort(costs);
 
-		addFourElementsSubset(subsets, costs.clone());
+		addThreeElementsSubset(subsets, sortedCostsIndices);
 
-		addBestElementsSubset(subsets, costs.clone());
+		addFourElementsSubset(subsets, sortedCostsIndices);
+
+		addBestElementsSubset(subsets, sortedCostsIndices);
 
 		return subsets;
 
 	}
 
-	private void addTwoElementsSubset(Subsets subsets, List<Solution> refSet) {
+	private void addTwoElementsSubset(Subsets subsets) {
 
-		for (int i = 0; i < refSet.size() - 1; i++) {
+		for (int i = 0; i < refSetSize - 1; i++) {
 
-			for (int j = i + 1; j < refSet.size(); j++) {
+			for (int j = i + 1; j < refSetSize; j++) {
 
 				List<Integer> list = new ArrayList<Integer>(2);
 				list.add(i);
@@ -347,17 +353,16 @@ public abstract class ScatterSearch extends Heuristic {
 		}
 	}
 
-	private void addThreeElementsSubset(Subsets subsets, double[] costs) {
+	private void addThreeElementsSubset(Subsets subsets,
+			int[] sortedCostsIndices) {
 
 		List<List<Integer>> twoElementsSubset = subsets.getSubset(2);
 
-		int[] sortedCostsIndices = Utils.sort(costs);
-
 		for (List<Integer> list : twoElementsSubset) {
 
 			int best = -1;
 
-			for (int i = 0; i < costs.length; i++) {
+			for (int i = 0; i < sortedCostsIndices.length; i++) {
 
 				if (!list.contains(sortedCostsIndices[i])) {
 					best = sortedCostsIndices[i];
@@ -370,17 +375,15 @@ public abstract class ScatterSearch extends Heuristic {
 		}
 	}
 
-	private void addFourElementsSubset(Subsets subsets, double[] costs) {
+	private void addFourElementsSubset(Subsets subsets, int[] sortedCostsIndices) {
 
-		List<List<Integer>> twoElementsSubset = subsets.getSubset(3);
+		List<List<Integer>> threeElementsSubset = subsets.getSubset(3);
 
-		int[] sortedCostsIndices = Utils.sort(costs);
-
-		for (List<Integer> list : twoElementsSubset) {
+		for (List<Integer> list : threeElementsSubset) {
 
 			int best = -1;
 
-			for (int i = 0; i < costs.length; i++) {
+			for (int i = 0; i < sortedCostsIndices.length; i++) {
 
 				if (!list.contains(sortedCostsIndices[i])) {
 					best = sortedCostsIndices[i];
@@ -393,14 +396,12 @@ public abstract class ScatterSearch extends Heuristic {
 		}
 	}
 
-	private void addBestElementsSubset(Subsets subsets, double[] costs) {
+	private void addBestElementsSubset(Subsets subsets, int[] sortedCostsIndices) {
 
 		List<Integer> bestElements = new ArrayList<Integer>(numBestElements);
 
-		int[] sorted = Utils.sort(costs);
-
 		for (int i = 0; i < numBestElements; i++) {
-			bestElements.add(sorted[i]);
+			bestElements.add(sortedCostsIndices[i]);
 		}
 
 		subsets.addSubset(bestElements);
@@ -418,60 +419,74 @@ public abstract class ScatterSearch extends Heuristic {
 	protected List<Solution> solutionCombination(Subsets subsets,
 			List<Solution> refSet) {
 
-		List<Solution> result = new ArrayList<Solution>(4);
+		List<Solution> result = new ArrayList<Solution>();
 
-		for (int i = 0; i < 4; i++) {
+		int debug = 0;
 
-			List<Integer> solutionsIndices = subsets
-					.split(subsets.getSubset(i));
+		for (Integer type : new int[] { 2, 3, 4, numBestElements }) {
 
-			double weightsSum = 0;
-			for (Integer solutionIndex : solutionsIndices) {
+			List<List<Integer>> subsetsList = subsets.getSubset(type);
 
-				weightsSum += 1.0 / refSet.get(solutionIndex).getCost();
-			}
+			for (List<Integer> subset : subsetsList) {
 
-			List<Double> weights = new ArrayList<Double>(solutionsIndices
-					.size());
+				System.out.println(debug++);
 
-			for (Integer solutionIndex : solutionsIndices) {
+				double[] costs = new double[subset.size()];
 
-				double weight = refSet.get(solutionIndex).getCost();
-
-				weights.add((1 / weight) / weightsSum);
-			}
-
-			List<Solution> solutions = new ArrayList<Solution>(solutionsIndices
-					.size());
-			for (Integer solutionIndex : solutionsIndices) {
-				solutions.add(refSet.get(solutionIndex));
-			}
-
-			List<Variable> variables = getVariables(solutions);
-			List<Double> scores = new ArrayList<Double>(variables.size());
-
-			for (Variable var : variables) {
-
-				double score = 0.0;
-
-				for (int s = 0; s < solutionsIndices.size(); s++) {
-
-					Solution solution = refSet.get(solutionsIndices.get(s));
-
-					if (solutionContainsVariable(solution, var)) {
-
-						score += weights.get(s);
-					}
+				for (int j = 0; j < costs.length; j++) {
+					costs[j] = refSet.get(subset.get(j)).getCost();
 				}
 
-				score = Math.floor(score + 0.5);
+				double weightsSum = 0;
+				for (Double cost : costs) {
 
-				scores.add(score);
+					weightsSum += 1.0 / cost;
+				}
+
+				List<Double> weights = new ArrayList<Double>(subset.size());
+
+				for (Double cost : costs) {
+
+					double weight = cost;
+
+					weights.add((1.0 / weight) / weightsSum);
+				}
+
+				List<Solution> solutions = new ArrayList<Solution>(subset
+						.size());
+				for (Integer solutionIndex : subset) {
+					solutions.add(refSet.get(solutionIndex));
+				}
+
+				List<Variable> variables = getVariables(solutions);
+				List<Double> scores = new ArrayList<Double>(variables.size());
+
+				for (Variable var : variables) {
+
+					double score = 0.0;
+
+					for (int s = 0; s < subset.size(); s++) {
+
+						Solution solution = refSet.get(subset.get(s));
+
+						if (solutionContainsVariable(solution, var)) {
+
+							score += weights.get(s);
+						}
+					}
+
+					score = Math.floor(score + 0.5);
+
+					scores.add(score);
+				}
+
+				if (debug == 190) {
+					System.out.println("aki");
+				}
+				Solution solution = mountSolution(refSet, variables, scores);
+
+				result.add(solution);
 			}
-
-			Solution solution = mountSolution(refSet, variables, scores);
-
-			result.add(solution);
 		}
 		return result;
 	}
@@ -506,7 +521,7 @@ public abstract class ScatterSearch extends Heuristic {
 	 *            variables found in solutions of reference set
 	 * @param scores
 	 *            scores os variables
-	 * @return	the assembled solution 
+	 * @return the assembled solution
 	 */
 	protected abstract Solution mountSolution(List<Solution> refSet,
 			List<Variable> variables, List<Double> scores);
@@ -522,6 +537,7 @@ public abstract class ScatterSearch extends Heuristic {
 		public Subsets() {
 
 			this.subsets = new HashMap<Integer, List<Integer>>();
+			this.subsetsIndex = new HashMap<Integer, List<Integer>>();
 		}
 
 		public List<Integer> split(List<List<Integer>> subset) {
@@ -545,22 +561,22 @@ public abstract class ScatterSearch extends Heuristic {
 				indices_[i] = indices.get(i);
 			}
 
-			int[] copy = Arrays.copyOf(indices_, indices_.length);
+			Arrays.sort(indices_);
 
-			Arrays.sort(copy);
+			int hashCode = Arrays.hashCode(indices_);
 
-			int hashCode = Arrays.hashCode(copy);
+			if (!subsets.containsKey(hashCode)) {
+				subsets.put(hashCode, indices);
 
-			subsets.put(hashCode, indices);
+				List<Integer> list = subsetsIndex.get(indices_.length);
 
-			List<Integer> list = subsetsIndex.get(indices_.length);
+				if (list == null) {
+					list = new ArrayList<Integer>();
+					subsetsIndex.put(indices_.length, list);
+				}
 
-			if (list == null) {
-				list = new ArrayList<Integer>();
-				subsetsIndex.put(indices_.length, list);
+				list.add(hashCode);
 			}
-
-			list.add(hashCode);
 		}
 
 		public List<List<Integer>> getSubset(int numElements) {
