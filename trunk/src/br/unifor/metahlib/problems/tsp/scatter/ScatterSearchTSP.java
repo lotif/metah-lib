@@ -7,9 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.scatter.ScatterSearch;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
+import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
+/**
+ * Implementation of scatter search for the TSP problem.
+ * 
+ * @author Nathanael de Castro Costa
+ */
 public final class ScatterSearchTSP extends ScatterSearch {
 
 	protected TSPProblem problem;
@@ -17,8 +24,11 @@ public final class ScatterSearchTSP extends ScatterSearch {
 	public ScatterSearchTSP(TSPProblem problem, int refSetSize) {
 
 		super(problem, refSetSize);
+
+		this.problem = problem;
 	}
 
+	@Override
 	protected double getSolutionsDifference(Solution a, Solution b) {
 
 		Object[] aValues = a.getValues();
@@ -129,19 +139,18 @@ public final class ScatterSearchTSP extends ScatterSearch {
 			}
 		}
 
-		// XXX
-		assert (oneScoresVariables.size() + zeroScoresVariables.size() == scores
-				.size());
+		Object[] resp = partialSolutionByOneScores(oneScoresVariables);
 
-		List<Variable> partialSolution = partialSolutionByOneScores(oneScoresVariables);
+		List<Variable> partialSolution = (List<Variable>) resp[0];
+		Set<Object> visited = (Set<Object>) resp[1];
 
 		Solution complete = completeSolution(zeroScoresVariables,
-				partialSolution);
+				partialSolution, visited);
 
 		return complete;
 	}
 
-	private List<Variable> partialSolutionByOneScores(
+	private Object[] partialSolutionByOneScores(
 			List<Variable> oneScoresVariables) {
 
 		List<Variable> partial = new ArrayList<Variable>();
@@ -152,8 +161,6 @@ public final class ScatterSearchTSP extends ScatterSearch {
 		partial.add(first);
 		visited.add(first.o1);
 		visited.add(first.o2);
-
-		ArrayList<Point2D.Double> cities = problem.getDataSet().getCities();
 
 		for (int i = 0; i < partial.size(); i++) {
 
@@ -169,11 +176,12 @@ public final class ScatterSearchTSP extends ScatterSearch {
 
 					if (visited.contains(edge2.o2)) {
 						oneScoresVariables.remove(j);
+						j--;
 					} else {
 						next.add(edge2);
+						visited.add(edge2.o1);
+						visited.add(edge2.o2);
 					}
-
-					j--;
 				}
 			}
 
@@ -182,10 +190,8 @@ public final class ScatterSearchTSP extends ScatterSearch {
 
 			for (Edge edge : next) {
 
-				int city1 = cities.indexOf(edge.o1);
-				int city2 = cities.indexOf(edge.o2);
-
-				double cost = problem.getDataSet().getDistance(city1, city2);
+				double cost = problem.getDataSet().getDistance(
+						(Integer) edge.o1, (Integer) edge.o2);
 
 				if (cost < bestCost) {
 					bestCost = cost;
@@ -198,21 +204,82 @@ public final class ScatterSearchTSP extends ScatterSearch {
 			}
 		}
 
-		return partial;
+		return new Object[] { partial, visited };
 	}
 
 	private Solution completeSolution(List<Variable> zeroScoresVariables,
-			List<Variable> partialSolution) {
+			List<Variable> partialSolution, Set<Object> visited) {
 
-		// TODO Auto-generated method stub
-		return null;
+		for (int i = partialSolution.size() - 1; i < partialSolution.size(); i++) {
+
+			Edge edge1 = (Edge) partialSolution.get(i);
+
+			List<Edge> next = new ArrayList<Edge>();
+
+			for (int j = 0; j < zeroScoresVariables.size(); j++) {
+
+				Edge edge2 = (Edge) zeroScoresVariables.get(j);
+
+				if (edge1.o2.equals(edge2.o1)) {
+
+					if (visited.contains(edge2.o2)) {
+						zeroScoresVariables.remove(j);
+						j--;
+					} else {
+						next.add(edge2);
+						visited.add(edge2.o1);
+						visited.add(edge2.o2);
+					}
+				}
+			}
+
+			double bestCost = Double.POSITIVE_INFINITY;
+			Edge bestVar = null;
+
+			for (Edge edge : next) {
+
+				double cost = problem.getDataSet().getDistance((Integer)edge.o1, (Integer)edge.o2);
+
+				if (cost < bestCost) {
+					bestCost = cost;
+					bestVar = edge;
+				}
+			}
+
+			if (bestVar != null) {
+				partialSolution.add(bestVar);
+			}
+		}
+
+		// now, partialSolution has a complete solution. And then a Solution
+		// object is mounted
+
+		Object[] values = new Object[problem.getDimension()];
+
+		for (int i = 0; i < values.length-1; i++) {
+			values[i] = ((Edge) partialSolution.get(i)).o1;
+		}
+		
+		values[values.length-1] = ((Edge) partialSolution.get(values.length-2)).o2;
+
+		Solution complete = new Solution(problem);
+		complete.setValues(values);
+
+		return complete;
 	}
 
 	@Override
 	protected void improvement(List<Solution> solutions) {
 
-		// TODO Auto-generated method stub
+		for (int i = 0; i < solutions.size(); i++) {
 
+			problem.setInitialSolution(solutions.get(i));
+
+			HillClimbing hc = new HillClimbing(problem, new TwoOpt(),
+					HillClimbing.DEFAULT, 10, 10, 0.95);
+
+			solutions.set(i, hc.execute());
+		}
 	}
 
 	private class Edge implements Variable {
@@ -245,6 +312,12 @@ public final class ScatterSearchTSP extends ScatterSearch {
 
 			return (Integer.toString(o1.hashCode()) + Integer.toString(o2
 					.hashCode())).hashCode();
+		}
+
+		@Override
+		public String toString() {
+
+			return o1.toString() + "\n" + o2.toString();
 		}
 	}
 
