@@ -43,11 +43,11 @@ public class FirstImprovement extends TrajectoryHeuristic {
 		for(int i = 0; i < max_it; i++){
 			Solution _x = neighborhoodStructure.getRandomNeighbor(solution);
 			
-			eval = problem.getCostEvaluator().eval(solution);
 			double _eval = problem.getCostEvaluator().eval(_x);
 			
 			if(_eval < eval){
 				solution = _x;
+				eval = _eval;
 				break;
 			}
 			
