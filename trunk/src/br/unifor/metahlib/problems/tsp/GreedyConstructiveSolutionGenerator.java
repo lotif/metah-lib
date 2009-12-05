@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.SolutionFactory;
 
 /**
  * Class that generates a new TSP solution by a greedy constructive mehtod
@@ -12,7 +13,7 @@ import br.unifor.metahlib.base.Solution;
  * @author marcelolotif
  *
  */
-public class GreedyConstructiveSolutionGenerator {
+public class GreedyConstructiveSolutionGenerator implements SolutionFactory {
 
 	/**
 	 * The TSP problem instance
@@ -81,6 +82,11 @@ public class GreedyConstructiveSolutionGenerator {
 		
 		s.setValues(values);
 		return s;
+	}
+
+	@Override
+	public Solution newSolution() {
+		return generateNewGreedySolution();
 	}
 	
 }
