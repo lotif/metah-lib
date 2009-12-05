@@ -102,6 +102,13 @@ public abstract class Problem {
 	}
 	
 	/**
+	 * Returns true if an initial solution was informed.
+	 */
+	public boolean hasInitialSolution() {
+		return initialSolution != null;
+	}
+	
+	/**
 	 * Limits the solution values to the allowed ranges. 
 	 * @param values solution values
 	 * @return ranged values

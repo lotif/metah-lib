@@ -3,7 +3,7 @@ package br.unifor.metahlib.base;
 /**
  * A possible solution for a problem. 
  */
-public class Solution implements Cloneable {
+public class Solution implements Cloneable, Comparable<Solution> {
 	
 	/**
 	 * Solution cost.  
@@ -19,6 +19,11 @@ public class Solution implements Cloneable {
 	 * Values of solution. The meaning of the values is given by the problem.
 	 */
 	private Object[] values;
+	
+	/**
+	 * Solution from which this was originated.
+	 */
+	private Solution originSolution; 
 	
 	/**
 	 * Constructs a new Solution for the problem informed.
@@ -56,6 +61,13 @@ public class Solution implements Cloneable {
 		return values;
 	}
 	
+	/**
+	 * Returns the solution from which this was originated.
+	 */
+	public Solution getOriginSolution(){
+		return originSolution;
+	}
+	
     /**
      * Creates a solution clone.
      */
@@ -72,6 +84,7 @@ public class Solution implements Cloneable {
         Solution clone = new Solution(problem);
         clone.cost = cost;
         clone.values = values.clone();
+        clone.originSolution = this;
         return clone;
     }
 	    
@@ -95,5 +108,10 @@ public class Solution implements Cloneable {
 		}
 		s+= "]";
 		return s;
+	}
+
+	@Override
+	public int compareTo(Solution o) {
+		return Double.compare(getCost(), o.getCost());
 	}
 }

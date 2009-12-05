@@ -69,7 +69,7 @@ public class OptimizationResult {
 	@Override
 	public String toString(){
 		String s = "Best solution:" + bestSolution + "\n";
-		s+= "Found on iteration " + bestSolutionIteration;
+		s+= "Found on iteration " + bestSolutionIteration + "\n";
 		s+= "RunTime: " + (runTime / 1000000) + " (ms)";
 		return s;
 	}
