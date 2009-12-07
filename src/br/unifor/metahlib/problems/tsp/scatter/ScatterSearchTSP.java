@@ -1,12 +1,13 @@
 package br.unifor.metahlib.problems.tsp.scatter;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import br.unifor.metahlib.base.Solution;
+import br.unifor.metahlib.base.Utils;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.scatter.ScatterSearch;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
@@ -123,149 +124,39 @@ public final class ScatterSearchTSP extends ScatterSearch {
 		return contains;
 	}
 
-	@Override
 	protected Solution mountSolution(List<Solution> refSet,
-			List<Variable> variables, List<Double> scores) {
+			List<Variable> variables) {
 
-		List<Variable> oneScoresVariables = new ArrayList<Variable>();
-		List<Variable> zeroScoresVariables = new ArrayList<Variable>();
+		Graph graph = new Graph(problem.getDimension());
 
-		for (int i = 0; i < scores.size(); i++) {
+		for (Variable var : variables) {
 
-			if (scores.get(i) == 1.0) {
-				oneScoresVariables.add(variables.get(i));
-			} else {
-				zeroScoresVariables.add(variables.get(i));
+			if (var.getBinaryScore()) {
+				Edge e1 = (Edge) var;
+
+				graph.addEdge(e1);
 			}
 		}
 
-		Object[] resp = partialSolutionByOneScores(oneScoresVariables);
+		graph.limitNeighbors();
 
-		List<Variable> partialSolution = (List<Variable>) resp[0];
-		Set<Object> visited = (Set<Object>) resp[1];
+		List<Object> path = graph.getBestPath();
 
-		Solution complete = completeSolution(zeroScoresVariables,
-				partialSolution, visited);
+		Solution solution = null;
 
-		return complete;
-	}
+		if (path.size() - 1 == problem.getDimension()) {
 
-	private Object[] partialSolutionByOneScores(
-			List<Variable> oneScoresVariables) {
+			Object[] values = new Object[problem.getDimension()];
 
-		List<Variable> partial = new ArrayList<Variable>();
-
-		Set<Object> visited = new HashSet<Object>();
-
-		Edge first = (Edge) oneScoresVariables.remove(0);
-		partial.add(first);
-		visited.add(first.o1);
-		visited.add(first.o2);
-
-		for (int i = 0; i < partial.size(); i++) {
-
-			Edge edge1 = (Edge) partial.get(i);
-
-			List<Edge> next = new ArrayList<Edge>();
-
-			for (int j = 0; j < oneScoresVariables.size(); j++) {
-
-				Edge edge2 = (Edge) oneScoresVariables.get(j);
-
-				if (edge1.o2.equals(edge2.o1)) {
-
-					if (visited.contains(edge2.o2)) {
-						oneScoresVariables.remove(j);
-						j--;
-					} else {
-						next.add(edge2);
-						visited.add(edge2.o1);
-						visited.add(edge2.o2);
-					}
-				}
+			for (int i = 0; i < values.length; i++) {
+				values[i] = path.get(i);
 			}
 
-			double bestCost = Double.POSITIVE_INFINITY;
-			Edge bestVar = null;
-
-			for (Edge edge : next) {
-
-				double cost = problem.getDataSet().getDistance(
-						(Integer) edge.o1, (Integer) edge.o2);
-
-				if (cost < bestCost) {
-					bestCost = cost;
-					bestVar = edge;
-				}
-			}
-
-			if (bestVar != null) {
-				partial.add(bestVar);
-			}
+			solution = new Solution(problem);
+			solution.setValues(values);
 		}
 
-		return new Object[] { partial, visited };
-	}
-
-	private Solution completeSolution(List<Variable> zeroScoresVariables,
-			List<Variable> partialSolution, Set<Object> visited) {
-
-		for (int i = partialSolution.size() - 1; i < partialSolution.size(); i++) {
-
-			Edge edge1 = (Edge) partialSolution.get(i);
-
-			List<Edge> next = new ArrayList<Edge>();
-
-			for (int j = 0; j < zeroScoresVariables.size(); j++) {
-
-				Edge edge2 = (Edge) zeroScoresVariables.get(j);
-
-				if (edge1.o2.equals(edge2.o1)) {
-
-					if (visited.contains(edge2.o2)) {
-						zeroScoresVariables.remove(j);
-						j--;
-					} else {
-						next.add(edge2);
-						visited.add(edge2.o1);
-						visited.add(edge2.o2);
-					}
-				}
-			}
-
-			double bestCost = Double.POSITIVE_INFINITY;
-			Edge bestVar = null;
-
-			for (Edge edge : next) {
-
-				double cost = problem.getDataSet().getDistance((Integer)edge.o1, (Integer)edge.o2);
-
-				if (cost < bestCost) {
-					bestCost = cost;
-					bestVar = edge;
-				}
-			}
-
-			if (bestVar != null) {
-				partialSolution.add(bestVar);
-			}
-		}
-
-		// now, partialSolution has a complete solution. And then a Solution
-		// object is mounted
-
-		Object[] values = new Object[problem.getDimension()];
-
-		for (int i = 0; i < values.length-1; i++) {
-			values[i] = ((Edge) partialSolution.get(i)).o1;
-		}
-		
-		values[values.length-1] = ((Edge) partialSolution.get(values.length-2)).o2;
-
-		Solution complete = new Solution(problem);
-		complete.setValues(values);
-
-		return complete;
+		return solution;
 	}
 
 	@Override
@@ -282,16 +173,25 @@ public final class ScatterSearchTSP extends ScatterSearch {
 		}
 	}
 
-	private class Edge implements Variable {
+	private class Edge extends Variable {
 
 		private Object o1;
 
 		private Object o2;
 
+		private double cost;
+
+		private double realScore;
+
+		private boolean binaryScore;
+
 		public Edge(Object o1, Object o2) {
 
 			this.o1 = o1;
 			this.o2 = o2;
+
+			this.cost = problem.getDataSet().getDistance((Integer) o1,
+					(Integer) o2);
 		}
 
 		@Override
@@ -302,6 +202,7 @@ public final class ScatterSearchTSP extends ScatterSearch {
 			if (obj instanceof Edge) {
 				Edge edge = (Edge) obj;
 				ret = edge.o1.equals(this.o1) && edge.o2.equals(this.o2);
+				ret = ret || edge.o1.equals(this.o2) && edge.o2.equals(this.o1);
 			}
 
 			return ret;
@@ -317,8 +218,226 @@ public final class ScatterSearchTSP extends ScatterSearch {
 		@Override
 		public String toString() {
 
-			return o1.toString() + "\n" + o2.toString();
+			return o1.toString() + " " + o2.toString() + ": " + cost;
 		}
+
+		@Override
+		public void setBinaryScore(boolean score) {
+
+			this.binaryScore = score;
+		}
+
+		@Override
+		public void setRealScore(double score) {
+
+			this.realScore = score;
+		}
+
+		@Override
+		public boolean getBinaryScore() {
+
+			return binaryScore;
+		}
+
+		@Override
+		public double getRealScore() {
+
+			return realScore;
+		}
+	}
+
+	private class Graph {
+
+		private final static int NEIGHBORS_LIM = 2;
+
+		private Edge[][] matrix;
+
+		public Graph(int numvertices) {
+
+			matrix = new Edge[numvertices][numvertices];
+		}
+
+		public void addEdge(Edge edge) {
+
+			int v1 = ((Integer) edge.o1) - 1;
+			int v2 = ((Integer) edge.o2) - 1;
+
+			matrix[v1][v2] = edge;
+			matrix[v2][v1] = edge;
+		}
+
+		public List<Integer> getNeighbors(int i) {
+
+			List<Integer> neighbors = new ArrayList<Integer>();
+
+			for (int j = 0; j < matrix[i].length; j++) {
+				if (i != j && matrix[i][j] != null) {
+					neighbors.add(j);
+				}
+			}
+
+			return neighbors;
+		}
+
+		public void limitNeighbors() {
+
+			for (int i = 0; i < matrix.length - 1; i++) {
+				for (int j = i + 1; j < matrix[i].length; j++) {
+
+					if (matrix[i][j] != null) {
+
+						List<Integer> neighbors1 = getNeighbors(i);
+						List<Integer> neighbors2 = getNeighbors(j);
+
+						if (neighbors1.size() > NEIGHBORS_LIM
+								|| neighbors2.size() > NEIGHBORS_LIM) {
+
+							double sb1 = secondBestScore(i, neighbors1);
+							double sb2 = secondBestScore(j, neighbors2);
+
+							if (neighbors1.size() > NEIGHBORS_LIM
+									&& neighbors2.size() <= NEIGHBORS_LIM) {
+
+								if (matrix[i][j].realScore <= sb1) {
+
+									matrix[i][j] = null;
+									matrix[j][i] = null;
+								}
+							} else if (neighbors1.size() <= NEIGHBORS_LIM
+									&& neighbors2.size() > NEIGHBORS_LIM) {
+
+								if (matrix[i][j].realScore <= sb2) {
+
+									matrix[i][j] = null;
+									matrix[j][i] = null;
+								}
+							} else {
+								if (matrix[i][j].realScore <= sb1
+										&& matrix[i][j].realScore <= sb2) {
+
+									matrix[i][j] = null;
+									matrix[j][i] = null;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		public List<Object> getBestPath() {
+
+			double bestValue = Double.NEGATIVE_INFINITY;
+			List<Object> bestPath = new ArrayList<Object>();
+
+			for (int i = 0; i < matrix.length; i++) {
+
+				if (!bestPath.contains(i)) {
+
+					Object[] resp = getPath(i);
+
+					double value = (Double) resp[0];
+
+					if (value > bestValue) {
+						bestValue = value;
+						bestPath = (List<Object>) resp[1];
+					}
+				}
+			}
+
+			for (int i = 0; i < bestPath.size(); i++) {
+				bestPath.set(i, ((Integer) bestPath.get(i)) + 1);
+			}
+			return bestPath;
+
+		}
+
+		private Object[] getPath(int i) {
+
+			Object[] resp = null;
+			List<Object> path = new ArrayList<Object>();
+			double score = 0.0;
+
+			List<Integer> neighbors = getNeighbors(i);
+
+			Set<Integer> visited = new HashSet<Integer>();
+			if (neighbors.size() > 0) {
+				visited.add(i);
+				Object[] l = getPath(neighbors.get(0), visited);
+				if (l == null) {
+					path.add(i);
+				} else {
+					path = (List<Object>) l[1];
+					path.add(0, i);
+					score = (Double) l[0];
+					score = score + matrix[i][(Integer) path.get(1)].realScore;
+					Collections.reverse(path);
+				}
+			}
+
+			if (neighbors.size() > 1) {
+				visited.add(i);
+				Object[] r = getPath(neighbors.get(1), visited);
+				if (r != null) {
+					path.addAll((List<Object>) r[1]);
+					score = score + (Double) r[0];
+				}
+			}
+
+			resp = new Object[] { score, path };
+
+			return resp;
+		}
+
+		private Object[] getPath(Integer i, Set<Integer> visited) {
+
+			visited.add(i);
+
+			Object[] resp = null;
+			List<Object> path = new ArrayList<Object>();
+			double score = 0.0;
+
+			List<Integer> neighbors = getNeighbors(i);
+
+			for (Integer n : neighbors) {
+				if (!visited.contains(n)) {
+					resp = getPath(n, visited);
+				}
+			}
+
+			if (resp == null) {
+				path.add(i);
+			} else {
+				path = (List<Object>) resp[1];
+				path.add(0, i);
+				score = (Double) resp[0];
+				score = score + matrix[i][(Integer) path.get(1)].realScore;
+			}
+
+			resp = new Object[] { score, path };
+
+			return resp;
+		}
+
+		private double secondBestScore(int i, List<Integer> vertices) {
+
+			double ret = -1;
+			if (vertices.size() > 1) {
+				double[] scores = new double[vertices.size()];
+
+				for (int j = 0; j < vertices.size(); j++) {
+					scores[j] = matrix[i][vertices.get(j)].realScore;
+				}
+
+				int[] sortedVertices = Utils.sort(scores);
+
+				ret = matrix[i][vertices
+						.get(sortedVertices[sortedVertices.length - 2])].realScore;
+			}
+
+			return ret;
+		}
+
 	}
 
 }
