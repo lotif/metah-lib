@@ -51,7 +51,7 @@ public abstract class ScatterSearch extends Heuristic {
 
 		this.refSetSize = refSetSize;
 
-		this.candidateSetSize = 4 * refSetSize;
+		this.candidateSetSize = 10 * refSetSize;
 
 		numBestElements = refSetSize / 2;
 
@@ -83,7 +83,10 @@ public abstract class ScatterSearch extends Heuristic {
 			List<Solution> candidateSet = diversificationGenerator(seed);
 			candidateSet = initialImprovement(candidateSet);
 			referenceSetUpdate(refSet, candidateSet);
+			removeEqualsSolutions(refSet);
 		} while (refSet.size() < refSetSize);
+
+		endIteration(refSet.get(0));
 
 		return refSet;
 	}
@@ -211,8 +214,6 @@ public abstract class ScatterSearch extends Heuristic {
 			refSet.add(candidateSet.get(diversificationSet[i]));
 		}
 
-		removeEqualsSolutions(refSet);
-
 	}
 
 	/**
@@ -277,33 +278,28 @@ public abstract class ScatterSearch extends Heuristic {
 	 */
 	protected Solution scatterSearchPhase(List<Solution> refSet) {
 
-		List<Solution> solutions = null;
+		Solution solution = null;
 
 		for (int i = 0; i < max_it; i++) {
 			Subsets subsets = subsetGeneration(refSet);
-			solutions = solutionCombination(subsets, refSet);
+			List<Solution> solutions = solutionCombination(subsets, refSet);
 			improvement(solutions);
-			referenceSetUpdate(refSet, solutions);
+
+			List<Solution> refSetTmp = new ArrayList<Solution>(refSetSize);
+			referenceSetUpdate(refSetTmp, solutions);
+
+			refSetTmp.addAll(refSet);
+			refSet = new ArrayList<Solution>(refSetSize);
+//			removeEqualsSolutions(refSetTmp);
+			referenceSetUpdate(refSet, refSetTmp);
+
+			solution = refSet.get(0);
+			endIteration(solution);
+			System.out.println(solution.getCost() + " "
+					+ problem.getOptimalSolutionCost());
 		}
 
-		double bestCost = Double.POSITIVE_INFINITY;
-		int bestSolutionIndex = -1;
-
-		for (int i = 0; i < solutions.size(); i++) {
-
-			double cost = solutions.get(i).getCost();
-			int solutionIndex = i;
-
-			if (cost < bestCost) {
-				bestCost = cost;
-				bestSolutionIndex = solutionIndex;
-			}
-		}
-
-		Solution solution = solutions.get(bestSolutionIndex);
-
-		endIteration(solution);
-
+		
 		return solution;
 	}
 
@@ -421,15 +417,12 @@ public abstract class ScatterSearch extends Heuristic {
 
 		List<Solution> result = new ArrayList<Solution>();
 
-		int debug = 0;
-
-		for (Integer type : new int[] { 2, 3, 4, numBestElements }) {
+		// for (Integer type : new int[] { 2, 4, 3, numBestElements }) {
+		for (Integer type : new int[] { 2 }) {
 
 			List<List<Integer>> subsetsList = subsets.getSubset(type);
 
 			for (List<Integer> subset : subsetsList) {
-
-				System.out.println(debug++);
 
 				double[] costs = new double[subset.size()];
 
@@ -459,7 +452,6 @@ public abstract class ScatterSearch extends Heuristic {
 				}
 
 				List<Variable> variables = getVariables(solutions);
-				List<Double> scores = new ArrayList<Double>(variables.size());
 
 				for (Variable var : variables) {
 
@@ -475,17 +467,17 @@ public abstract class ScatterSearch extends Heuristic {
 						}
 					}
 
+					var.setRealScore(score);
+
 					score = Math.floor(score + 0.5);
 
-					scores.add(score);
+					var.setBinaryScore(score == 1.0 ? true : false);
 				}
 
-				if (debug == 190) {
-					System.out.println("aki");
-				}
-				Solution solution = mountSolution(refSet, variables, scores);
+				Solution solution = mountSolution(refSet, variables);
 
-				result.add(solution);
+				if (solution != null)
+					result.add(solution);
 			}
 		}
 		return result;
@@ -519,12 +511,10 @@ public abstract class ScatterSearch extends Heuristic {
 	 *            reference set
 	 * @param variables
 	 *            variables found in solutions of reference set
-	 * @param scores
-	 *            scores os variables
 	 * @return the assembled solution
 	 */
 	protected abstract Solution mountSolution(List<Solution> refSet,
-			List<Variable> variables, List<Double> scores);
+			List<Variable> variables);
 
 	protected abstract void improvement(List<Solution> solutions);
 
@@ -597,9 +587,21 @@ public abstract class ScatterSearch extends Heuristic {
 
 			return subset;
 		}
+
 	}
 
-	protected interface Variable {
+	protected abstract class Variable {
 
+		public abstract double getRealScore();
+
+		public abstract boolean getBinaryScore();
+
+		public abstract void setRealScore(double score);
+
+		public abstract void setBinaryScore(boolean score);
+
+		public abstract int hashCode();
+
+		public abstract boolean equals(Object o);
 	}
 }
