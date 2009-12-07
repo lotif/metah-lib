@@ -105,35 +105,43 @@ public class Ant implements Comparable<Ant> {
 		}
 		Integer[] sol = new Integer[e];
 		sol[0] = Jki.remove(city - 1);
-		int cityJ;
 
 		for (int i = 1; i < e; i++) {
-			double prob;
 			int cityI = sol[i - 1];
 			double til = 0;
 			double dist = 0;
+			double[] prob = new double[Jki.size()];
+
 			for (int l = 0; l < Jki.size(); l++) {
 				int cityL = Jki.get(l);
 				til += tij[cityI - 1][cityL - 1];
 				dist += problem.getDataSet().getDistance(cityI, cityL);
 			}
-			int pos = -1;
-			while (pos == -1) {
-				for (int j = 0; j < Jki.size(); j++) {
-					cityJ = Jki.get(j);
-					double num = Math.pow(tij[cityI - 1][cityJ - 1], alpha)
-							* Math.pow(1.0 / problem.getDataSet().getDistance(
-									cityI, cityJ), beta);
-					double den = Math.pow(til, alpha)
-							* Math.pow(1.0 / dist, beta);
+			double den = Math.pow(til, alpha) * Math.pow(1.0 / dist, beta);
 
-					double pkij = num / den;
-					prob = rand.nextDouble();
-					if (pkij >= prob) {
-						pos = j;
-						break;
-					}
-				}
+			double total = 0;
+			for (int j = 0; j < Jki.size(); j++) {
+				int cityJ = Jki.get(j);
+				double num = Math.pow(tij[cityI - 1][cityJ - 1], alpha)
+						* Math.pow(1.0 / problem.getDataSet().getDistance(
+								cityI, cityJ), beta);
+
+				double pkij = num / den;
+				prob[j] = pkij;
+				total += pkij;
+			}
+
+			prob[0] = prob[0] / total;
+			double last = prob[0];
+			for (int j = 1; j < prob.length; j++) {
+				prob[j] = prob[j] / total + last;
+				last = prob[j];
+			}
+
+			double r = rand.nextDouble();
+			int pos = 0;
+			while (pos < prob.length - 1 && r > prob[pos]) {
+				pos++;
 			}
 			sol[i] = Jki.remove(pos);
 		}
