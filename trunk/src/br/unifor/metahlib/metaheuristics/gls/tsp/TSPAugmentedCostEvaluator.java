@@ -12,7 +12,6 @@ public class TSPAugmentedCostEvaluator extends AugmentedCostEvaluator {
 
 	public TSPAugmentedCostEvaluator(TSPProblem problem, double lambda, int numberOfVariables) throws IOException, EdgeWeightTypeNotSupported{
 		super(problem, lambda);
-//		problem.setDataSet(new TSPDataSet(problem.getDataSet().getFile()));
 		this.penalties = new double[numberOfVariables][numberOfVariables];
 	}
 	
@@ -44,7 +43,7 @@ public class TSPAugmentedCostEvaluator extends AugmentedCostEvaluator {
 		penalties[tspFeature.getI() - 1][tspFeature.getJ() - 1]++;
 		
 		TSPProblem p = (TSPProblem) problem;
-		int[][] distanceMatrix = p.getDataSet().getDistances();
+		int[][] distanceMatrix = p.getInstance().getDistances();
 		
 		distanceMatrix[tspFeature.getI() - 1][tspFeature.getJ() - 1] = 
 			(int)Math.round(

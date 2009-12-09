@@ -9,16 +9,16 @@ import br.unifor.metahlib.base.Solution;
 public class TourCostEvaluator extends CostEvaluator {
 	
 	/**
-	 * TSP dataSet with cities distances.
+	 * TSP instance with cities distances.
 	 */
-	private TSPDataSet dataSet;
+	private TSPInstance instance;
 	
 	/**
 	 * Class constructor.
-	 * @param dataSet dataset with cities distances
+	 * @param instance instance with cities distances
 	 */
-	public TourCostEvaluator(TSPDataSet dataSet){
-		this.dataSet = dataSet;
+	public TourCostEvaluator(TSPInstance instance){
+		this.instance = instance;
 	}
 
 	/**
@@ -30,9 +30,9 @@ public class TourCostEvaluator extends CostEvaluator {
 		int d = 0;
 		if (cities.length > 0){
 			for (int i = 0; i < cities.length - 1; ++i){
-				d+= dataSet.getDistance((Integer) cities[i], (Integer) cities[i+1]); 
+				d+= instance.getDistance((Integer) cities[i], (Integer) cities[i+1]); 
 			}
-			d+= dataSet.getDistance((Integer) cities[cities.length - 1], (Integer) cities[0]);
+			d+= instance.getDistance((Integer) cities[cities.length - 1], (Integer) cities[0]);
 		}
 		
 		return d;

@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * TSP problem dataSet. The properties of this class represents the TSPLib file content.
+ * TSP problem instance. The properties of this class represents the TSPLib file content.
  */
-public class TSPDataSet {
+public class TSPInstance {
 	
     /**
      * Supported edged weight types.  
@@ -38,12 +38,12 @@ public class TSPDataSet {
 	protected ArrayList<Integer> optimalTour;  	
 	
     /**
-     * DataSet name.
+     * Instance name.
      */
 	protected String name;
 	
 	/**
-	 * Comments about this dataSet.
+	 * Comments about this instance.
 	 */
 	protected String comment;
     
@@ -70,13 +70,13 @@ public class TSPDataSet {
 	protected File file;
     
     /**
-     * Constructs a new TSPDataSet from the informed TSPLib file.
+     * Constructs a new TSPInstance from the informed TSPLib file.
      * @param file TSPlib file
      * @throws IOException
      * @throws EdgeWeightTypeNotSupported
      * @throws EdgeWeightFormatNotSupported 
      */
-    public TSPDataSet(File file) throws IOException, EdgeWeightTypeNotSupported, EdgeWeightFormatNotSupported {
+    public TSPInstance(File file) throws IOException, EdgeWeightTypeNotSupported, EdgeWeightFormatNotSupported {
     	this.file = file;
         loadFile(file);
         distances = calcDistances();
@@ -402,14 +402,14 @@ public class TSPDataSet {
     }
 
     /**
-     * Name of dataSet.
+     * Name of instance.
      */
     public String getName(){
         return name;
     }
 
 	/**
-	 * Comments about this dataSet.
+	 * Comments about this instance.
 	 */
     public String getComment(){
         return comment;

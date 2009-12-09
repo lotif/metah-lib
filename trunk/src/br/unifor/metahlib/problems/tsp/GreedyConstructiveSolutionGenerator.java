@@ -66,7 +66,7 @@ public class GreedyConstructiveSolutionGenerator implements SolutionFactory {
 			int index = -1;
 			
 			for(int j = 0; j < cities.size(); j++){
-				double distance = problem.getDataSet().getDistance(startingPoint, cities.get(j));
+				double distance = problem.getInstance().getDistance(startingPoint, cities.get(j));
 				
 				if(distance < minCost || minCost == -1){
 					minCost = distance;

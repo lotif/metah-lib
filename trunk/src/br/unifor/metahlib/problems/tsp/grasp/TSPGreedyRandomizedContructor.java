@@ -27,7 +27,7 @@ public class TSPGreedyRandomizedContructor extends GreedyRandomizedConstructor {
 		}
 		
 		List<SolutionElement> elements = new ArrayList<SolutionElement>();
-		int[][] distances = ((TSPProblem)problem).getDataSet().getDistances();
+		int[][] distances = ((TSPProblem)problem).getInstance().getDistances();
 		
 		List<Integer> invalidValues = new ArrayList<Integer>();
 		for(int i = 0; i < values.length; i++){

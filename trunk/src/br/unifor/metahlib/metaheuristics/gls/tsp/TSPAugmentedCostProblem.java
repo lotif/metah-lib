@@ -46,10 +46,10 @@ public class TSPAugmentedCostProblem extends AugmentedCostProblem {
 		
 		for(int i = 0; i < values.length; i++){			
 			if(i != values.length - 1){
-				double cost = f.getDataSet().getDistance(values[i], values[i + 1]);
+				double cost = f.getInstance().getDistance(values[i], values[i + 1]);
 				solutionFeatures.add(new TSPSolutionFeature(values[i], values[i + 1], cost));
 			} else {
-				double cost = f.getDataSet().getDistance(values[i], values[1]);
+				double cost = f.getInstance().getDistance(values[i], values[1]);
 				solutionFeatures.add(new TSPSolutionFeature(values[i], values[1], cost));
 			}
 		}

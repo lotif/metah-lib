@@ -12,9 +12,9 @@ import br.unifor.metahlib.base.Solution;
 public class TSPProblem extends Problem {
 	
 	/**
-	 * TSP dataSet with cities distances.
+	 * TSP instance with cities distances.
 	 */
-	private TSPDataSet dataSet;
+	private TSPInstance instance;
 	
 	/**
 	 * Optimal tour or null if it's unknown.
@@ -30,9 +30,9 @@ public class TSPProblem extends Problem {
 	 */
 	public TSPProblem(File file) throws IOException, EdgeWeightTypeNotSupported, EdgeWeightFormatNotSupported {
 		super();
-		TSPDataSet ds = new TSPDataSet(file); 
+		TSPInstance ds = new TSPInstance(file); 
 		setCostEvaluator(new TourCostEvaluator(ds));
-		setDataSet(ds);
+		setInstance(ds);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class TSPProblem extends Problem {
 	@Override
 	public Solution newRandomSolution() {
 		Solution s = new Solution(this);
-		Object[] tour = new Object[dataSet.getDimension()];
+		Object[] tour = new Object[instance.getDimension()];
 		
 		ArrayList<Integer> citiesLeft = new ArrayList<Integer>();
 		for(int i = 1; i <= tour.length; i++){
@@ -59,20 +59,20 @@ public class TSPProblem extends Problem {
 	}
 
 	/**
-	 * Returns the TSP dataSet with cities distances.
-	 * @return a TSPDataSet instance
+	 * Returns the TSP instance with cities distances.
+	 * @return a TSPInstance instance
 	 */
-	public TSPDataSet getDataSet() {
-		return dataSet;
+	public TSPInstance getInstance() {
+		return instance;
 	}
 
 	/**
-	 * Sets the TSP dataSet with cities distances.
-	 * @param dataSet a TSPDataSet instance
+	 * Sets the TSP instance with cities distances.
+	 * @param instance a TSPInstance instance
 	 */
-	public void setDataSet(TSPDataSet dataSet) {
-		this.dataSet = dataSet;
-		ArrayList<Integer> tour = dataSet.getOptimalTour();
+	public void setInstance(TSPInstance instance) {
+		this.instance = instance;
+		ArrayList<Integer> tour = instance.getOptimalTour();
 		if (tour != null){
 			optimalTour = new Solution(this);
 			optimalTour.setValues(tour.toArray());
@@ -90,7 +90,7 @@ public class TSPProblem extends Problem {
 		Object[] result = new Object[values.length];
 		for(int i = 0; i < values.length; ++i){
 			int idx = (Integer) values[i];
-			if (idx >= 1 && idx <= dataSet.getDimension()){
+			if (idx >= 1 && idx <= instance.getDimension()){
 				result[i] = idx;
 			} else {
 				throw new IndexOutOfBoundsException("Tour contains invalid index at position "
@@ -103,12 +103,12 @@ public class TSPProblem extends Problem {
 	
 	@Override
 	public double[] getSolutionValueRange(int idx){
-		return new double[] { 1.0, dataSet.getDimension() };
+		return new double[] { 1.0, instance.getDimension() };
 	}
 	
 	@Override
 	public int getDimension(){
-		return dataSet.getDimension();
+		return instance.getDimension();
 	}
 	
 	public Solution getOptimalTour(){
