@@ -190,7 +190,7 @@ public final class ScatterSearchTSP extends ScatterSearch {
 			this.o1 = o1;
 			this.o2 = o2;
 
-			this.cost = problem.getDataSet().getDistance((Integer) o1,
+			this.cost = problem.getInstance().getDistance((Integer) o1,
 					(Integer) o2);
 		}
 

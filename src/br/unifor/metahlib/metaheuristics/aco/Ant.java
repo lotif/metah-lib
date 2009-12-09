@@ -115,7 +115,7 @@ public class Ant implements Comparable<Ant> {
 			for (int l = 0; l < Jki.size(); l++) {
 				int cityL = Jki.get(l);
 				til += tij[cityI - 1][cityL - 1];
-				dist += problem.getDataSet().getDistance(cityI, cityL);
+				dist += problem.getInstance().getDistance(cityI, cityL);
 			}
 			double den = Math.pow(til, alpha) * Math.pow(1.0 / dist, beta);
 
@@ -123,7 +123,7 @@ public class Ant implements Comparable<Ant> {
 			for (int j = 0; j < Jki.size(); j++) {
 				int cityJ = Jki.get(j);
 				double num = Math.pow(tij[cityI - 1][cityJ - 1], alpha)
-						* Math.pow(1.0 / problem.getDataSet().getDistance(
+						* Math.pow(1.0 / problem.getInstance().getDistance(
 								cityI, cityJ), beta);
 
 				double pkij = num / den;
