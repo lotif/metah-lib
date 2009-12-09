@@ -295,7 +295,7 @@ public abstract class ScatterSearch extends Heuristic {
 
 			solution = refSet.get(0);
 			endIteration(solution);
-			System.out.println(solution.getCost() + " "
+			System.out.println(i + ": "+solution.getCost() + " "
 					+ problem.getOptimalSolutionCost());
 		}
 
