@@ -10,6 +10,7 @@ import br.unifor.metahlib.base.Solution;
 import br.unifor.metahlib.base.Utils;
 import br.unifor.metahlib.heuristics.hillclimbing.HillClimbing;
 import br.unifor.metahlib.metaheuristics.scatter.ScatterSearch;
+import br.unifor.metahlib.metaheuristics.vns.VariableNeighborhoodSearch;
 import br.unifor.metahlib.problems.tsp.TSPProblem;
 import br.unifor.metahlib.problems.tsp.neighborhood.TwoOpt;
 
@@ -163,13 +164,19 @@ public final class ScatterSearchTSP extends ScatterSearch {
 	protected void improvement(List<Solution> solutions) {
 
 		for (int i = 0; i < solutions.size(); i++) {
-
+			
 			problem.setInitialSolution(solutions.get(i));
+			
+			TwoOpt to = new TwoOpt();
+			
+			HillClimbing hc = new HillClimbing(problem, to,
+					HillClimbing.ITERATED_DEFAULT, 5, 5, 0.95);
+			
+			to.setRandom(this.random);
+			
+			VariableNeighborhoodSearch vns = new VariableNeighborhoodSearch(problem, hc, 50, 100, to);
 
-			HillClimbing hc = new HillClimbing(problem, new TwoOpt(),
-					HillClimbing.DEFAULT, 10, 10, 0.95);
-
-			solutions.set(i, hc.execute());
+			solutions.set(i, vns.execute());
 		}
 	}
 
